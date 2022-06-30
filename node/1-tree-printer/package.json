@@ -1,0 +1,23 @@
+{
+  "name": "tree-printer",
+  "version": "1.0.0",
+  "description": "A package to print trees",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iantropov/antropov-ivan-otus.git"
+  },
+  "keywords": [
+    "tree",
+    "tree-printer"
+  ],
+  "author": "Ivan Antropov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iantropov/antropov-ivan-otus/issues"
+  },
+  "homepage": "https://github.com/iantropov/antropov-ivan-otus#readme"
+}
