@@ -5,9 +5,9 @@ import { INPUT_FILE_NAME, NUMBERS_COUNT } from "./constants.js";
 console.time("generationTime");
 logInfo("Starting generating numbers...");
 const generator = new NumberFileGenerator(INPUT_FILE_NAME, NUMBERS_COUNT);
-generator.generate().then((numbersCount) => {
+generator.generate().then(() => {
     logInfo(
-        `Generated ${numbersCount} numbers. File size: ${fileSize(
+        `Generated ${NUMBERS_COUNT} numbers. File size: ${fileSize(
             INPUT_FILE_NAME
         )} MB`
     );

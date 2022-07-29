@@ -10,7 +10,8 @@ export class PreSorter {
     constructor(fileName, preSortBufferSize) {
         this._inputStream = new NumberFileReadStream(fileName);
         this._preSortBufferSize = preSortBufferSize;
-        this._outputBuffer = [];
+        this._outputBuffer = new Float64Array(preSortBufferSize);
+        this._outputBufferCounter = 0;
         this._outputFiles = [];
     }
 
@@ -38,15 +39,16 @@ export class PreSorter {
     }
 
     _onInputStreamData(number) {
+        debugger
         logDebug('PreSorter: onData');
-        this._outputBuffer.push(number);
-        if (this._outputBuffer.length === this._preSortBufferSize) {
+        this._outputBuffer[this._outputBufferCounter++] = number;
+        if (this._outputBufferCounter === this._preSortBufferSize) {
             this._dumpNextOutputFile();
         }
     }
 
     _onInputStreamEnd() {
-        if (this._outputBuffer.length > 0) {
+        if (this._outputBufferCounter > 0) {
             this._dumpNextOutputFile();
         }
 
@@ -76,7 +78,7 @@ export class PreSorter {
             this._buildFileEntry(nextOutputFileName, outFilePromise)
         );
 
-        this._outputBuffer = [];
+        this._outputBufferCounter = 0;
     }
     
     _outputFileName(index) {
