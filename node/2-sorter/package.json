@@ -1,0 +1,26 @@
+{
+  "name": "sorter",
+  "version": "1.0.0",
+  "description": "A package to sort files",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "generate": "NODE_OPTIONS=--max-old-space-size=50 node src/generate.js",
+    "sort": "NODE_OPTIONS=--max-old-space-size=50 node src/sort.js",
+    "start": "npm run generate && npm run sort"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iantropov/antropov-ivan-otus.git"
+  },
+  "keywords": [
+    "sorter",
+    "sort"
+  ],
+  "author": "Ivan Antropov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iantropov/antropov-ivan-otus/issues"
+  },
+  "homepage": "https://github.com/iantropov/antropov-ivan-otus#readme"
+}
