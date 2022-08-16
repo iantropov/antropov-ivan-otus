@@ -1,0 +1,9 @@
+html 
+    head
+        title Courses
+    body
+        h1 We can offer the following courses:
+        ul
+        each course in courses
+            li
+                a(href=`/courses/${course.name}`)= course.name

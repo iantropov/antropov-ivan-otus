@@ -1,0 +1,8 @@
+html 
+    head
+        title= `Course "${course.name}"`
+    body
+        h1= `Course "${course.name}" has the following lessons:`
+        ul
+        each lesson in course.lessons
+            li= lesson.name
