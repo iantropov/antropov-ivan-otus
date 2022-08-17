@@ -65,6 +65,24 @@ app.get("/courses/:name", (req, res) => {
     });
 });
 
+app.get("/courses/:name/lessons/:lessonName", (req, res) => {
+    db.collection('courses').findOne({name: req.params.name}, (err, course) => {
+        if (err) {
+            console.log(err);
+            res.sendStatus(500);
+        } else if (!course) {
+            res.sendStatus(404);
+        } else {
+            const lesson = course.lessons.find((lesson) => lesson.name === lessonName);
+            if (!lesson) {
+                res.sendStatus(404);
+            } else {
+                res.render("lesson", { lesson });
+            }
+        }
+    });
+});
+
 app.get("/test", (req, res) => {
     res.send("Hello world! You've sent me - " + req.query.name);
 });
