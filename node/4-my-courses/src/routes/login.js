@@ -1,18 +1,25 @@
-import bodyParser from 'body-parser';
+import bodyParser from "body-parser";
+import csrf from "csurf";
+
+const parseForm = bodyParser.urlencoded({ extended: false });
+const csrfProtection = csrf();
 
 export const registerLoginRoutes = (express) => {
-    express.use(bodyParser.urlencoded({ extended: false }));
-
-    express.get("/login", async (req, res) => {
-        res.render("login");
+    express.get("/login", csrfProtection, async (req, res) => {
+        res.render("login", { csrfToken: req.csrfToken() });
     });
 
-    express.post("/login", async (req, res) => {
-        if (req.body.password !== 'password') {
+    express.post("/login", parseForm, csrfProtection, async (req, res) => {
+        if (req.body.password !== "password") {
             res.sendStatus(403);
         } else {
             req.session.userName = req.body.name;
-            res.redirect('/courses');
+            res.redirect("/courses");
         }
+    });
+
+    express.use(function (err, req, res, next) {
+        if (err.code !== "EBADCSRFTOKEN") return next(err);
+        res.sendStatus(403);
     });
 };
