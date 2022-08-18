@@ -1,8 +1,9 @@
-html 
+html
     head
         title Courses
     body
-        h1 We can offer the following courses:
+        h1= `Hello "${userName}"!`
+        h2 We can offer the following courses for you:
         ul
         each course in courses
             li

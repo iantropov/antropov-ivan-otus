@@ -3,7 +3,7 @@ import { Course } from "../models/course.js";
 export const registerCoursesRoutes = (express) => {
     express.get("/courses", async (req, res) => {
         const courses = await Course.find();
-        res.render("courses", { courses });
+        res.render("courses", { courses, userName: req.session.userName });
     });
 
     express.get("/courses/:courseName", async (req, res) => {
@@ -12,7 +12,7 @@ export const registerCoursesRoutes = (express) => {
             res.sendStatus(404);
             return;
         }
-        res.render("course", { course });
+        res.render("course", { course, userName: req.session.userName });
     });
 
     express.get("/courses/:courseName/lessons/:lessonName", async (req, res) => {
@@ -28,6 +28,6 @@ export const registerCoursesRoutes = (express) => {
             return;
         }
 
-        res.render("lesson", { lesson });
+        res.render("lesson", { lesson, userName: req.session.userName });
     });
 };
