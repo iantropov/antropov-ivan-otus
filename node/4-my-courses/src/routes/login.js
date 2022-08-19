@@ -11,7 +11,7 @@ export const registerLoginRoutes = (express) => {
 
     express.post("/login", parseForm, csrfProtection, async (req, res) => {
         if (req.body.password !== "password") {
-            res.sendStatus(403);
+            res.sendStatus(401);
         } else {
             req.session.userName = req.body.name;
             res.redirect("/courses");
@@ -20,6 +20,6 @@ export const registerLoginRoutes = (express) => {
 
     express.use(function (err, req, res, next) {
         if (err.code !== "EBADCSRFTOKEN") return next(err);
-        res.sendStatus(403);
+        res.sendStatus(401);
     });
 };
