@@ -1,0 +1,9 @@
+# my-courses app
+
+To start the app:
+
+```
+docker-compose up -d
+npm run seed
+npm start
+```

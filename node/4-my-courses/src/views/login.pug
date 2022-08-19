@@ -1,0 +1,17 @@
+html
+    head
+        title Login
+    body
+        h1 Please introduce yourserlf:
+        form(method='POST', action='/login')
+            input(type='hidden', name='_csrfs', value=csrfToken)
+            p
+                label
+                    span Name:&nbsp;
+                    input(name='name', type='text')
+            p
+                label
+                    span Password:&nbsp;
+                    input(name='password', type='password')
+            p
+                input(type='submit')

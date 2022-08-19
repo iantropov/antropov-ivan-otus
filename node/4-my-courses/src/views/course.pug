@@ -1,0 +1,10 @@
+html
+    head
+        title= `Course "${course.name}"`
+    body
+        h1= `Hello "${userName}"!`
+        h2= `Course "${course.name}" has the following lessons for you:`
+        ul
+        each lesson in course.lessons
+            li
+                a(href=`/courses/${course.name}/lessons/${lesson.name}`)= lesson.name

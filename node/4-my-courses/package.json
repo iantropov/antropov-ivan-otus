@@ -1,0 +1,37 @@
+{
+  "name": "my-courses",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon ./src/index.js",
+    "seed": "node ./src/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iantropov/antropov-ivan-otus.git#master"
+  },
+  "keywords": [
+    "rest-api"
+  ],
+  "author": "Ivan Antropov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iantropov/antropov-ivan-otus/issues"
+  },
+  "homepage": "https://github.com/iantropov/antropov-ivan-otus/tree/master#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "csurf": "^1.11.0",
+    "express": "^4.18.1",
+    "express-request-id": "^2.0.1",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.5.2",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
