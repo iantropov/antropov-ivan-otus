@@ -1,0 +1,33 @@
+{
+  "name": "5-web-sockets",
+  "version": "1.0.0",
+  "description": "WS example",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/iantropov/antropov-ivan-otus.git"
+  },
+  "keywords": [
+    "ws",
+    "web-sockets",
+    "service-worker"
+  ],
+  "author": "Ivan Antropov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iantropov/antropov-ivan-otus/issues"
+  },
+  "homepage": "https://github.com/iantropov/antropov-ivan-otus#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "ws": "^8.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
