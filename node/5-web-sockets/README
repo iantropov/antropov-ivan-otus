@@ -1,0 +1,9 @@
+# web-sockets app
+
+To use the app:
+
+```
+npm start
+```
+
+then go to http://localhost:3000
