@@ -1,0 +1,26 @@
+{
+  "name": "6-bar-cli",
+  "version": "1.0.0",
+  "description": "CLI for a bar",
+  "bin": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iantropov/antropov-ivan-otus.git"
+  },
+  "keywords": [
+    "cli",
+    "bar"
+  ],
+  "author": "Ivan Antropov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iantropov/antropov-ivan-otus/issues"
+  },
+  "homepage": "https://github.com/iantropov/antropov-ivan-otus#readme",
+  "dependencies": {
+    "commander": "^9.4.0"
+  }
+}
