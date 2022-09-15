@@ -2,7 +2,7 @@ const program = require("commander");
 
 const { name, version, description } = require("./package.json");
 const drinksModel = require("./drinks-model.js");
-const { authorizeUser, extractDrink } = require("./utils.js");
+const { authorizeUser, extractDrink, printDrinks } = require("./utils.js");
 
 program.name(name).description(description).version(version);
 
@@ -10,7 +10,7 @@ program
     .command("get-drinks")
     .description("Get a list of available drinks")
     .action(() => {
-        console.log(drinksModel.findAll());
+        printDrinks(drinksModel.findAll());
     });
 
 program
@@ -21,7 +21,7 @@ program
         if (!drink) {
             console.log("Oops, we don't have this drink.");
         } else {
-            console.log(drink);
+            printDrinks([drink]);
         }
     });
 
@@ -40,7 +40,8 @@ program
             return;
         }
 
-        console.log("Here you are! This is your new drink: ", drinkFromOptions);
+        console.log("Here you are! This is your new drink!");
+        printDrinks([drinkFromOptions]);
 
         drinksModel.addDrink(drinkFromOptions);
         drinksModel.saveDrinks();
@@ -71,10 +72,8 @@ program
         drinkToChange.name = drinkFromOptions.name;
         drinkToChange.volume = drinkFromOptions.volume;
 
-        console.log(
-            "Here you are! This is your updated drink: ",
-            drinkToChange
-        );
+        console.log("Here you are! This is your updated drink!");
+        printDrinks(drinkToChange);
 
         drinksModel.saveDrinks();
     });
@@ -96,10 +95,8 @@ program
 
         drinksModel.deleteDrink(drinkName);
 
-        console.log(
-            "Here you are! These are your remain drinks: ",
-            drinksModel.findAll()
-        );
+        console.log("Here you are! These are your remain drinks:");
+        printDrinks(drinksModel.findAll());
 
         drinksModel.saveDrinks();
     });

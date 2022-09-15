@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/iantropov/antropov-ivan-otus#readme",
   "dependencies": {
+    "cli-table": "^0.3.11",
     "commander": "^9.4.0"
   }
 }
