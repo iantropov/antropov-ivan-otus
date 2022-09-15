@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const program = require("commander");
 
 const { name, version, description } = require("./package.json");
@@ -73,7 +75,7 @@ program
         drinkToChange.volume = drinkFromOptions.volume;
 
         console.log("Here you are! This is your updated drink!");
-        printDrinks(drinkToChange);
+        printDrinks([drinkToChange]);
 
         drinksModel.saveDrinks();
     });

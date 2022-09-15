@@ -3,7 +3,6 @@ var Table = require("cli-table");
 const BAR_OWNERS_CREDENTIALS = "iam:boss";
 
 module.exports.authorizeUser = function authorizeUser(options) {
-    console.dir(options);
     if (!options.credentials) {
         console.log(
             "You must supply your credentials in order to change drinks"

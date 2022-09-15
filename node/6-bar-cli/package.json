@@ -1,5 +1,5 @@
 {
-  "name": "6-bar-cli",
+  "name": "bar-cli",
   "version": "1.0.0",
   "description": "CLI for a bar",
   "bin": "server.js",
