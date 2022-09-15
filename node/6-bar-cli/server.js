@@ -1,10 +1,8 @@
 const program = require("commander");
-const { writeFileSync } = require('node:fs');
 
-const drinks = require("./data/drinks.json");
 const { name, version, description } = require("./package.json");
-
-const BAR_OWNERS_CREDENTIALS = 'iam:boss'
+const drinksModel = require("./drinks-model.js");
+const { authorizeUser, extractDrink } = require("./utils.js");
 
 program.name(name).description(description).version(version);
 
@@ -12,14 +10,14 @@ program
     .command("get-drinks")
     .description("Get a list of available drinks")
     .action(() => {
-        console.log(drinks);
+        console.log(drinksModel.findAll());
     });
 
 program
     .command("get-drink")
     .argument("<name>", "Name of the drink")
     .action((drinkName) => {
-        const drink = drinks.find(({ name }) => name === drinkName);
+        const drink = drinksModel.findDrink(drinkName);
         if (!drink) {
             console.log("Oops, we don't have this drink.");
         } else {
@@ -31,35 +29,79 @@ program
     .command("add-drink")
     .option("-c, --credentials <name:password>", "Credentials of the bar owner")
     .option("-n, --name <name>", "Name of the drink")
-    .option("-v, --volume <volume>", "Volume of the drink", '1')
+    .option("-v, --volume <volume>", "Volume of the drink", "1")
     .action((options) => {
-        if (!options.credentials) {
-            console.log("You must supply your credentials in order to add a drink");
+        if (!authorizeUser(options)) {
             return;
         }
 
-        if (options.credentials !== BAR_OWNERS_CREDENTIALS) {
-            console.log("We can't allow you to add a drink. You aren't the boss!");
+        const drinkFromOptions = extractDrink(options);
+        if (!drinkFromOptions) {
             return;
         }
 
-        if (!options.name) {
-            console.log("You must supply name of the drink");
-            return;
-        }
+        console.log("Here you are! This is your new drink: ", drinkFromOptions);
 
-        const volumeNumber = Number(options.volume);
-
-        const newDrink = {
-            name: options.name,
-            volume: isNaN(volumeNumber) ? 1 : volumeNumber
-        }
-        console.log('Here you are! This is your new drink: ', newDrink);
-
-        drinks.push(newDrink)
-
-        writeFileSync('./data/drinks.json', JSON.stringify(drinks));
+        drinksModel.addDrink(drinkFromOptions);
+        drinksModel.saveDrinks();
     });
 
+program
+    .command("update-drink")
+    .argument("<name>", "Name of the drink to update")
+    .option("-c, --credentials <name:password>", "Credentials of the bar owner")
+    .option("-n, --name <name>", "Name of the drink")
+    .option("-v, --volume <volume>", "Volume of the drink", "1")
+    .action((drinkName, options) => {
+        if (!authorizeUser(options)) {
+            return;
+        }
+
+        const drinkToChange = drinksModel.findDrink(drinkName);
+        if (!drinkToChange) {
+            console.log("Oops, we don't have this drink.");
+            return;
+        }
+
+        const drinkFromOptions = extractDrink(options);
+        if (!drinkFromOptions) {
+            return;
+        }
+
+        drinkToChange.name = drinkFromOptions.name;
+        drinkToChange.volume = drinkFromOptions.volume;
+
+        console.log(
+            "Here you are! This is your updated drink: ",
+            drinkToChange
+        );
+
+        drinksModel.saveDrinks();
+    });
+
+program
+    .command("delete-drink")
+    .argument("<name>", "Name of the drink to update")
+    .option("-c, --credentials <name:password>", "Credentials of the bar owner")
+    .action((drinkName, options) => {
+        if (!authorizeUser(options)) {
+            return;
+        }
+
+        const drinkToDelete = drinksModel.findDrink(drinkName);
+        if (!drinkToDelete) {
+            console.log("Oops, we don't have this drink.");
+            return;
+        }
+
+        drinksModel.deleteDrink(drinkName);
+
+        console.log(
+            "Here you are! These are your remain drinks: ",
+            drinksModel.findAll()
+        );
+
+        drinksModel.saveDrinks();
+    });
 
 program.parse(process.argv);
