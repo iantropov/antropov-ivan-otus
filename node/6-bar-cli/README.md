@@ -18,7 +18,7 @@ You can get list of drinks:
 ```
 ➜  6-bar-cli git:(6-bar-cli) ✗ bar-cli get-drinks
 ┌──────────┬────────────────────┬──────────┐
-│ Index    │ Name               │ Volume   │
+│ #        │ Name               │ Volume   │
 ├──────────┼────────────────────┼──────────┤
 │ 1        │ cola               │ 0.5      │
 ├──────────┼────────────────────┼──────────┤
@@ -33,7 +33,7 @@ You can check a drink:
 ```
 ➜  6-bar-cli git:(6-bar-cli) ✗ bar-cli get-drink cola
 ┌──────────┬────────────────────┬──────────┐
-│ Index    │ Name               │ Volume   │
+│ #        │ Name               │ Volume   │
 ├──────────┼────────────────────┼──────────┤
 │ 1        │ cola               │ 0.5      │
 └──────────┴────────────────────┴──────────┘
@@ -45,7 +45,7 @@ You can a new drink (bar owner's credentials are required):
 ➜  6-bar-cli git:(6-bar-cli) ✗ bar-cli add-drink -c iam:boss -n new-drink-2 -v 5
 Here you are! This is your new drink!
 ┌──────────┬────────────────────┬──────────┐
-│ Index    │ Name               │ Volume   │
+│ #        │ Name               │ Volume   │
 ├──────────┼────────────────────┼──────────┤
 │ 1        │ new-drink-2        │ 5        │
 └──────────┴────────────────────┴──────────┘
@@ -57,7 +57,7 @@ You can update an existing drink (bar owner's credentials are required):
 ➜  6-bar-cli git:(6-bar-cli) ✗ bar-cli update-drink 'new-drink-2' -c iam:boss -n old-drink -v 6
 Here you are! This is your updated drink!
 ┌──────────┬────────────────────┬──────────┐
-│ Index    │ Name               │ Volume   │
+│ #        │ Name               │ Volume   │
 ├──────────┼────────────────────┼──────────┤
 │ 1        │ old-drink          │ 6        │
 └──────────┴────────────────────┴──────────┘
@@ -69,7 +69,7 @@ Finally, you can delete a drink from the bar (bar owner's credentials are requir
 ➜  6-bar-cli git:(6-bar-cli) ✗ bar-cli delete-drink new-drink-3 -c iam:boss
 Here you are! These are your remain drinks:
 ┌──────────┬────────────────────┬──────────┐
-│ Index    │ Name               │ Volume   │
+│ #        │ Name               │ Volume   │
 ├──────────┼────────────────────┼──────────┤
 │ 1        │ cola               │ 0.5      │
 ├──────────┼────────────────────┼──────────┤
