@@ -1,14 +1,21 @@
 import Table from "cli-table";
+import { Drink } from "drinks-model";
 import { createRequire } from "module";
 
 const BAR_OWNERS_CREDENTIALS = "iam:boss";
 
-export function loadPackageJson() {
-    const require = createRequire(import.meta.url);
-    return require("./package.json");
+export interface BarCliOptions {
+    credentials?: string;
+    name?: string;
+    volume?: string;
 }
 
-export function authorizeUser(options) {
+export function loadPackageJson() {
+    const require = createRequire(import.meta.url);
+    return require("../package.json");
+}
+
+export function authorizeUser(options: BarCliOptions) {
     if (!options.credentials) {
         console.log(
             "You must supply your credentials in order to change drinks"
@@ -24,7 +31,7 @@ export function authorizeUser(options) {
     return true;
 }
 
-export function extractDrink(options) {
+export function extractDrink(options: BarCliOptions): Drink | null {
     if (!options.name) {
         console.log("You must supply name of the drink");
         return null;
@@ -38,15 +45,14 @@ export function extractDrink(options) {
     };
 }
 
-export function printDrinks(drinks) {
+export function printDrinks(drinks: Drink[]) {
     const table = new Table({
-        head: ["Index", "Name", "Volume"],
+        head: ["#", "Name", "Volume"],
         colWidths: [10, 20, 10],
-        rows: drinks.map((drink, index) => [
-            index + 1,
-            drink.name,
-            drink.volume,
-        ]),
+    });
+
+    drinks.forEach((drink, index) => {
+        table.push([index + 1, drink.name, drink.volume]);
     });
 
     console.log(table.toString());

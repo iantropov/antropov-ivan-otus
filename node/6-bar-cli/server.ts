@@ -3,7 +3,7 @@
 import { program } from "commander";
 
 import * as drinksModel from "./drinks-model.js";
-import { loadPackageJson, authorizeUser, extractDrink, printDrinks } from "./utils.js";
+import { loadPackageJson, authorizeUser, extractDrink, printDrinks, BarCliOptions } from "./utils.js";
 
 const packageJson = loadPackageJson();
 
@@ -19,7 +19,7 @@ program
 program
     .command("get-drink")
     .argument("<name>", "Name of the drink")
-    .action((drinkName) => {
+    .action((drinkName: string) => {
         const drink = drinksModel.findDrink(drinkName);
         if (!drink) {
             console.log("Oops, we don't have this drink.");
@@ -33,7 +33,7 @@ program
     .option("-c, --credentials <name:password>", "Credentials of the bar owner")
     .option("-n, --name <name>", "Name of the drink")
     .option("-v, --volume <volume>", "Volume of the drink", "1")
-    .action((options) => {
+    .action((options: BarCliOptions) => {
         if (!authorizeUser(options)) {
             return;
         }
@@ -56,7 +56,7 @@ program
     .option("-c, --credentials <name:password>", "Credentials of the bar owner")
     .option("-n, --name <name>", "Name of the drink")
     .option("-v, --volume <volume>", "Volume of the drink", "1")
-    .action((drinkName, options) => {
+    .action((drinkName: string, options: BarCliOptions) => {
         if (!authorizeUser(options)) {
             return;
         }
@@ -85,7 +85,7 @@ program
     .command("delete-drink")
     .argument("<name>", "Name of the drink to update")
     .option("-c, --credentials <name:password>", "Credentials of the bar owner")
-    .action((drinkName, options) => {
+    .action((drinkName: string, options: BarCliOptions) => {
         if (!authorizeUser(options)) {
             return;
         }

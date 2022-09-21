@@ -2,6 +2,15 @@
 
 This app allows you to manage your own bar!
 
+## Installation
+
+```
+npm run build
+npm install --global .
+```
+
+## Using
+
 To add/update/delete a drink you must provide your credentials.
 
 You can get list of drinks:
