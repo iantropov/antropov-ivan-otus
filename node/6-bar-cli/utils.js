@@ -1,8 +1,14 @@
-var Table = require("cli-table");
+import Table from "cli-table";
+import { createRequire } from "module";
 
 const BAR_OWNERS_CREDENTIALS = "iam:boss";
 
-module.exports.authorizeUser = function authorizeUser(options) {
+export function loadPackageJson() {
+    const require = createRequire(import.meta.url);
+    return require("./package.json");
+}
+
+export function authorizeUser(options) {
     if (!options.credentials) {
         console.log(
             "You must supply your credentials in order to change drinks"
@@ -16,9 +22,9 @@ module.exports.authorizeUser = function authorizeUser(options) {
     }
 
     return true;
-};
+}
 
-module.exports.extractDrink = function extractDrink(options) {
+export function extractDrink(options) {
     if (!options.name) {
         console.log("You must supply name of the drink");
         return null;
@@ -30,14 +36,18 @@ module.exports.extractDrink = function extractDrink(options) {
         name: options.name,
         volume: isNaN(volumeNumber) ? 1 : volumeNumber,
     };
-};
+}
 
-module.exports.printDrinks = function printDrinks(drinks) {
-    var table = new Table({
+export function printDrinks(drinks) {
+    const table = new Table({
         head: ["Index", "Name", "Volume"],
         colWidths: [10, 20, 10],
-        rows: drinks.map((drink, index) => [index + 1, drink.name, drink.volume]),
+        rows: drinks.map((drink, index) => [
+            index + 1,
+            drink.name,
+            drink.volume,
+        ]),
     });
 
     console.log(table.toString());
-};
+}

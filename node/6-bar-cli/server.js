@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 
-const program = require("commander");
+import { program } from "commander";
 
-const { name, version, description } = require("./package.json");
-const drinksModel = require("./drinks-model.js");
-const { authorizeUser, extractDrink, printDrinks } = require("./utils.js");
+import * as drinksModel from "./drinks-model.js";
+import { loadPackageJson, authorizeUser, extractDrink, printDrinks } from "./utils.js";
 
-program.name(name).description(description).version(version);
+const packageJson = loadPackageJson();
+
+program.name(packageJson.name).description(packageJson.description).version(packageJson.version);
 
 program
     .command("get-drinks")
