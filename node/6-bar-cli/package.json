@@ -1,0 +1,34 @@
+{
+  "name": "bar-cli",
+  "version": "1.0.0",
+  "description": "CLI for a bar",
+  "bin": "./build/server.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iantropov/antropov-ivan-otus.git"
+  },
+  "keywords": [
+    "cli",
+    "bar"
+  ],
+  "author": "Ivan Antropov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iantropov/antropov-ivan-otus/issues"
+  },
+  "homepage": "https://github.com/iantropov/antropov-ivan-otus#readme",
+  "dependencies": {
+    "cli-table": "^0.3.11",
+    "commander": "^9.4.0",
+    "typescript": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/cli-table": "^0.3.0",
+    "@types/node": "^18.7.18"
+  }
+}
