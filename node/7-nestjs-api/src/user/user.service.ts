@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './user.enity';
+import { UNIQUE_EMAIL_CONTRAINT, User } from './user.enity';
+
+const UNIQUE_CONSTRAINT_ERROR = '23505';
 
 @Injectable()
 export class UserService {
@@ -24,9 +26,21 @@ export class UserService {
         return user;
     }
 
-    create(createUserDto: CreateUserDto) {
+    async create(createUserDto: CreateUserDto) {
         const user = this.userRepository.create(createUserDto);
-        return this.userRepository.save(user);
+        try {
+            return await this.userRepository.save(user);
+        } catch (error) {
+            if (
+                error instanceof QueryFailedError &&
+                error.driverError.code === UNIQUE_CONSTRAINT_ERROR &&
+                error.driverError.constraint === UNIQUE_EMAIL_CONTRAINT
+            ) {
+                throw new BadRequestException('Please, choose another email');
+            } else {
+                throw error;
+            }
+        }
     }
 
     async update(id: string, updateUserDto: UpdateUserDto) {
