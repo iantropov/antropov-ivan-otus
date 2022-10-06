@@ -24,7 +24,7 @@ export class MessageService {
 
     async findOne(userId: string, id: string) {
         const message = await this.messageRepository.findOne({
-            where: { id: +id, user: { id: +userId } }
+            where: { id: +id, userId: +userId }
         });
         if (!message) {
             throw new NotFoundException(`Message #${id} not found!`);

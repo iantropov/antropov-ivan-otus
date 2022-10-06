@@ -1,5 +1,5 @@
 import { User } from "src/user/user.enity"
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm"
 
 @Entity('messages')
 export class Message {
@@ -9,6 +9,12 @@ export class Message {
     @Column()
     text: string
 
-    @ManyToOne(() => User, (user) => user.messages)
+    @Column()
+    userId: number
+
+    @ManyToOne(() => User, (user) => user.messages, {
+        onDelete: 'CASCADE'
+    })
+    @JoinColumn()
     user: User
 }
