@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from 'src/user/user.enity';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { CreateMessageDto } from './dto/create-message.dto';
@@ -15,19 +14,17 @@ export class MessageService {
         private readonly userService: UserService
     ) {}
 
-    findAll(userId: string) {
+    findAll(userId: number) {
         return this.messageRepository.find({
             where: {
-                user: {
-                    id: +userId
-                }
+                userId
             }
         });
     }
 
-    async findOne(userId: string, id: string) {
+    async findOne(userId: number, id: number) {
         const message = await this.messageRepository.findOne({
-            where: { id: +id, userId: +userId }
+            where: { id, userId }
         });
         if (!message) {
             throw new NotFoundException(`Message #${id} not found!`);
@@ -35,7 +32,7 @@ export class MessageService {
         return message;
     }
 
-    async create(userId: string, createMessageDto: CreateMessageDto) {
+    async create(userId: number, createMessageDto: CreateMessageDto) {
         const user = await this.userService.findOne(userId);
         const message = this.messageRepository.create({
             userId: user.id,
@@ -44,9 +41,10 @@ export class MessageService {
         return await this.messageRepository.save(message);
     }
 
-    async update(userId: string, id: string, updateMessageDto: UpdateMessageDto) {
+    async update(userId: number, id: number, updateMessageDto: UpdateMessageDto) {
         const message = await this.messageRepository.preload({
-            id: +id,
+            id,
+            userId,
             ...updateMessageDto
         });
         if (!message) {
@@ -55,7 +53,7 @@ export class MessageService {
         return this.messageRepository.save(message);
     }
 
-    async remove(userId: string, id: string) {
+    async remove(userId: number, id: number) {
         const message = await this.findOne(userId, id);
         return this.messageRepository.remove(message);
     }

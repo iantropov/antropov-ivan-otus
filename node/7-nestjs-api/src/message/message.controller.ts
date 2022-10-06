@@ -8,24 +8,24 @@ export class MessageController {
     constructor(private readonly messageService: MessageService) {}
 
     @Get()
-    findAll(@Param('userId') userId: string) {
+    findAll(@Param('userId') userId: number) {
         return this.messageService.findAll(userId);
     }
 
     @Get(':id')
-    findOne(@Param('userId') userId: string, @Param('id') id: string) {
+    findOne(@Param('userId') userId: number, @Param('id') id: number) {
         return this.messageService.findOne(userId, id);
     }
 
     @Post()
-    create(@Param('userId') userId: string, @Body() createMessageDto: CreateMessageDto) {
+    create(@Param('userId') userId: number, @Body() createMessageDto: CreateMessageDto) {
         return this.messageService.create(userId, createMessageDto);
     }
 
     @Patch(':id')
     update(
-        @Param('userId') userId: string,
-        @Param('id') id: string,
+        @Param('userId') userId: number,
+        @Param('id') id: number,
         @Body() updateMessageDto: UpdateMessageDto
     ) {
         return this.messageService.update(userId, id, updateMessageDto);
@@ -33,7 +33,7 @@ export class MessageController {
 
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('userId') userId: string, @Param('id') id: string) {
+    remove(@Param('userId') userId: number, @Param('id') id: number) {
         return this.messageService.remove(userId, id);
     }
 }
