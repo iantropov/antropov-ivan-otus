@@ -1,4 +1,5 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Message } from '../message/message.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 export const UNIQUE_EMAIL_CONTRAINT = 'unique_email_constraint';
 
@@ -10,4 +11,7 @@ export class User {
     @Column()
     @Unique(UNIQUE_EMAIL_CONTRAINT, ['email'])
     email: string;
+
+    @OneToMany(() => Message, message => message.user)
+    messages: Message[];
 }
