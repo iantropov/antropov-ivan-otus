@@ -14,11 +14,11 @@ Plan:
 - Message module
   + CRUD
   + Relation to user
-  - Validations
+  + Validations
 - Authz / Authn
   - Login
   - Logout
-  - Access to removal of a message
+  - Access to messages
 
 
 

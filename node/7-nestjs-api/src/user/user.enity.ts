@@ -12,6 +12,9 @@ export class User {
     @Unique(UNIQUE_EMAIL_CONTRAINT, ['email'])
     email: string;
 
+    @Column()
+    password: string;
+
     @OneToMany(() => Message, message => message.user)
     @JoinColumn()
     messages: Message[];

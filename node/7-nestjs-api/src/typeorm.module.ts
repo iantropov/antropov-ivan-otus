@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import DatabaseLogger from './common/loggers/database.logger';
+import DatabaseLogger from './database/database.logger';
 
 @Module({
   imports: [

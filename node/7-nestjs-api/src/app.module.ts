@@ -7,12 +7,14 @@ import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { DatabaseModule } from './typeorm.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
         UserModule,
         MessageModule,
-        DatabaseModule
+        DatabaseModule,
+        AuthModule
     ],
     controllers: [AppController],
     providers: [AppService]
