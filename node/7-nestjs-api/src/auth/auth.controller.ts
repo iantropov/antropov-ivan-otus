@@ -19,8 +19,9 @@ export class AuthController {
       @UseGuards(LocalAuthGuard)
       @Post('login')
       async logIn(@Req() request: RequestWithUser) {
-        const user = request.user;
-        user.password = undefined;
-        return user;
+        // const user = request.user;
+        // user.password = undefined;
+        // return user;
+        return request.session;
       }
 }

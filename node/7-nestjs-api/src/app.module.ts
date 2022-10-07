@@ -8,19 +8,15 @@ import { MessageModule } from './message/message.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { DatabaseModule } from './typeorm.module';
 import { AuthModule } from './auth/auth.module';
+import * as passport from 'passport';
 
 @Module({
-    imports: [
-        UserModule,
-        MessageModule,
-        DatabaseModule,
-        AuthModule
-    ],
+    imports: [UserModule, MessageModule, DatabaseModule, AuthModule],
     controllers: [AppController],
     providers: [AppService]
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer): void {
-        consumer.apply(LoggerMiddleware).forRoutes('*');
+        consumer.apply(LoggerMiddleware, passport.initialize(), passport.session()).forRoutes('*');
     }
 }

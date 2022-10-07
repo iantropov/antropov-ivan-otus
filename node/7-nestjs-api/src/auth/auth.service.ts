@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UNIQUE_CONSTRAINT_ERROR } from 'src/database/constants';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
-import { UNIQUE_EMAIL_CONTRAINT } from 'src/user/user.enity';
+import { UNIQUE_EMAIL_CONTRAINT, User } from 'src/user/user.enity';
 
 @Injectable()
 export class AuthService {
@@ -45,4 +45,12 @@ export class AuthService {
             throw new HttpException('Wrong credentials provided', HttpStatus.UNAUTHORIZED);
         }
     }
+
+    async findById(id: number): Promise<Omit<User, 'password'>> {
+        const { password: _, ...user } = await this.userService.findOne(id);
+        if (!user) {
+          throw new BadRequestException(`No user found with id ${id}`);
+        }
+        return user;
+      }
 }
