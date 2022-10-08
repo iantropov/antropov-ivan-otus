@@ -17,7 +17,6 @@ export class AuthService {
                 ...registerDto,
                 password: hashedPassword
             });
-            createdUser.password = undefined;
             return createdUser;
         } catch (error) {
             if (
@@ -45,12 +44,4 @@ export class AuthService {
             throw new HttpException('Wrong credentials provided', HttpStatus.UNAUTHORIZED);
         }
     }
-
-    async findById(id: number): Promise<Omit<User, 'password'>> {
-        const { password: _, ...user } = await this.userService.findOne(id);
-        if (!user) {
-          throw new BadRequestException(`No user found with id ${id}`);
-        }
-        return user;
-      }
 }
