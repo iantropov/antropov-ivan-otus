@@ -1,8 +1,6 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
@@ -11,9 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import * as passport from 'passport';
 
 @Module({
-    imports: [UserModule, MessageModule, DatabaseModule, AuthModule],
-    controllers: [AppController],
-    providers: [AppService]
+    imports: [UserModule, MessageModule, DatabaseModule, AuthModule]
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer): void {

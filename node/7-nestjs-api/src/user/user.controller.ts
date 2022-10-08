@@ -5,30 +5,27 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UserService } from './user.service';
 
 @Controller('users')
+@UseGuards(LoggedInGuard)
 export class UserController {
     constructor(private readonly userService: UserService) {}
 
     @Get()
-    @UseGuards(LoggedInGuard)
     findAll() {
         return this.userService.findAll();
     }
 
     @Get(':id')
-    @UseGuards(LoggedInGuard)
     findOne(@Param('id') id: number) {
         return this.userService.findOne(id);
     }
 
     @Patch(':id')
-    @UseGuards(LoggedInGuard)
     update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
         return this.userService.update(id, updateUserDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
-    @UseGuards(LoggedInGuard)
     remove(@Param('id') id: number) {
         this.userService.remove(id);
     }
