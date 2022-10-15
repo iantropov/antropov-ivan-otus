@@ -15,7 +15,7 @@ type User {
   id: ID!
   email: String!
   password: String!
-  messages: [Message!]!
+  messages: [Message!]
 }
 
 type Query {
