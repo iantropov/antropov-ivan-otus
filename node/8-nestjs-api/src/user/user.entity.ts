@@ -18,7 +18,7 @@ export class User {
     @Column()
     password: string;
 
-    @OneToMany(() => Message, message => message.user, { eager: true })
+    @OneToMany(() => Message, message => message.user)
     @JoinColumn()
     messages?: Message[];
 }

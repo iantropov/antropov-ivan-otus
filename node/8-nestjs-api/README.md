@@ -6,8 +6,12 @@ Plan:
       + Config GQL
       + Add a temporal entity for GraphQL
       + Add a response with GQL
-      - Move current entities to GQL (without Auth)
+      + Move current entities to GQL (without Auth)
     - Day 1:
+      - Field resolver for user.messages
+      - DataLoader
+      - Queries for Message, User (findOne)
+      - Mutations for Message, User (CUD)
       - Add field resolvers for relations
       - Add Auth
 
