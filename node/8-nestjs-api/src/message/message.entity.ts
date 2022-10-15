@@ -1,8 +1,11 @@
-import { User } from "src/user/user.enity"
+import { Field, ID, ObjectType } from "@nestjs/graphql"
+import { User } from "src/user/user.entity"
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "typeorm"
 
+@ObjectType()
 @Entity('messages')
 export class Message {
+    @Field(() => ID, { description: 'A unique identifier' })
     @PrimaryGeneratedColumn()
     id: number
 

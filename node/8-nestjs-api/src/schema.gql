@@ -2,13 +2,22 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Coffee {
-  id: Float!
-  name: String!
-  brand: String!
-  flavors: [String!]!
+type Message {
+  """A unique identifier"""
+  id: ID!
+  text: String!
+  userId: Float!
+  user: User!
+}
+
+type User {
+  """A unique identifier"""
+  id: ID!
+  email: String!
+  password: String!
+  messages: [Message!]!
 }
 
 type Query {
-  coffees: [Coffee!]!
+  users: [User!]!
 }

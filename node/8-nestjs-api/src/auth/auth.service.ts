@@ -4,7 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { UNIQUE_CONSTRAINT_ERROR } from 'src/database/constants';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { QueryFailedError } from 'typeorm';
-import { UNIQUE_EMAIL_CONTRAINT, User } from 'src/user/user.enity';
+import { UNIQUE_EMAIL_CONTRAINT, User } from 'src/user/user.entity';
 
 @Injectable()
 export class AuthService {

@@ -9,7 +9,6 @@ import * as passport from 'passport';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
-import { CoffeeModule } from './coffee/coffee.module';
 
 @Module({
     imports: [
@@ -20,10 +19,8 @@ import { CoffeeModule } from './coffee/coffee.module';
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql')
-        }),
-        CoffeeModule
-    ],
-    providers: []
+        })
+    ]
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer): void {
