@@ -1,6 +1,17 @@
 ## Description
 
-NestJS API app
+Plan:
+    - Day 0:
+      - Install GQL
+      - Config GQL
+      - Add a temporal entity for GraphQL
+      - Add a response with GQL
+      - Move current entities to GQL (with Auth)
+    - Day 1:
+      - Add field resolvers for relations
+      - Add Auth
+
+NestJS API app (on GraphQL)
 
 ## Installation
 

@@ -1,0 +1,14 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Coffee {
+  id: Float!
+  name: String!
+  brand: String!
+  flavors: [String!]!
+}
+
+type Query {
+  coffees: [Coffee!]!
+}

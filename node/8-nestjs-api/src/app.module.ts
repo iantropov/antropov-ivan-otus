@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UserModule } from './user/user.module';
 import { MessageModule } from './message/message.module';
@@ -7,9 +6,24 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { DatabaseModule } from './typeorm.module';
 import { AuthModule } from './auth/auth.module';
 import * as passport from 'passport';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { CoffeeModule } from './coffee/coffee.module';
 
 @Module({
-    imports: [UserModule, MessageModule, DatabaseModule, AuthModule]
+    imports: [
+        UserModule,
+        MessageModule,
+        DatabaseModule,
+        AuthModule,
+        GraphQLModule.forRoot<ApolloDriverConfig>({
+            driver: ApolloDriver,
+            autoSchemaFile: join(process.cwd(), 'src/schema.gql')
+        }),
+        CoffeeModule
+    ],
+    providers: []
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer): void {
