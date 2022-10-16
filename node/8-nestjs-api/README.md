@@ -8,7 +8,7 @@ Plan:
       + Add a response with GQL
       + Move current entities to GQL (without Auth)
     - Day 1:
-      - Field resolver for user.messages
+      <- Field resolver for user.messages
       - DataLoader
       - Queries for Message, User (findOne)
       - Mutations for Message, User (CUD)

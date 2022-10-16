@@ -5,7 +5,7 @@ import { MessageModule } from './message/message.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { DatabaseModule } from './typeorm.module';
 import { AuthModule } from './auth/auth.module';
-import * as passport from 'passport';
+import passport from 'passport';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
