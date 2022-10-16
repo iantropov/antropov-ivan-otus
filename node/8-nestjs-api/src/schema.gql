@@ -16,8 +16,10 @@ type User {
   email: String!
   password: String!
   messages: [Message!]!
+  message(id: ID!): Message!
 }
 
 type Query {
   users: [User!]!
+  user(id: ID!): User!
 }
