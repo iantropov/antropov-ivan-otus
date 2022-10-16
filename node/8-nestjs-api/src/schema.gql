@@ -25,17 +25,14 @@ type Query {
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserDto!): User!
   updateUser(userId: ID!, updateUserInput: UpdateUserDto!): User!
   deleteUser(userId: ID!): User!
   createMessage(userId: ID!, createMessageInput: CreateMessageDto!): Message!
   updateMessage(userId: ID!, messageId: ID!, updateMessageInput: UpdateMessageDto!): Message!
   deleteMessage(userId: ID!, messageId: ID!): Message!
-}
-
-input CreateUserDto {
-  email: String!
-  password: String!
+  registerUser(registerUserInput: RegisterDto!): User!
+  loginUser(email: String!, password: String!): String!
+  logoutUser: String!
 }
 
 input UpdateUserDto {
@@ -48,4 +45,9 @@ input CreateMessageDto {
 
 input UpdateMessageDto {
   text: String
+}
+
+input RegisterDto {
+  email: String!
+  password: String!
 }

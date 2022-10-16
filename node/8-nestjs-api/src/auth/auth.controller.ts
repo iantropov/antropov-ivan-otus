@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto } from './dto/register.dto';
+import { RegisterDto } from './dto/register.input';
 import { LocalAuthGuard } from './local-auth.guard';
 import { LoggedInGuard } from './logged-in.guard';
 import { Request, Response } from 'express';

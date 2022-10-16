@@ -1,5 +1,5 @@
 import { UserService } from 'src/user/user.service';
-import { RegisterDto } from './dto/register.dto';
+import { RegisterDto } from './dto/register.input';
 import * as bcrypt from 'bcrypt';
 import { UNIQUE_CONSTRAINT_ERROR } from 'src/database/constants';
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
