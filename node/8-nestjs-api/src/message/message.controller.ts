@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { LoggedInGuard } from 'src/auth/logged-in.guard';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { CreateMessageDto } from './dto/create-message.input';
+import { UpdateMessageDto } from './dto/update-message.input';
 import { MessageService } from './message.service';
 
 @Controller('users/:userId/messages')

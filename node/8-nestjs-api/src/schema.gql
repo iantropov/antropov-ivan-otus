@@ -23,3 +23,17 @@ type Query {
   users: [User!]!
   user(id: ID!): User!
 }
+
+type Mutation {
+  createMessage(userId: ID!, createMessageInput: CreateMessageDto!): Message!
+  updateMessage(userId: ID!, messageId: ID!, updateMessageInput: UpdateMessageDto!): Message!
+  deleteMessage(userId: ID!, messageId: ID!): Message!
+}
+
+input CreateMessageDto {
+  text: String!
+}
+
+input UpdateMessageDto {
+  text: String
+}

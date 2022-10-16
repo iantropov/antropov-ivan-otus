@@ -2,8 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
+import { CreateMessageDto } from './dto/create-message.input';
+import { UpdateMessageDto } from './dto/update-message.input';
 import { Message } from './message.entity';
 
 @Injectable()
@@ -55,6 +55,10 @@ export class MessageService {
 
     async remove(userId: number, id: number) {
         const message = await this.findOne(userId, id);
-        return this.messageRepository.remove(message);
+        await this.messageRepository.remove(message);
+        return {
+            ...message,
+            id
+        };
     }
 }
