@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dto/create-user.input';
+import { UpdateUserDto } from './dto/update-user.input';
 import { User } from './user.entity';
 
 type SerializedUser = Omit<User, 'password'>;
@@ -61,7 +61,11 @@ export class UserService {
 
     async remove(id: number) {
         const user = await this.findById(id);
-        return this.userRepository.remove(user);
+        await this.userRepository.remove(user);
+        return {
+            ...user,
+            id
+        };
     }
 
     private serializeUser(user: User) {

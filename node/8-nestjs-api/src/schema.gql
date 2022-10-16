@@ -25,9 +25,21 @@ type Query {
 }
 
 type Mutation {
+  createUser(createUserInput: CreateUserDto!): User!
+  updateUser(userId: ID!, updateUserInput: UpdateUserDto!): User!
+  deleteUser(userId: ID!): User!
   createMessage(userId: ID!, createMessageInput: CreateMessageDto!): Message!
   updateMessage(userId: ID!, messageId: ID!, updateMessageInput: UpdateMessageDto!): Message!
   deleteMessage(userId: ID!, messageId: ID!): Message!
+}
+
+input CreateUserDto {
+  email: String!
+  password: String!
+}
+
+input UpdateUserDto {
+  email: String
 }
 
 input CreateMessageDto {

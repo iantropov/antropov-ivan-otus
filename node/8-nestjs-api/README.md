@@ -10,9 +10,10 @@ Plan:
     - Day 1:
       <- Field resolver for user.messages
       + DataLoader
-      + Queries for Message, User (findOne)
-      - Mutations for Message, User (CUD)
-      - Add field resolvers for relations
+      + Queries for Message
+      + Queries for User
+      + Mutations for Message
+      + Mutations for User
       - Add Auth
 
 NestJS API app (on GraphQL)
