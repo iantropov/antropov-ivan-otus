@@ -1,0 +1,53 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Message {
+  """A unique identifier"""
+  id: ID!
+  text: String!
+  userId: Float!
+  user: User!
+}
+
+type User {
+  """A unique identifier"""
+  id: ID!
+  email: String!
+  password: String!
+  messages: [Message!]!
+  message(id: ID!): Message!
+}
+
+type Query {
+  users: [User!]!
+  user(id: ID!): User!
+}
+
+type Mutation {
+  updateUser(userId: ID!, updateUserInput: UpdateUserDto!): User!
+  deleteUser(userId: ID!): User!
+  createMessage(userId: ID!, createMessageInput: CreateMessageDto!): Message!
+  updateMessage(userId: ID!, messageId: ID!, updateMessageInput: UpdateMessageDto!): Message!
+  deleteMessage(userId: ID!, messageId: ID!): Message!
+  registerUser(registerUserInput: RegisterDto!): User!
+  loginUser(email: String!, password: String!): String!
+  logoutUser: String!
+}
+
+input UpdateUserDto {
+  email: String
+}
+
+input CreateMessageDto {
+  text: String!
+}
+
+input UpdateMessageDto {
+  text: String
+}
+
+input RegisterDto {
+  email: String!
+  password: String!
+}
