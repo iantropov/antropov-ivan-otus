@@ -1,6 +1,21 @@
 # Project Work: MyCode
 
+## DevCycle
+
+```
+npm run start:dev
+```
+
+```
+npm run build
+NODE_ENV=production node dist/main
+```
+
+## Links
+
 https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1
+
+## Roadmap
 
 Сущности:
 - User
