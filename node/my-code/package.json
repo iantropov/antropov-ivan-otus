@@ -23,7 +23,9 @@
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/mongoose": "^9.2.0",
     "@nestjs/platform-express": "^9.0.0",
+    "mongoose": "^6.6.5",
     "next": "^12.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

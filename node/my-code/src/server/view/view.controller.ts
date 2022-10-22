@@ -3,7 +3,7 @@ import { Request, Response } from 'express';
 
 import { ViewService } from './view.service';
 
-@Controller('/')
+@Controller('/view')
 export class ViewController {
     constructor(private viewService: ViewService) {}
 
