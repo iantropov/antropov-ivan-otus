@@ -1,3 +1,6 @@
 # Ivan Antropov repo for homeworks
 
-Course: node-2022-06
+Courses:
+    - node-2022-06
+    - softwarearchitect-2022-09
+    -
