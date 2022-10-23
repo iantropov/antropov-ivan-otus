@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { ViewModule } from './view/view.module';
 import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
+import { ProblemsModule } from './problems/problems.module';
 
 @Module({
     imports: [
@@ -18,7 +19,8 @@ import { LoggerMiddleware } from './common/middlewares/logger.middleware';
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/server/schema.gql')
         }),
-        UsersModule
+        UsersModule,
+        ProblemsModule
     ],
     controllers: [AppController],
     providers: [AppService]
