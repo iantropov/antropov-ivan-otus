@@ -5,15 +5,19 @@ import { Document, ObjectId } from 'mongoose';
 @ObjectType()
 @Schema()
 export class User extends Document {
+    @Field(() => String)
+    _id: ObjectId;
 
-  @Field(() => String)
-  _id: ObjectId;
+    @Prop()
+    @Field(() => String)
+    email: string;
 
-  @Prop()
-  email: string;
+    @Prop()
+    @Field(() => String)
+    name: string;
 
-  @Prop()
-  name: string;
+    @Prop()
+    password: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

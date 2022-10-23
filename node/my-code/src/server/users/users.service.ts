@@ -22,8 +22,16 @@ export class UsersService {
         return user;
     }
 
-    create(createUserDto: CreateUserInput) {
-        const user = new this.userModel(createUserDto);
+    async findByEmail(email: string) {
+        const user = await this.userModel.findOne({ email }).exec();
+        if (!user) {
+            throw new NotFoundException(`User with email=${email} not found`);
+        }
+        return user;
+    }
+
+    create(createUserInput: CreateUserInput) {
+        const user = new this.userModel(createUserInput);
         return user.save();
     }
 

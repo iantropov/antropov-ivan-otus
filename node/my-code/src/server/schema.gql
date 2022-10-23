@@ -6,6 +6,7 @@ type User {
   _id: String!
   email: String!
   name: String!
+  password: String!
 }
 
 type Problem {
@@ -20,6 +21,7 @@ type Query {
   user(id: ID!): User!
   problems: [Problem!]!
   problem(id: ID!): Problem!
+  whoAmI: User!
 }
 
 type Mutation {
@@ -29,11 +31,15 @@ type Mutation {
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   updateProblem(id: ID!, updateProblemInput: UpdateProblemInput!): Problem!
   deleteProblem(id: ID!): Problem!
+  registerUser(registerUserInput: RegisterUserInput!): User!
+  loginUser(email: String!, password: String!): String!
+  logoutUser: String!
 }
 
 input CreateUserInput {
   email: String!
   name: String!
+  password: String!
 }
 
 input UpdateUserInput {
@@ -51,4 +57,10 @@ input UpdateProblemInput {
   summary: String
   description: String
   solution: String
+}
+
+input RegisterUserInput {
+  email: String!
+  name: String!
+  password: String!
 }

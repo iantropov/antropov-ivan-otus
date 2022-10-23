@@ -10,6 +10,7 @@ import { ViewModule } from './view/view.module';
 import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { ProblemsModule } from './problems/problems.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
@@ -20,7 +21,8 @@ import { ProblemsModule } from './problems/problems.module';
             autoSchemaFile: join(process.cwd(), 'src/server/schema.gql')
         }),
         UsersModule,
-        ProblemsModule
+        ProblemsModule,
+        AuthModule
     ],
     controllers: [AppController],
     providers: [AppService]
