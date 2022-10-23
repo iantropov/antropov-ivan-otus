@@ -26,17 +26,16 @@ export class UsersResolver {
         return this.usersService.create(createUserInput);
     }
 
-
     @Mutation(() => User, { name: 'updateUser' })
     async update(
-        @Args('userId', { type: () => ID }) userId: string,
+        @Args('id', { type: () => ID }) userId: string,
         @Args('updateUserInput') updateUserInput: UpdateUserInput
     ) {
         return this.usersService.update(userId, updateUserInput);
     }
 
     @Mutation(() => User, { name: 'deleteUser' })
-    async delete(@Args('userId', { type: () => ID }) userId: string) {
+    async delete(@Args('id', { type: () => ID }) userId: string) {
         return this.usersService.remove(userId);
     }
 }

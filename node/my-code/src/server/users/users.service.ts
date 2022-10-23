@@ -29,7 +29,7 @@ export class UsersService {
 
     async update(id: string, updateUserDto: UpdateUserInput) {
         const existingUser = await this.userModel
-            .findOneAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
+            .findOneAndUpdate({ id }, { $set: updateUserDto }, { new: true })
             .exec();
 
         if (!existingUser) {
