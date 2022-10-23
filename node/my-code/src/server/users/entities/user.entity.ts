@@ -1,6 +1,8 @@
+import { ObjectType } from '@nestjs/graphql';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
+@ObjectType()
 @Schema()
 export class User extends Document {
   @Prop()
