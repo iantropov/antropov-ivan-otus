@@ -2,11 +2,10 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
+type GraphQLUser {
   _id: String!
   email: String!
   name: String!
-  password: String!
 }
 
 type Problem {
@@ -16,23 +15,27 @@ type Problem {
   solution: String!
 }
 
+type AccessToken {
+  accessToken: String!
+}
+
 type Query {
-  users: [User!]!
-  user(id: ID!): User!
+  users: [GraphQLUser!]!
+  user(id: ID!): GraphQLUser!
   problems: [Problem!]!
   problem(id: ID!): Problem!
-  whoAmI: User!
+  whoAmI: GraphQLUser!
 }
 
 type Mutation {
-  createUser(createUserInput: CreateUserInput!): User!
-  updateUser(id: ID!, updateUserInput: UpdateUserInput!): User!
-  deleteUser(id: ID!): User!
+  createUser(createUserInput: CreateUserInput!): GraphQLUser!
+  updateUser(id: ID!, updateUserInput: UpdateUserInput!): GraphQLUser!
+  deleteUser(id: ID!): GraphQLUser!
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   updateProblem(id: ID!, updateProblemInput: UpdateProblemInput!): Problem!
   deleteProblem(id: ID!): Problem!
-  registerUser(registerUserInput: RegisterUserInput!): User!
-  loginUser(email: String!, password: String!): String!
+  registerUser(registerUserInput: RegisterUserInput!): GraphQLUser!
+  loginUser(email: String!, password: String!): AccessToken!
   logoutUser: String!
 }
 

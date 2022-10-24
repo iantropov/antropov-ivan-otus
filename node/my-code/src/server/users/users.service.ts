@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateUserInput } from './input/create-user.input';
 import { UpdateUserInput } from './input/update-user.input';
 import { User } from './entities/user.entity';
+import { GraphQLUser } from './entities/user-graphql.entity';
 
 @Injectable()
 export class UsersService {
@@ -49,5 +50,10 @@ export class UsersService {
     async remove(id: string) {
         const user = await this.findOne(id);
         return user.remove();
+    }
+
+    serialize(user: User): GraphQLUser {
+        const { _id, email, name } = user;
+        return { _id, email, name };
     }
 }
