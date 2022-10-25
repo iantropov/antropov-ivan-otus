@@ -1,8 +1,8 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Link from 'next/link';
-
-import { gql, useQuery } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 const AllUsersQuery = gql`
     query {
@@ -24,9 +24,27 @@ const WhoAmIQuery = gql`
     }
 `;
 
+const LOGOUT_USER = gql`
+    mutation {
+        logoutUser
+    }
+`;
+
+
 const Home: NextPage = () => {
+    const router = useRouter();
     const { data, loading, error } = useQuery(AllUsersQuery);
     const { data: userData, loading: userLoading, error: userError } = useQuery(WhoAmIQuery);
+    const [logoutUser, { data: logoutData, loading: logoutLoading, error: logoutError }] = useMutation(LOGOUT_USER);
+
+    const onLogoutUserClick = () => {
+        logoutUser().then(() => {
+            alert("Logged Out!");
+            router.push('/login');
+        }, (error) => {
+            alert(error);
+        });
+    }
 
     if (loading || userLoading) return <p>Loading...</p>;
     if (error) return <p>Oh no... {userError.message}</p>;
@@ -57,6 +75,7 @@ const Home: NextPage = () => {
                 ) : (
                     <p>
                         _id: {userData.whoAmI._id}, email: {userData.whoAmI.email}, name: {userData.whoAmI.name}
+                        <button type="button" onClick={onLogoutUserClick}>Log Out</button>
                     </p>
                 )}
             </div>

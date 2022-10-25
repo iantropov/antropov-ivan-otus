@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { gql, useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const LOGIN_USER = gql`
     mutation loginUser($email: String!, $password: String!) {
@@ -11,6 +12,8 @@ const LOGIN_USER = gql`
 `;
 
 const Login: NextPage = () => {
+    const router = useRouter();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
@@ -29,6 +32,7 @@ const Login: NextPage = () => {
         loginUser({ variables: { email, password } }).then(
             result => {
                 console.log(result);
+                router.push('/');
             },
             error => {
                 console.log(error);

@@ -9,7 +9,7 @@ import { CurrentUser } from './current-user.decorator';
 import { UsersService } from '../users/users.service';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
 import { LocalAuthGraphQLGuard } from './local-auth-graphql.guard';
-import { JwtAuthGraphqlGuard } from './jwt-auth-graphql.guard';
+// import { JwtAuthGraphqlGuard } from './jwt-auth-graphql.guard';
 import { LoggedInGraphQLGuard } from './logged-in.graphql.guard';
 
 @ObjectType()
@@ -40,7 +40,7 @@ export class AuthResolver {
         return this.authService.login(user);
     }
 
-    // @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(LoggedInGraphQLGuard)
     @Mutation(() => String, { name: 'logoutUser' })
     async logoutUser(@Context('req') request: Request) {
         await request.logout(() => {});
