@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
+import passport from 'passport';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -29,6 +30,7 @@ import { AuthModule } from './auth/auth.module';
 })
 export class AppModule {
     configure(consumer: MiddlewareConsumer): void {
-        consumer.apply(LoggerMiddleware).forRoutes('*');
+        // consumer.apply(LoggerMiddleware).forRoutes('*');
+        consumer.apply(LoggerMiddleware, passport.initialize(), passport.session()).forRoutes('*');
     }
 }

@@ -10,6 +10,7 @@ import { UsersService } from '../users/users.service';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
 import { LocalAuthGraphQLGuard } from './local-auth-graphql.guard';
 import { JwtAuthGraphqlGuard } from './jwt-auth-graphql.guard';
+import { LoggedInGraphQLGuard } from './logged-in.graphql.guard';
 
 @ObjectType()
 class AccessToken {
@@ -22,7 +23,8 @@ export class AuthResolver {
     constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
 
     @Query(() => GraphQLUser, { name: 'whoAmI'})
-    @UseGuards(JwtAuthGraphqlGuard)
+    @UseGuards(LoggedInGraphQLGuard)
+    // @UseGuards(JwtAuthGraphqlGuard)
     async getCurrentUser(@CurrentUser() user: GraphQLUser) {
         return this.usersService.findOne(user._id);
     }

@@ -1,22 +1,44 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
+import { gql, useMutation } from '@apollo/client';
+
+const LOGIN_USER = gql`
+    mutation loginUser($email: String!, $password: String!) {
+        loginUser(email: $email, password: $password) {
+            accessToken
+        }
+    }
+`;
 
 const Login: NextPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loginUser, { data, loading, error }] = useMutation(LOGIN_USER);
 
-    const onEmailChange = (event) => {
-        setEmail(event.value);
-    }
+    const onEmailChange = event => {
+        setEmail(event.currentTarget.value);
+    };
 
-    const onPasswordChange = (event) => {
-        setPassword(event.value);
-    }
+    const onPasswordChange = event => {
+        setPassword(event.currentTarget.value);
+    };
 
-    const onSubmit = (event) => {
+    const onSubmit = event => {
         event.preventDefault();
-        alert(JSON.stringify([...(new FormData(event.currentTarget)).entries()]));
-    }
+
+        loginUser({ variables: { email, password } }).then(
+            result => {
+                console.log(result);
+            },
+            error => {
+                console.log(error);
+                alert(error);
+            }
+        );
+        alert(JSON.stringify([...new FormData(event.currentTarget).entries()]));
+    };
+
+    if (loading) return <p>Loging in...</p>;
 
     return (
         <section className="my-content">
@@ -31,10 +53,17 @@ const Login: NextPage = () => {
                     </label>
                     <label>
                         Password:
-                        <input name="password" type="password" value={password} onChange={onPasswordChange} />
+                        <input
+                            name="password"
+                            type="password"
+                            value={password}
+                            onChange={onPasswordChange}
+                        />
                     </label>
-                    <input type="submit" value="Login"/>
+                    <input type="submit" value="Login" />
                 </form>
+                <h2>Current data:</h2>
+                {JSON.stringify(data)}
             </div>
         </section>
     );
