@@ -1,0 +1,29 @@
+.login {
+    width: 300px;
+    display: flex;
+    flex-flow: column nowrap;
+
+    &__header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    &__body {
+
+    }
+}
+
+.login-body {
+    display: flex;
+    flex-flow: column nowrap;
+
+    &__row {
+        margin-bottom: 20px;
+    }
+}
+
+.login-row {
+    &__label, &__button {
+        width: 100%;
+    }
+}
