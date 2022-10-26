@@ -13,7 +13,7 @@
     }
 }
 
-.login-body {
+.loginBody {
     display: flex;
     flex-flow: column nowrap;
 
@@ -22,7 +22,7 @@
     }
 }
 
-.login-row {
+.loginRow {
     &__label, &__button {
         width: 100%;
     }

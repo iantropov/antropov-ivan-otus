@@ -1,0 +1,23 @@
+.layout {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: stretch;
+    min-height: 100vh;
+
+    &__header {
+        min-height: 100px;
+    }
+
+    &__main {
+        flex-grow: 1;
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    &__footer {
+        min-height: 100px;
+    }
+}

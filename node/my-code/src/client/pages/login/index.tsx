@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
+import classnames from 'classnames';
+
+import styles from './styles.module.scss';
 
 const LOGIN_USER = gql`
     mutation loginUser($email: String!, $password: String!) {
@@ -45,14 +48,14 @@ const Login: NextPage = () => {
     if (loading) return <p>Loging in...</p>;
 
     return (
-        <section className="login">
-            <div className="login__header">
+        <section className={styles.login}>
+            <div className={styles.login__header}>
                 <h1>Login page</h1>
             </div>
-            <div className="login__body login-body">
+            <div className={classnames(styles.login__body, styles.loginBody)}>
                 <form onSubmit={onSubmit}>
-                    <div className="login-body__row login-row">
-                        <label className="login-row__label form-label">
+                    <div className={classnames(styles.loginBody__row, styles.loginRow)}>
+                        <label className={classnames(styles.loginRow__label, 'form-label')}>
                             Email:
                             <input
                                 className="form-control"
@@ -63,8 +66,8 @@ const Login: NextPage = () => {
                             />
                         </label>
                     </div>
-                    <div className="login-body__row login-row">
-                        <label className="login-row__label form-label">
+                    <div className={classnames(styles.loginBody__row, styles.loginRow)}>
+                        <label className={classnames(styles.loginRow__label, 'form-label')}>
                             Password:
                             <input
                                 name="password"
@@ -75,8 +78,11 @@ const Login: NextPage = () => {
                             />
                         </label>
                     </div>
-                    <div className="login-body__row">
-                        <button type="submit" className="login-row__button btn btn-primary">
+                    <div className={styles.loginBody__row}>
+                        <button
+                            type="submit"
+                            className={classnames(styles.loginRow__button, 'btn', 'btn-primary')}
+                        >
                             Login
                         </button>
                     </div>
