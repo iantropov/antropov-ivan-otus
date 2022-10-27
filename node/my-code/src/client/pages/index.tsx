@@ -3,48 +3,26 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { gql, useMutation, useQuery } from '@apollo/client';
-
-const AllUsersQuery = gql`
-    query {
-        users {
-            _id
-            email
-            name
-        }
-    }
-`;
-
-const WhoAmIQuery = gql`
-    query {
-        whoAmI {
-            _id
-            name
-            email
-        }
-    }
-`;
-
-const LOGOUT_USER = gql`
-    mutation {
-        logoutUser
-    }
-`;
-
+import { ALL_USERS_QUERY, LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../lib/graphql-queries';
 
 const Home: NextPage = () => {
     const router = useRouter();
-    const { data, loading, error } = useQuery(AllUsersQuery);
-    const { data: userData, loading: userLoading, error: userError } = useQuery(WhoAmIQuery);
-    const [logoutUser, { data: logoutData, loading: logoutLoading, error: logoutError }] = useMutation(LOGOUT_USER);
+    const { data, loading, error } = useQuery(ALL_USERS_QUERY);
+    const { data: userData, loading: userLoading, error: userError } = useQuery(WHO_AM_I_QUERY);
+    const [logoutUser, { data: logoutData, loading: logoutLoading, error: logoutError }] =
+        useMutation(LOGOUT_USER_MUTATION);
 
     const onLogoutUserClick = () => {
-        logoutUser().then(() => {
-            alert("Logged Out!");
-            router.push('/login');
-        }, (error) => {
-            alert(error);
-        });
-    }
+        logoutUser().then(
+            () => {
+                alert('Logged Out!');
+                router.push('/login');
+            },
+            error => {
+                alert(error);
+            }
+        );
+    };
 
     if (loading || userLoading) return <p>Loading...</p>;
     if (error) return <p>Oh no... {userError.message}</p>;
@@ -74,8 +52,11 @@ const Home: NextPage = () => {
                     'No Data!'
                 ) : (
                     <p>
-                        _id: {userData.whoAmI._id}, email: {userData.whoAmI.email}, name: {userData.whoAmI.name}
-                        <button type="button" onClick={onLogoutUserClick}>Log Out</button>
+                        _id: {userData.whoAmI._id}, email: {userData.whoAmI.email}, name:{' '}
+                        {userData.whoAmI.name}
+                        <button type="button" onClick={onLogoutUserClick}>
+                            Log Out
+                        </button>
                     </p>
                 )}
             </div>

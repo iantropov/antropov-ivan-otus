@@ -34,7 +34,6 @@ const Login: NextPage = () => {
 
         loginUser({ variables: { email, password } }).then(
             result => {
-                console.log(result);
                 router.push('/');
             },
             error => {
@@ -42,7 +41,6 @@ const Login: NextPage = () => {
                 alert(error);
             }
         );
-        alert(JSON.stringify([...new FormData(event.currentTarget).entries()]));
     };
 
     if (loading) return <p>Loging in...</p>;
