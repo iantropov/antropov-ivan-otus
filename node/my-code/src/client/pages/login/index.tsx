@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import classnames from 'classnames';
 
 import styles from './styles.module.scss';
+import { WHO_AM_I_QUERY } from '../../lib/graphql-queries';
 
 const LOGIN_USER = gql`
     mutation loginUser($email: String!, $password: String!) {
@@ -19,7 +20,9 @@ const Login: NextPage = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginUser, { loading }] = useMutation(LOGIN_USER);
+    const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+        refetchQueries: [{ query: WHO_AM_I_QUERY }]
+    });
 
     const onEmailChange = event => {
         setEmail(event.currentTarget.value);

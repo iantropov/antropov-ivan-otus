@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         refetch
     } = useQuery(WHO_AM_I_QUERY, {
         // fetchPolicy: 'no-cache',
-        errorPolicy: 'ignore'
+        // errorPolicy: 'ignore'
     });
     const [logoutUser] = useMutation(LOGOUT_USER_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
@@ -38,7 +38,8 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         logoutUser().then(
             () => {
                 // refetch();
-                // router.push('/login');
+                client.resetStore();
+                router.push('/login');
                 // setTimeout(rerender, 5000);
             },
             error => {

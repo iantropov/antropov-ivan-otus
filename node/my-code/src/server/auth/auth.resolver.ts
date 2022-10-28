@@ -9,7 +9,6 @@ import { CurrentUser } from './current-user.decorator';
 import { UsersService } from '../users/users.service';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
 import { LocalAuthGraphQLGuard } from './local-auth-graphql.guard';
-// import { JwtAuthGraphqlGuard } from './jwt-auth-graphql.guard';
 import { LoggedInGraphQLGuard } from './logged-in.graphql.guard';
 
 @ObjectType()
@@ -26,10 +25,12 @@ export class AuthResolver {
     ) {}
 
     @Query(() => GraphQLUser, { name: 'whoAmI', nullable: true })
-    @UseGuards(LoggedInGraphQLGuard)
-    // @UseGuards(JwtAuthGraphqlGuard)
-    async getCurrentUser(@CurrentUser() user: GraphQLUser) {
-        return this.usersService.findOne(user._id);
+    async getCurrentUser(@Context('req') request) {
+        if (request && request['user']) {
+            return this.usersService.findOne(request['user']._id);
+        } else {
+            return null;
+        }
     }
 
     @Mutation(() => GraphQLUser, { name: 'registerUser' })
