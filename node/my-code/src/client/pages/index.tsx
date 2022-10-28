@@ -9,26 +9,15 @@ const Home: NextPage = () => {
     const router = useRouter();
     const { data, loading, error } = useQuery(ALL_USERS_QUERY);
     const { data: userData, loading: userLoading, error: userError } = useQuery(WHO_AM_I_QUERY);
-    const [logoutUser, { data: logoutData, loading: logoutLoading, error: logoutError }] =
-        useMutation(LOGOUT_USER_MUTATION);
-
-    const onLogoutUserClick = () => {
-        logoutUser().then(
-            () => {
-                alert('Logged Out!');
-                router.push('/login');
-            },
-            error => {
-                alert(error);
-            }
-        );
-    };
-
-    // if (loading) return <p>Loading...</p>;
 
     if (loading || userLoading) return <p>Loading...</p>;
     if (error) return <p>Oh no... {error.message}</p>;
     if (userError) return <p>Oh no... {userError.message}</p>;
+
+    if (!userData?.whoAmI) {
+        // router.replace('/login');
+        return null;
+    }
 
     return (
         <section className="my-content">
@@ -57,9 +46,6 @@ const Home: NextPage = () => {
                     <p>
                         _id: {userData.whoAmI?._id}, email: {userData.whoAmI?.email}, name:{' '}
                         {userData.whoAmI?.name}
-                        <button type="button" onClick={onLogoutUserClick}>
-                            Log Out
-                        </button>
                     </p>
                 )}
             </div>
