@@ -14,9 +14,14 @@ export class HttpExceptionFilter<T extends HttpException> implements ExceptionFi
             typeof exceptionResponse === 'string'
                 ? { message: exceptionResponse }
                 : (exceptionResponse as object);
-        response.status(status).json({
-            ...error,
-            timestamp: new Date().toISOString()
-        });
+
+        if (ctx['contextType'] === 'graphql') {
+            return exception;
+        } else {
+            response.status(status).json({
+                ...error,
+                timestamp: new Date().toISOString()
+            });
+        }
     }
 }

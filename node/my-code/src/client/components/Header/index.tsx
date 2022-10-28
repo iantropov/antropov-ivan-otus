@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -15,16 +15,18 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className }) => {
     const router = useRouter();
 
+    const [,rerender] = useState({});
+
+    debugger
     const {
         data: userData,
         loading: userLoading,
         error: userError,
-        client
+        client,
+        refetch
     } = useQuery(WHO_AM_I_QUERY, {
-        onError: error => {
-            debugger;
-            console.log("QUERY", error);
-        }
+        // fetchPolicy: 'no-cache',
+        errorPolicy: 'ignore'
     });
     const [logoutUser] = useMutation(LOGOUT_USER_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
@@ -35,19 +37,17 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
     const onLogoutClick = () => {
         logoutUser().then(
             () => {
-                router.push('/login');
-                client.resetStore().then(() => {
-
-                }, (error) => {
-                    debugger
-                    console.log("RESET", error);
-                });
+                // refetch();
+                // router.push('/login');
+                // setTimeout(rerender, 5000);
             },
             error => {
                 alert(error);
             }
         );
     };
+
+    // console.log("CLIENT", client);
 
     debugger;
 
@@ -66,7 +66,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                 MyCode
             </a>
 
-            {!userLoading && userData && (
+            {!userLoading && userData?.whoAmI && (
                 <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                     <li>
                         <a href="#" className="nav-link px-2 link-secondary">
@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                 </ul>
             )}
 
-            {!userLoading && !userData && (
+            {!userLoading && !userData?.whoAmI && (
                 <div className="col-md-3 text-end">
                     <Link href="/login">
                         <a className="btn btn-outline-primary me-2">Login</a>
@@ -107,7 +107,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                 </div>
             )}
 
-            {!userLoading && userData && (
+            {!userLoading && userData?.whoAmI && (
                 <div className="col-md-3 text-end">
                     <button className="btn btn-outline-primary me-2" onClick={onLogoutClick}>
                         Logout

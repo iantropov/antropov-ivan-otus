@@ -20,9 +20,12 @@ class AccessToken {
 
 @Resolver()
 export class AuthResolver {
-    constructor(private readonly authService: AuthService, private readonly usersService: UsersService) {}
+    constructor(
+        private readonly authService: AuthService,
+        private readonly usersService: UsersService
+    ) {}
 
-    @Query(() => GraphQLUser, { name: 'whoAmI'})
+    @Query(() => GraphQLUser, { name: 'whoAmI', nullable: true })
     @UseGuards(LoggedInGraphQLGuard)
     // @UseGuards(JwtAuthGraphqlGuard)
     async getCurrentUser(@CurrentUser() user: GraphQLUser) {
@@ -36,7 +39,11 @@ export class AuthResolver {
 
     @UseGuards(LocalAuthGraphQLGuard)
     @Mutation(() => AccessToken, { name: 'loginUser' })
-    async loginUser(@Args('email') email: string, @Args('password') password: string, @CurrentUser() user: User) {
+    async loginUser(
+        @Args('email') email: string,
+        @Args('password') password: string,
+        @CurrentUser() user: User
+    ) {
         return this.authService.login(user);
     }
 

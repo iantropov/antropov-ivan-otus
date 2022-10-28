@@ -24,8 +24,11 @@ const Home: NextPage = () => {
         );
     };
 
+    // if (loading) return <p>Loading...</p>;
+
     if (loading || userLoading) return <p>Loading...</p>;
-    if (error) return <p>Oh no... {userError.message}</p>;
+    if (error) return <p>Oh no... {error.message}</p>;
+    if (userError) return <p>Oh no... {userError.message}</p>;
 
     return (
         <section className="my-content">
@@ -52,8 +55,8 @@ const Home: NextPage = () => {
                     'No Data!'
                 ) : (
                     <p>
-                        _id: {userData.whoAmI._id}, email: {userData.whoAmI.email}, name:{' '}
-                        {userData.whoAmI.name}
+                        _id: {userData.whoAmI?._id}, email: {userData.whoAmI?.email}, name:{' '}
+                        {userData.whoAmI?.name}
                         <button type="button" onClick={onLogoutUserClick}>
                             Log Out
                         </button>
