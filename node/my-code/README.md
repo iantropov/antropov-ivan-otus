@@ -82,6 +82,8 @@ Roadmap:
   + сделать футер
   + сделать страницу регистрации
   - сделать страницу задач
+    - https://getbootstrap.com/docs/5.2/examples/list-groups/#
+    - https://getbootstrap.com/docs/5.2/components/collapse/
   - сделать страницу любимых задач
   - сделать заголовок админа
   - сделать страницу пользовалей
