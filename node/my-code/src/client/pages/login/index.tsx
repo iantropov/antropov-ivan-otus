@@ -20,7 +20,7 @@ const Login: NextPage = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginUser, { loading }] = useMutation(LOGIN_USER, {
+    const [loginUser, { loading, client }] = useMutation(LOGIN_USER, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
     });
 
@@ -37,6 +37,7 @@ const Login: NextPage = () => {
 
         loginUser({ variables: { email, password } }).then(
             result => {
+                client.resetStore();
                 router.push('/');
             },
             error => {

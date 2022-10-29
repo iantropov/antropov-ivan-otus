@@ -15,7 +15,7 @@ const Home: NextPage = () => {
     if (userError) return <p>Oh no... {userError.message}</p>;
 
     if (!userData?.whoAmI) {
-        // router.replace('/login');
+        router.replace('/login');
         return null;
     }
 
