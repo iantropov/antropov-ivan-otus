@@ -5,22 +5,16 @@ import { useRouter } from 'next/router';
 import classnames from 'classnames';
 
 import styles from './styles.module.scss';
-import { WHO_AM_I_QUERY } from '../../lib/graphql-queries';
-
-const LOGIN_USER = gql`
-    mutation loginUser($email: String!, $password: String!) {
-        loginUser(email: $email, password: $password) {
-            accessToken
-        }
-    }
-`;
+import { LOGIN_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
 
 const Login: NextPage = () => {
     const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loginUser, { loading, client }] = useMutation(LOGIN_USER, {
+    const [isUserLoggingIn, setIsUserLoggingIn] = useState(false);
+
+    const [loginUser, { client }] = useMutation(LOGIN_USER_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
     });
 
@@ -34,6 +28,7 @@ const Login: NextPage = () => {
 
     const onSubmit = event => {
         event.preventDefault();
+        setIsUserLoggingIn(true);
 
         loginUser({ variables: { email, password } }).then(
             result => {
@@ -43,11 +38,10 @@ const Login: NextPage = () => {
             error => {
                 console.log(error);
                 alert(error);
+                setIsUserLoggingIn(false);
             }
         );
     };
-
-    if (loading) return <p>Loging in...</p>;
 
     return (
         <section className={styles.login}>
@@ -84,8 +78,9 @@ const Login: NextPage = () => {
                         <button
                             type="submit"
                             className={classnames(styles.loginRow__button, 'btn', 'btn-primary')}
+                            disabled={isUserLoggingIn || !email || !password}
                         >
-                            Login
+                            {isUserLoggingIn ? 'Logging in ...' : 'Login'}
                         </button>
                     </div>
                 </form>

@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { gql, useMutation, useQuery } from '@apollo/client';
-import { ALL_USERS_QUERY, LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../lib/graphql-queries';
+import { ALL_USERS_QUERY, LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../lib/graphql';
 
 const Home: NextPage = () => {
     const router = useRouter();

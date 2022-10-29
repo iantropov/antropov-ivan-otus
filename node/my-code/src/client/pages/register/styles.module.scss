@@ -1,0 +1,29 @@
+.register {
+    width: 300px;
+    display: flex;
+    flex-flow: column nowrap;
+
+    &__header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    &__body {
+
+    }
+}
+
+.registerBody {
+    display: flex;
+    flex-flow: column nowrap;
+
+    &__row {
+        margin-bottom: 20px;
+    }
+}
+
+.registerRow {
+    &__label, &__button {
+        width: 100%;
+    }
+}

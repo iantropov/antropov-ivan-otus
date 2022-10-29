@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
 
-import { LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql-queries';
+import { LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
 
@@ -15,42 +15,26 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className }) => {
     const router = useRouter();
 
-    const [,rerender] = useState({});
-
-    debugger
     const {
         data: userData,
         loading: userLoading,
-        error: userError,
-        client,
-        refetch
-    } = useQuery(WHO_AM_I_QUERY, {
-        // fetchPolicy: 'no-cache',
-        // errorPolicy: 'ignore'
-    });
+        client
+    } = useQuery(WHO_AM_I_QUERY);
     const [logoutUser] = useMutation(LOGOUT_USER_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
     });
 
-    console.log('USER', userData, userLoading, userError);
-
     const onLogoutClick = () => {
         logoutUser().then(
             () => {
-                // refetch();
                 client.resetStore();
                 router.push('/login');
-                // setTimeout(rerender, 5000);
             },
             error => {
                 alert(error);
             }
         );
     };
-
-    // console.log("CLIENT", client);
-
-    debugger;
 
     return (
         <header
@@ -103,7 +87,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                         <a className="btn btn-outline-primary me-2">Login</a>
                     </Link>
                     <Link href="/register">
-                        <a className="btn btn-primary">Sign-up</a>
+                        <a className="btn btn-primary">Register</a>
                     </Link>
                 </div>
             )}
