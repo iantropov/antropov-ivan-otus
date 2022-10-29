@@ -20,6 +20,17 @@ export const WHO_AM_I_QUERY = gql`
     }
 `;
 
+export const GET_PROBLEMS_QUERY = gql`
+    query {
+        problems {
+            summary
+            description
+            solution
+            _id
+        }
+    }
+`;
+
 export const LOGOUT_USER_MUTATION = gql`
     mutation {
         logoutUser
@@ -36,13 +47,9 @@ export const LOGIN_USER_MUTATION = gql`
 
 export const REGISTER_USER_MUTATION = gql`
     mutation registerUser($name: String!, $email: String!, $password: String!) {
-        registerUser(registerUserInput: {
-            name: $name,
-            email: $email,
-            password: $password
-        }) {
-            _id,
-            name,
+        registerUser(registerUserInput: { name: $name, email: $email, password: $password }) {
+            _id
+            name
             email
         }
     }

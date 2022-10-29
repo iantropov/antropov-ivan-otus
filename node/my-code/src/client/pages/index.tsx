@@ -1,54 +1,25 @@
 import React from 'react';
 import { NextPage } from 'next';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { ALL_USERS_QUERY, LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../lib/graphql';
+import { useQuery } from '@apollo/client';
+
+import { GET_PROBLEMS_QUERY } from '../lib/graphql';
+import { useUser } from '../hooks/use-user';
+import { ProblemsReponse } from '../lib/types';
+import { Problems } from '../components/Problems';
 
 const Home: NextPage = () => {
-    const router = useRouter();
-    const { data, loading, error } = useQuery(ALL_USERS_QUERY);
-    const { data: userData, loading: userLoading, error: userError } = useQuery(WHO_AM_I_QUERY);
+    const { data, loading } = useQuery<ProblemsReponse>(GET_PROBLEMS_QUERY);
+    const [user, isUserLoading] = useUser();
 
-    if (loading || userLoading) return <p>Loading...</p>;
-    if (error) return <p>Oh no... {error.message}</p>;
-    if (userError) return <p>Oh no... {userError.message}</p>;
-
-    if (!userData?.whoAmI) {
-        router.replace('/login');
-        return null;
-    }
+    if (loading || isUserLoading) return <p>Loading...</p>;
+    if (!user) return null;
 
     return (
         <section className="my-content">
             <div className="my-header">
-                <h1>Hello, World 22!</h1>
+                <h1>Hello, {user.name}!</h1>
             </div>
-            <div className="my-links">
-                <Link href="/login">Login</Link>
-                <br />
-                <Link href="/register">Register</Link>
-            </div>
-            <div className="my-users">
-                <ul className="my-users-list">
-                    {data.users.map(user => (
-                        <li key={user._id}>
-                            _id: {user._id}, email: {user.email}, name: {user.name}
-                        </li>
-                    ))}
-                </ul>
-            </div>
-            <div className="my-user">
-                <h2>Who Am I:</h2>
-                {userError ? (
-                    'No Data!'
-                ) : (
-                    <p>
-                        _id: {userData.whoAmI?._id}, email: {userData.whoAmI?.email}, name:{' '}
-                        {userData.whoAmI?.name}
-                    </p>
-                )}
-            </div>
+            <Problems className="my-problems" problems={data.problems} />
         </section>
     );
 };
