@@ -19,7 +19,7 @@ func outputSquareWithValue(width int, height int, getValue func(int, int) string
 
 func main() {
 	outputSquareWithValue(25, 25, func(x, y int) string {
-		if y < x+10 && y > x-10 && y > 14-x && y < 34-x {
+		if (x+y)%3 == 0 {
 			return "#"
 		} else {
 			return "."
@@ -51,7 +51,7 @@ func main() {
 // 19 - x == 0 || y == 0 || x == 24 || y == 24
 // 20 - !(x%2 == 1 && y%2 == 0 || x%2 == 0 && y%2 == 1)
 // 21 - ??
-// 22 - ??
-// 23 - ??
+// 22 - (x + y) % 3 == 0
+// 23 - x % 2 == 0 && y % 3 == 0
 // 24 - x == y || x == 24-y
 // 25 - x%6 == 0 || y%6 == 0
