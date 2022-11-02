@@ -10,4 +10,7 @@ export class GraphQLUser {
 
     @Field(() => String)
     name: string;
+
+    @Field(() => Boolean)
+    isAdmin: boolean;
 }

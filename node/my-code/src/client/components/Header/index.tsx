@@ -64,6 +64,13 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                             <a className="nav-link px-2 link-secondary">Favorite Problems</a>
                         </Link>
                     </li>
+                    {userData?.whoAmI.isAdmin && (
+                        <li>
+                            <Link href="/users">
+                                <a className="nav-link px-2 link-secondary">Users</a>
+                            </Link>
+                        </li>
+                    )}
                 </ul>
             )}
 

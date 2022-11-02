@@ -2,6 +2,7 @@ export interface User {
     _id: string;
     email: string;
     name: string;
+    isAdmin: boolean;
 }
 
 export interface Problem {
@@ -17,4 +18,8 @@ export interface WhoAmIResponse {
 
 export interface ProblemsReponse {
     problems: Problem[]
+}
+
+export interface UsersResponse {
+    users: User[];
 }

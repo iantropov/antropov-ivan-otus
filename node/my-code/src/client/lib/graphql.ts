@@ -1,11 +1,12 @@
 import { gql } from '@apollo/client';
 
-export const ALL_USERS_QUERY = gql`
+export const GET_USERS_QUERY = gql`
     query {
         users {
             _id
             email
             name
+            isAdmin
         }
     }
 `;
@@ -16,6 +17,7 @@ export const WHO_AM_I_QUERY = gql`
             _id
             name
             email
+            isAdmin
         }
     }
 `;

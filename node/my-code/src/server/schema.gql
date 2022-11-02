@@ -6,6 +6,7 @@ type GraphQLUser {
   _id: String!
   email: String!
   name: String!
+  isAdmin: Boolean!
 }
 
 type Problem {

@@ -53,7 +53,7 @@ export class UsersService {
     }
 
     serialize(user: User): GraphQLUser {
-        const { _id, email, name } = user;
-        return { _id, email, name };
+        const { _id, email, name, isAdmin } = user;
+        return { _id, email, name, isAdmin };
     }
 }
