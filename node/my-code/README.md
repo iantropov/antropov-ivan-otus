@@ -100,3 +100,10 @@ Roadmap:
   - сделать solution опциональным
   - отказаться от _id в пользу id на фронте
   Деплой (в качестве последней домашки) - 3 часа
+
+
+=================================
+
+show databases;
+use my-code;
+db.users.updateOne({_id: ObjectId("63624efce5b645efa2c00801")}, {$set:{isAdmin: true}})

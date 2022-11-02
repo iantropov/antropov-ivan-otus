@@ -15,7 +15,12 @@ interface ProblemProps {
     allowRemove: boolean;
 }
 
-const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdit, allowRemove }) => {
+const ProblemComponent: React.FC<ProblemProps> = ({
+    className,
+    problem,
+    allowEdit,
+    allowRemove
+}) => {
     const [deleteProblem] = useMutation(DELETE_PROBLEM_MUTATION, {
         refetchQueries: [{ query: GET_PROBLEMS_QUERY }]
     });
@@ -39,14 +44,51 @@ const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdi
                 'list-group-item list-group-item-action d-flex gap-3 py-3'
             )}
         >
-            <img
-                src="https://github.com/twbs.png"
-                alt="twbs"
-                width="32"
-                height="32"
-                className="rounded-circle flex-shrink-0"
-            />
-            <div className="d-flex gap-2 w-100 justify-content-between">
+            <div className={styles.problem__content}>
+                <div className={styles.problem__header}>
+                    <div className={styles.problem__icon}>
+                        <img
+                            src="https://github.com/twbs.png"
+                            alt="twbs"
+                            width="32"
+                            height="32"
+                            className="rounded-circle flex-shrink-0"
+                        />
+                    </div>
+                    <div className={styles.problem__summary}>{problem.summary}</div>
+                    <div className={styles.problem__id}>
+                        <small className="opacity-50 text-nowrap">#{problem._id}</small>
+                    </div>
+                </div>
+                <p className={styles.problem__description}>{problem.description}</p>
+                <div className={styles.problem__solution}>
+                    <p>
+                        <a
+                            className={styles.problem__collapse}
+                            data-bs-toggle="collapse"
+                            href={`#solution-${problem._id}`}
+                        >
+                            Solution
+                        </a>
+                    </p>
+                    <div className="collapse" id={`solution-${problem._id}`}>
+                        <p className="mb-0 opacity-75">{problem.solution}</p>
+                    </div>{' '}
+                </div>
+            </div>
+            <div className={styles.problem__footer}>
+                {allowEdit && (
+                    <Link href={`/problems/${problem._id}`}>
+                        <a className="btn btn-sm btn-primary">Edit</a>
+                    </Link>
+                )}
+                {allowRemove && (
+                    <button className="btn btn-sm btn-danger" onClick={onDeleteProblemClick}>
+                        Delete
+                    </button>
+                )}
+            </div>
+            {/* <div className="d-flex gap-2 w-100 justify-content-between">
                 <div>
                     {allowEdit ? (
                         <Link href={`/problems/${problem._id}`}>
@@ -79,7 +121,7 @@ const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdi
                         Delete
                     </button>
                 )}
-            </div>
+            </div> */}
         </div>
     );
 };
