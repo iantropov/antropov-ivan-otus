@@ -6,10 +6,11 @@ import classnames from 'classnames';
 import { GET_PROBLEMS_QUERY } from '../../lib/graphql';
 import { useUser } from '../../hooks/use-user';
 import { ProblemsReponse } from '../../lib/types';
+import { Problems } from '../../components/Problems';
 
 import styles from './styles.module.scss';
 
-const Home: NextPage = () => {
+const Favorites: NextPage = () => {
     const { data, loading } = useQuery<ProblemsReponse>(GET_PROBLEMS_QUERY);
     const [user, isUserLoading] = useUser();
 
@@ -17,10 +18,11 @@ const Home: NextPage = () => {
     if (!user) return null;
 
     return (
-        <section className="my-content">
-            <h1 className={classnames(styles.home__header)}>Hello, {user.name}!</h1>
+        <section className={classnames(styles.favorites)}>
+            <h2 className={classnames(styles.favorites__header)}>You have some problems:</h2>
+            <Problems className={classnames(styles.favorites__problems)} problems={data.problems} />
         </section>
     );
 };
 
-export default Home;
+export default Favorites;

@@ -15,11 +15,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ className }) => {
     const router = useRouter();
 
-    const {
-        data: userData,
-        loading: userLoading,
-        client
-    } = useQuery(WHO_AM_I_QUERY);
+    const { data: userData, loading: userLoading, client } = useQuery(WHO_AM_I_QUERY);
     const [logoutUser] = useMutation(LOGOUT_USER_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
     });
@@ -54,29 +50,19 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
             {!userLoading && userData?.whoAmI && (
                 <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
                     <li>
-                        <a href="#" className="nav-link px-2 link-secondary">
-                            Home
-                        </a>
+                        <Link href="/">
+                            <a className="nav-link px-2 link-secondary">Home</a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="#" className="nav-link px-2 link-dark">
-                            Features
-                        </a>
+                        <Link href="/problems">
+                            <a className="nav-link px-2 link-secondary">All Problems</a>
+                        </Link>
                     </li>
                     <li>
-                        <a href="#" className="nav-link px-2 link-dark">
-                            Pricing
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" className="nav-link px-2 link-dark">
-                            FAQs
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" className="nav-link px-2 link-dark">
-                            About
-                        </a>
+                        <Link href="/favorites">
+                            <a className="nav-link px-2 link-secondary">Favorite Problems</a>
+                        </Link>
                     </li>
                 </ul>
             )}
