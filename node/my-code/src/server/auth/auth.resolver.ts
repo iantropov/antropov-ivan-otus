@@ -3,7 +3,7 @@ import { Args, Context, Field, Mutation, ObjectType, Query, Resolver } from '@ne
 import { User } from '../users/entities/user.entity';
 import { RegisterUserInput } from './input/register-user.input';
 import { AuthService } from './auth.service';
-import { UseGuards } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Request } from 'express';
 import { CurrentUser } from './current-user.decorator';
 import { UsersService } from '../users/users.service';
@@ -19,6 +19,8 @@ class AccessToken {
 
 @Resolver()
 export class AuthResolver {
+    private readonly logger = new Logger('Auth');
+
     constructor(
         private readonly authService: AuthService,
         private readonly usersService: UsersService
@@ -26,9 +28,14 @@ export class AuthResolver {
 
     @Query(() => GraphQLUser, { name: 'whoAmI', nullable: true })
     async getCurrentUser(@Context('req') request) {
-        if (request && request['user']) {
+        if (!request || !request['user']) {
+            return null;
+        }
+
+        try {
             return this.usersService.findOne(request['user']._id);
-        } else {
+        } catch (error) {
+            this.logger.error(`Can't find current user: ${error}`);
             return null;
         }
     }

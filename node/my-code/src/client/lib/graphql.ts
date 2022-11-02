@@ -56,3 +56,11 @@ export const REGISTER_USER_MUTATION = gql`
         }
     }
 `;
+
+export const DELETE_USER_MUTATION = gql`
+    mutation deleteUser($userId: ID!) {
+        deleteUser(id: $userId) {
+            _id
+        }
+    }
+`;
