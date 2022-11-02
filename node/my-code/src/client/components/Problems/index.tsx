@@ -12,8 +12,16 @@ interface ProblemsProps {
 }
 
 export const Problems: React.FC<ProblemsProps> = ({ className, problems }) => {
+    if (problems.length === 0) {
+        return (
+            <div className={classnames(className, styles.problems, styles.problems_empty)}>
+                You don't have any problems yet :(
+            </div>
+        );
+    }
+
     return (
-        <ul className={classnames(className, styles.problems)}>
+        <ul className={classnames(className, styles.problems, 'list-group', 'w-auto')}>
             {problems.map(problem => (
                 <li className={styles.problems__problem} key={problem._id}>
                     <ProblemComponent problem={problem} />
