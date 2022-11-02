@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         logoutUser().then(
             () => {
                 client.resetStore();
-                router.push('/login');
+                router.push('/users/login');
             },
             error => {
                 alert(error);
@@ -76,10 +76,10 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
 
             {!userLoading && !userData?.whoAmI && (
                 <div className="col-md-3 text-end">
-                    <Link href="/login">
+                    <Link href="/users/login">
                         <a className="btn btn-outline-primary me-2">Login</a>
                     </Link>
-                    <Link href="/register">
+                    <Link href="/users/register">
                         <a className="btn btn-primary">Register</a>
                     </Link>
                 </div>

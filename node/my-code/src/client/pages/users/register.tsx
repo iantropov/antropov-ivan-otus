@@ -6,7 +6,7 @@ import classnames from 'classnames';
 
 import { REGISTER_USER_MUTATION } from '../../lib/graphql';
 
-import styles from './styles.module.scss';
+import styles from './register.module.scss';
 
 const Register: NextPage = () => {
     const router = useRouter();
@@ -42,7 +42,7 @@ const Register: NextPage = () => {
 
         registerUser({ variables: { name, email, password } }).then(
             result => {
-                router.push('/login');
+                router.push('/users/login');
             },
             error => {
                 setIsUserRegistering(false);

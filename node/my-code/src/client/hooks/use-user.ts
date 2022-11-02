@@ -15,7 +15,7 @@ export function useUser(options?: UseUserOptions): [User | null, boolean] {
 
     useEffect(() => {
         if (!userLoading && (!userData?.whoAmI || (options.isAdmin && !userData?.whoAmI.isAdmin))) {
-            router.replace('/login');
+            router.replace('/users/login');
         }
     }, [userData, userLoading]);
 

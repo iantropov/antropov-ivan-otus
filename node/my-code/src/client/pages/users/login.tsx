@@ -4,8 +4,9 @@ import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import classnames from 'classnames';
 
-import styles from './styles.module.scss';
 import { LOGIN_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
+
+import styles from './login.module.scss';
 
 const Login: NextPage = () => {
     const router = useRouter();
