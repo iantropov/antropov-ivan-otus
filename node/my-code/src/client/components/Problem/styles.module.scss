@@ -4,8 +4,13 @@
         opacity: .75;
     }
 
-    &__link, &__link:hover {
+    &__collapse, &__collapse:hover {
         text-decoration: underline;
         color: inherit;
+    }
+
+    &__summary {
+        cursor: pointer;
+        margin-bottom: 0;
     }
 }

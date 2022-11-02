@@ -9,9 +9,10 @@ import styles from './styles.module.scss';
 interface ProblemsProps {
     className?: string;
     problems: Problem[];
+    allowEdit: boolean;
 }
 
-export const Problems: React.FC<ProblemsProps> = ({ className, problems }) => {
+export const Problems: React.FC<ProblemsProps> = ({ className, problems, allowEdit }) => {
     if (problems.length === 0) {
         return (
             <div className={classnames(className, styles.problems, styles.problems_empty)}>
@@ -24,7 +25,7 @@ export const Problems: React.FC<ProblemsProps> = ({ className, problems }) => {
         <ul className={classnames(className, styles.problems, 'list-group', 'w-auto')}>
             {problems.map(problem => (
                 <li className={styles.problems__problem} key={problem._id}>
-                    <ProblemComponent problem={problem} />
+                    <ProblemComponent problem={problem} allowEdit={allowEdit} />
                 </li>
             ))}
         </ul>

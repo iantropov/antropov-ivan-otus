@@ -1,5 +1,6 @@
 import React from 'react';
 import classnames from 'classnames';
+import Link from 'next/link';
 
 import { Problem } from '../../lib/types';
 
@@ -8,9 +9,10 @@ import styles from './styles.module.scss';
 interface ProblemProps {
     className?: string;
     problem: Problem;
+    allowEdit: boolean;
 }
 
-const ProblemComponent: React.FC<ProblemProps> = ({ className, problem }) => {
+const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdit }) => {
     return (
         <div
             className={classnames(
@@ -28,15 +30,19 @@ const ProblemComponent: React.FC<ProblemProps> = ({ className, problem }) => {
             />
             <div className="d-flex gap-2 w-100 justify-content-between">
                 <div>
-                    <h6 className="mb-0">{problem.summary}</h6>
-                    <p className={classnames(styles.problem__description)}>
-                        {problem.description}
-                    </p>
+                    {allowEdit ? (
+                        <Link href={`/problems/${problem._id}`}>
+                            <h6 className={styles.problem__summary}>{problem.summary}</h6>
+                        </Link>
+                    ) : (
+                        <h6 className="mb-0">{problem.summary}</h6>
+                    )}
+                    <p className={classnames(styles.problem__description)}>{problem.description}</p>
                     {problem.solution ? (
                         <>
                             <p>
                                 <a
-                                    className={styles.problem__link}
+                                    className={styles.problem__collapse}
                                     data-bs-toggle="collapse"
                                     href={`#solution-${problem._id}`}
                                 >

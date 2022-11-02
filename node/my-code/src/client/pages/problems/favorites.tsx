@@ -6,11 +6,11 @@ import classnames from 'classnames';
 import { GET_PROBLEMS_QUERY } from '../../lib/graphql';
 import { useUser } from '../../hooks/use-user';
 import { ProblemsReponse } from '../../lib/types';
-import { Problems as ProblemsComponent } from '../../components/Problems';
+import { Problems } from '../../components/Problems';
 
-import styles from './styles.module.scss';
+import styles from './favorites.module.scss';
 
-const Problems: NextPage = () => {
+const Favorites: NextPage = () => {
     const { data, loading } = useQuery<ProblemsReponse>(GET_PROBLEMS_QUERY);
     const [user, isUserLoading] = useUser();
 
@@ -18,14 +18,15 @@ const Problems: NextPage = () => {
     if (!user) return null;
 
     return (
-        <section className={classnames(styles.problems)}>
-            <h2 className={classnames(styles.problems__header)}>You have some problems:</h2>
-            <ProblemsComponent
-                className={classnames(styles.problems__problems)}
+        <section className={classnames(styles.favorites)}>
+            <h2 className={classnames(styles.favorites__header)}>You have some problems:</h2>
+            <Problems
+                className={classnames(styles.favorites__problems)}
                 problems={data.problems}
+                allowEdit={false}
             />
         </section>
     );
 };
 
-export default Problems;
+export default Favorites;

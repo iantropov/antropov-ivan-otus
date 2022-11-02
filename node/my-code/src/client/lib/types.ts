@@ -12,12 +12,18 @@ export interface Problem {
     solution: string;
 }
 
+export type ProblemData = Omit<Problem, '_id'>;
+
 export interface WhoAmIResponse {
     whoAmI: User;
 }
 
 export interface ProblemsReponse {
-    problems: Problem[]
+    problems: Problem[];
+}
+
+export interface ProblemReponse {
+    problem: Problem;
 }
 
 export interface UsersResponse {

@@ -55,12 +55,12 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                         </Link>
                     </li>
                     <li>
-                        <Link href="/problems">
+                        <Link href="/problems/all">
                             <a className="nav-link px-2 link-secondary">All Problems</a>
                         </Link>
                     </li>
                     <li>
-                        <Link href="/favorites">
+                        <Link href="/problems/favorites">
                             <a className="nav-link px-2 link-secondary">Favorite Problems</a>
                         </Link>
                     </li>

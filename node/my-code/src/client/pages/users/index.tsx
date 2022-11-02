@@ -12,7 +12,7 @@ import styles from './styles.module.scss';
 const Users: NextPage = () => {
     const { data, loading } = useQuery<UsersResponse>(GET_USERS_QUERY);
     const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
-        refetchQueries: [{ query: WHO_AM_I_QUERY }, GET_USERS_QUERY]
+        refetchQueries: [{ query: WHO_AM_I_QUERY }, GET_USERS_QUERY ]
     });
 
     const [user, isUserLoading] = useUser({ isAdmin: true });
@@ -20,10 +20,10 @@ const Users: NextPage = () => {
     if (loading || isUserLoading) return <p>Loading...</p>;
     if (!user) return null;
 
-    const onDeleteUserClick = (userId) => {
+    const onDeleteUserClick = userId => {
         deleteUser({ variables: { userId } }).then(
             () => {
-                console.log("SUCCESS!");
+                console.log('SUCCESS!');
             },
             error => {
                 alert(error);
@@ -52,7 +52,10 @@ const Users: NextPage = () => {
                             <td>{user.email}</td>
                             <td>{user.isAdmin ? 'Yes' : 'No'}</td>
                             <td>
-                                <button className="btn btn-sm btn-danger" onClick={() => onDeleteUserClick(user._id)}>
+                                <button
+                                    className="btn btn-sm btn-danger"
+                                    onClick={() => onDeleteUserClick(user._id)}
+                                >
                                     Delete
                                 </button>
                             </td>
