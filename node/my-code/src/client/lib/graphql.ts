@@ -34,7 +34,7 @@ export const GET_PROBLEMS_QUERY = gql`
 `;
 
 export const GET_PROBLEM_QUERY = gql`
-    query($id: ID!) {
+    query ($id: ID!) {
         problem(id: $id) {
             summary
             description
@@ -96,7 +96,7 @@ export const CREATE_PROBLEM_MUTATION = gql`
 export const UPDATE_PROBLEM_MUTATION = gql`
     mutation updateProblem($id: ID!, $summary: String!, $description: String!, $solution: String!) {
         updateProblem(
-            id: $id,
+            id: $id
             updateProblemInput: {
                 summary: $summary
                 description: $description
@@ -106,6 +106,14 @@ export const UPDATE_PROBLEM_MUTATION = gql`
             summary
             description
             solution
+            _id
+        }
+    }
+`;
+
+export const DELETE_PROBLEM_MUTATION = gql`
+    mutation deleteProblem($problemId: ID!) {
+        deleteProblem(id: $problemId) {
             _id
         }
     }

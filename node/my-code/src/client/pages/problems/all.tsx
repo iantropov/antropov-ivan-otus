@@ -25,6 +25,7 @@ const Problems: NextPage = () => {
                 className={classnames(styles.problems__problems)}
                 problems={data.problems}
                 allowEdit={user.isAdmin}
+                allowRemove={user.isAdmin}
             />
             {user.isAdmin && (
                 <Link href="/problems/new">

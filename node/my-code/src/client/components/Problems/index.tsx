@@ -10,9 +10,15 @@ interface ProblemsProps {
     className?: string;
     problems: Problem[];
     allowEdit: boolean;
+    allowRemove: boolean;
 }
 
-export const Problems: React.FC<ProblemsProps> = ({ className, problems, allowEdit }) => {
+export const Problems: React.FC<ProblemsProps> = ({
+    className,
+    problems,
+    allowEdit,
+    allowRemove
+}) => {
     if (problems.length === 0) {
         return (
             <div className={classnames(className, styles.problems, styles.problems_empty)}>
@@ -25,7 +31,11 @@ export const Problems: React.FC<ProblemsProps> = ({ className, problems, allowEd
         <ul className={classnames(className, styles.problems, 'list-group', 'w-auto')}>
             {problems.map(problem => (
                 <li className={styles.problems__problem} key={problem._id}>
-                    <ProblemComponent problem={problem} allowEdit={allowEdit} />
+                    <ProblemComponent
+                        problem={problem}
+                        allowEdit={allowEdit}
+                        allowRemove={allowRemove}
+                    />
                 </li>
             ))}
         </ul>

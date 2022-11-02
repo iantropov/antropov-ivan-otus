@@ -24,6 +24,7 @@ const Favorites: NextPage = () => {
                 className={classnames(styles.favorites__problems)}
                 problems={data.problems}
                 allowEdit={false}
+                allowRemove={false}
             />
         </section>
     );

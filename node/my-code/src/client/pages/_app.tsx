@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { ApolloProvider } from '@apollo/client';
 
 import apolloClient from '../lib/apollo';
@@ -6,7 +7,6 @@ import { Layout } from '../components/Layout';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import '../styles/app.scss';
-import { useEffect } from 'react';
 
 function MyApp({ Component, pageProps }) {
     useEffect(() => {

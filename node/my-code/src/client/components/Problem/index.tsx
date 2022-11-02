@@ -1,8 +1,10 @@
 import React from 'react';
 import classnames from 'classnames';
 import Link from 'next/link';
+import { useMutation } from '@apollo/client';
 
 import { Problem } from '../../lib/types';
+import { DELETE_PROBLEM_MUTATION, GET_PROBLEMS_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
 
@@ -10,9 +12,25 @@ interface ProblemProps {
     className?: string;
     problem: Problem;
     allowEdit: boolean;
+    allowRemove: boolean;
 }
 
-const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdit }) => {
+const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdit, allowRemove }) => {
+    const [deleteProblem] = useMutation(DELETE_PROBLEM_MUTATION, {
+        refetchQueries: [{ query: GET_PROBLEMS_QUERY }]
+    });
+
+    const onDeleteProblemClick = () => {
+        deleteProblem({ variables: { problemId: problem._id } }).then(
+            () => {
+                console.log('SUCCESS!');
+            },
+            error => {
+                alert(error);
+            }
+        );
+    };
+
     return (
         <div
             className={classnames(
@@ -56,6 +74,11 @@ const ProblemComponent: React.FC<ProblemProps> = ({ className, problem, allowEdi
                     ) : null}
                 </div>
                 <small className="opacity-50 text-nowrap">#{problem._id}</small>
+                {allowRemove && (
+                    <button className="btn btn-sm btn-danger" onClick={onDeleteProblemClick}>
+                        Delete
+                    </button>
+                )}
             </div>
         </div>
     );
