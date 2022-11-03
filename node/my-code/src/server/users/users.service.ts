@@ -52,8 +52,40 @@ export class UsersService {
         return user.remove();
     }
 
+    async likeProblem(user: GraphQLUser, problemId: string) {
+        user.favorites.push(problemId);
+        return this.userModel.findOneAndUpdate(
+            { id: user._id },
+            {
+                $set: {
+                    favorites: user.favorites
+                }
+            }
+        );
+    }
+
+    async unlikeProblem(user: GraphQLUser, problemId: string) {
+        const problemIdIdx = user.favorites.findIndex(id => problemId === id);
+        if (problemIdIdx === -1) return Promise.resolve();
+        debugger
+        user.favorites.splice(problemIdIdx, 1);
+        return this.userModel.findOneAndUpdate(
+            { id: user._id },
+            {
+                $set: {
+                    favorites: user.favorites
+                }
+            }
+        );
+    }
+
+    async unlinkeProblemForAllUsers(problemId: string) {
+        const users = await this.findAll();
+        return Promise.all(users.map(user => this.unlikeProblem(user, problemId)));
+    }
+
     serialize(user: User): GraphQLUser {
-        const { _id, email, name, isAdmin } = user;
-        return { _id, email, name, isAdmin };
+        const { _id, email, name, isAdmin, favorites } = user;
+        return { _id, email, name, isAdmin, favorites };
     }
 }

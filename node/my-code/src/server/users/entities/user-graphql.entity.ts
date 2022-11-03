@@ -13,4 +13,7 @@ export class GraphQLUser {
 
     @Field(() => Boolean)
     isAdmin: boolean;
+
+    @Field(() => [String])
+    favorites: string[]
 }

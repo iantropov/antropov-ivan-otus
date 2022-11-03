@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import classnames from 'classnames';
 import Link from 'next/link';
 import { useMutation } from '@apollo/client';
 
 import { Problem } from '../../lib/types';
-import { DELETE_PROBLEM_MUTATION, GET_PROBLEMS_QUERY } from '../../lib/graphql';
+import {
+    DELETE_PROBLEM_MUTATION,
+    GET_PROBLEMS_QUERY,
+    LIKE_PROBLEM_MUTATION,
+    UNLIKE_PROBLEM_MUTATION,
+    WHO_AM_I_QUERY
+} from '../../lib/graphql';
+import { useUser } from '../../hooks/use-user';
 
 import styles from './styles.module.scss';
 
@@ -21,8 +28,17 @@ const ProblemComponent: React.FC<ProblemProps> = ({
     allowEdit,
     allowRemove
 }) => {
+    const [user] = useUser();
+
     const [deleteProblem] = useMutation(DELETE_PROBLEM_MUTATION, {
         refetchQueries: [{ query: GET_PROBLEMS_QUERY }]
+    });
+
+    const [likeProblem, { loading: isProblemLiking }] = useMutation(LIKE_PROBLEM_MUTATION, {
+        refetchQueries: [{ query: WHO_AM_I_QUERY }]
+    });
+    const [unlikeProblem, { loading: isProblemUnliking }] = useMutation(UNLIKE_PROBLEM_MUTATION, {
+        refetchQueries: [{ query: WHO_AM_I_QUERY }]
     });
 
     const onDeleteProblemClick = () => {
@@ -35,6 +51,21 @@ const ProblemComponent: React.FC<ProblemProps> = ({
             }
         );
     };
+
+    const onLikeProblemClick = () => {
+        (isLiked ? unlikeProblem : likeProblem)({ variables: { problemId: problem._id } }).then(
+            () => {
+                console.log(`${isLiked ? 'Unliked' : 'Liked'} problem #${problem._id} successfully!`);
+            },
+            error => {
+                alert(error);
+            }
+        );
+    };
+
+    const isLiked = useMemo(() => {
+        return user.favorites.includes(problem._id);
+    }, [user.favorites.length]);
 
     return (
         <div
@@ -77,6 +108,16 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                 </div>
             </div>
             <div className={styles.problem__footer}>
+                <button
+                    className={classnames(
+                        styles.problem__button,
+                        `btn btn-sm ${isLiked ? 'btn-warning' : 'btn-success'}`
+                    )}
+                    disabled={isProblemLiking || isProblemUnliking}
+                    onClick={onLikeProblemClick}
+                >
+                    {isLiked ? 'Unlike' : 'Like'}
+                </button>
                 {allowEdit && (
                     <Link href={`/problems/${problem._id}`}>
                         <a className={classnames(styles.problem__button, 'btn btn-sm btn-primary')}>

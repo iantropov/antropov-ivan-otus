@@ -5,10 +5,11 @@ import { Model } from 'mongoose';
 import { CreateProblemInput } from './input/create-problem.input';
 import { UpdateProblemInput } from './input/update-problem.input';
 import { Problem } from './entities/problem.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ProblemsService {
-    constructor(@InjectModel(Problem.name) private readonly problemModel: Model<Problem>) {}
+    constructor(@InjectModel(Problem.name) private readonly problemModel: Model<Problem>, private readonly usersService: UsersService) {}
 
     findAll() {
         return this.problemModel.find().exec();
@@ -40,6 +41,7 @@ export class ProblemsService {
 
     async remove(id: string) {
         const problem = await this.findOne(id);
+        await this.usersService.unlinkeProblemForAllUsers(id);
         return problem.remove();
     }
 }

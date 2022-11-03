@@ -17,7 +17,8 @@ export const WHO_AM_I_QUERY = gql`
             _id
             name
             email
-            isAdmin
+            isAdmin,
+            favorites
         }
     }
 `;
@@ -114,6 +115,22 @@ export const UPDATE_PROBLEM_MUTATION = gql`
 export const DELETE_PROBLEM_MUTATION = gql`
     mutation deleteProblem($problemId: ID!) {
         deleteProblem(id: $problemId) {
+            _id
+        }
+    }
+`;
+
+export const LIKE_PROBLEM_MUTATION = gql`
+    mutation likeProblem($problemId: ID!) {
+        likeProblem(id: $problemId) {
+            _id
+        }
+    }
+`;
+
+export const UNLIKE_PROBLEM_MUTATION = gql`
+    mutation unlikeProblem($problemId: ID!) {
+        unlikeProblem(id: $problemId) {
             _id
         }
     }

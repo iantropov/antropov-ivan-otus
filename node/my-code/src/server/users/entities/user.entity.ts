@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 
 @Schema()
 export class User extends Document {
@@ -14,6 +14,9 @@ export class User extends Document {
 
     @Prop({ default: false })
     isAdmin: boolean;
+
+    @Prop({ default: [] })
+    favorites: string[]
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

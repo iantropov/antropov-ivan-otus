@@ -3,6 +3,7 @@ export interface User {
     email: string;
     name: string;
     isAdmin: boolean;
+    favorites: string[];
 }
 
 export interface Problem {
