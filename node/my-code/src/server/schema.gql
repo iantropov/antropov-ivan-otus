@@ -33,6 +33,7 @@ type Query {
   user(id: ID!): GraphQLUser!
   problems: [Problem!]!
   problem(id: ID!): Problem!
+  searchProblems(text: String, categoryIds: [String!], favorite: Boolean): [Problem!]!
   categories: [Category!]!
   category(id: ID!): Category!
   whoAmI: GraphQLUser

@@ -1,7 +1,10 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateProblemInput } from './input/create-problem.input';
+import { CurrentUser } from '../auth/current-user.decorator';
+import { GraphQLUser } from '../users/entities/user-graphql.entity';
+import { CreateProblemInput } from './dto/create-problem.input';
+import { SearchProblemsArgs } from './dto/search-problems.args';
 
-import { UpdateProblemInput } from './input/update-problem.input';
+import { UpdateProblemInput } from './dto/update-problem.input';
 import { Problem } from './entities/problem.entity';
 import { ProblemsService } from './problems.service';
 
@@ -17,6 +20,11 @@ export class ProblemsResolver {
     @Query(() => Problem, { name: 'problem' })
     async findOne(@Args('id', { type: () => ID }) id: string) {
         return this.problemsService.findOne(id);
+    }
+
+    @Query(() => [Problem], { name: 'searchProblems' })
+    async search(@CurrentUser() user: GraphQLUser, @Args() args: SearchProblemsArgs) {
+        return this.problemsService.search(user, args);
     }
 
     @Mutation(() => Problem, { name: 'createProblem' })

@@ -2,11 +2,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
-import { CreateProblemInput } from './input/create-problem.input';
-import { UpdateProblemInput } from './input/update-problem.input';
+import { CreateProblemInput } from './dto/create-problem.input';
+import { UpdateProblemInput } from './dto/update-problem.input';
 import { Problem } from './entities/problem.entity';
 import { UsersService } from '../users/users.service';
 import { CategoriesService } from './categories.service';
+import { SearchProblemsArgs } from './dto/search-problems.args';
+import { GraphQLUser } from '../users/entities/user-graphql.entity';
 
 @Injectable()
 export class ProblemsService {
@@ -18,6 +20,33 @@ export class ProblemsService {
 
     findAll() {
         return this.problemModel.find().exec();
+    }
+
+    search(user: GraphQLUser, args: SearchProblemsArgs) {
+        let options = {};
+        if (args.text) {
+            options = {
+                ...options,
+                summary: { $regex: new RegExp(args.text, 'i')},
+                description: { $regex: new RegExp(args.text, 'i')}
+            }
+        }
+
+        if (args.categoryIds) {
+            options = {
+                ...options,
+                categories: { _id: { $in: args.categoryIds }}
+            }
+        }
+
+        if (args.favorite) {
+            options = {
+                ...options,
+                _id: { $in: user.favorites }
+            }
+        }
+
+        return this.problemModel.find(options);
     }
 
     async findOne(id: string) {
