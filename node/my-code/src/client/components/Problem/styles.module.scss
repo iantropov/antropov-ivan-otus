@@ -1,4 +1,27 @@
 .problem {
+    display: flex;
+    flex-flow: column nowrap;
+
+    &__content {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+
+    &__header {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    &__icon {
+        margin-right: 10px;
+    }
+
+    &__summary {
+        margin-right: auto;
+    }
+
     &__description {
         margin-bottom: 20px;
         opacity: .75;
@@ -9,8 +32,7 @@
         color: inherit;
     }
 
-    &__summary {
-        cursor: pointer;
-        margin-bottom: 0;
+    &__button {
+        margin-right: 10px;
     }
 }

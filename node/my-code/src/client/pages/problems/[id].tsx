@@ -42,6 +42,7 @@ const EditProblem: React.FC<EditProblemProps> = ({ id }) => {
 
     const onSubmit = (problem: ProblemData) => {
         return updateProblem({ variables: { id, ...problem } }).then(() => {
+            console.log(`Updated problem #${id} successfully!`);
             router.push('/problems/all');
         });
     };

@@ -18,6 +18,7 @@ const NewProblem: NextPage = () => {
 
     const onSubmit = (problem: ProblemData) => {
         return createProblem({ variables: problem }).then(() => {
+            console.log(`Created a problem successfully!`);
             router.push('/problems/all');
         });
     };

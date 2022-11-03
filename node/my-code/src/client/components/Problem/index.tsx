@@ -28,7 +28,7 @@ const ProblemComponent: React.FC<ProblemProps> = ({
     const onDeleteProblemClick = () => {
         deleteProblem({ variables: { problemId: problem._id } }).then(
             () => {
-                console.log('SUCCESS!');
+                console.log(`Removed problem #${problem._id} successfully!`);
             },
             error => {
                 alert(error);
@@ -79,49 +79,20 @@ const ProblemComponent: React.FC<ProblemProps> = ({
             <div className={styles.problem__footer}>
                 {allowEdit && (
                     <Link href={`/problems/${problem._id}`}>
-                        <a className="btn btn-sm btn-primary">Edit</a>
+                        <a className={classnames(styles.problem__button, 'btn btn-sm btn-primary')}>
+                            Edit
+                        </a>
                     </Link>
                 )}
                 {allowRemove && (
-                    <button className="btn btn-sm btn-danger" onClick={onDeleteProblemClick}>
+                    <button
+                        className={classnames(styles.problem__button, 'btn btn-sm btn-danger')}
+                        onClick={onDeleteProblemClick}
+                    >
                         Delete
                     </button>
                 )}
             </div>
-            {/* <div className="d-flex gap-2 w-100 justify-content-between">
-                <div>
-                    {allowEdit ? (
-                        <Link href={`/problems/${problem._id}`}>
-                            <h6 className={styles.problem__summary}>{problem.summary}</h6>
-                        </Link>
-                    ) : (
-                        <h6 className="mb-0">{problem.summary}</h6>
-                    )}
-                    <p className={classnames(styles.problem__description)}>{problem.description}</p>
-                    {problem.solution ? (
-                        <>
-                            <p>
-                                <a
-                                    className={styles.problem__collapse}
-                                    data-bs-toggle="collapse"
-                                    href={`#solution-${problem._id}`}
-                                >
-                                    Solution
-                                </a>
-                            </p>
-                            <div className="collapse" id={`solution-${problem._id}`}>
-                                <p className="mb-0 opacity-75">{problem.solution}</p>
-                            </div>
-                        </>
-                    ) : null}
-                </div>
-                <small className="opacity-50 text-nowrap">#{problem._id}</small>
-                {allowRemove && (
-                    <button className="btn btn-sm btn-danger" onClick={onDeleteProblemClick}>
-                        Delete
-                    </button>
-                )}
-            </div> */}
         </div>
     );
 };

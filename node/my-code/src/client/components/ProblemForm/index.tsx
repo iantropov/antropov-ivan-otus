@@ -38,21 +38,19 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
             summary,
             description,
             solution
-        }).then(
-            result => {
-                console.log('SUCCESS');
-            },
-            error => {
-                setIsProblemCreating(false);
-                console.log(error);
-                alert(error);
-            }
-        );
+        }).catch(error => {
+            setIsProblemCreating(false);
+            console.log(error);
+            alert(error);
+        });
     };
 
     return (
         <section className={classnames(className, styles.problemForm)}>
-            <form className={classnames(styles.problemForm__rows, styles.problemFormRows)} onSubmit={onFormSubmit}>
+            <form
+                className={classnames(styles.problemForm__rows, styles.problemFormRows)}
+                onSubmit={onFormSubmit}
+            >
                 <div className={classnames(styles.problemFormRows__row, styles.problemFormRow)}>
                     <label className={classnames(styles.problemFormRow__label, 'form-label')}>
                         Summary:
@@ -87,11 +85,7 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
                 <div className={styles.problemFormRows__row}>
                     <button
                         type="submit"
-                        className={classnames(
-                            styles.problemFormRow__button,
-                            'btn',
-                            'btn-primary'
-                        )}
+                        className={classnames(styles.problemFormRow__button, 'btn', 'btn-primary')}
                         disabled={isProblemCreating || !summary || !description || !solution}
                     >
                         {isProblemCreating ? 'Saving...' : 'Save'}

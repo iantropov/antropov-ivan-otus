@@ -23,7 +23,7 @@ const Users: NextPage = () => {
     const onDeleteUserClick = userId => {
         deleteUser({ variables: { userId } }).then(
             () => {
-                console.log('SUCCESS!');
+                console.log(`Removed the user #${userId} successfully!`);
             },
             error => {
                 alert(error);
