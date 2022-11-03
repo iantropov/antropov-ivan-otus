@@ -6,10 +6,15 @@ import { CreateProblemInput } from './input/create-problem.input';
 import { UpdateProblemInput } from './input/update-problem.input';
 import { Problem } from './entities/problem.entity';
 import { UsersService } from '../users/users.service';
+import { CategoriesService } from './categories.service';
 
 @Injectable()
 export class ProblemsService {
-    constructor(@InjectModel(Problem.name) private readonly problemModel: Model<Problem>, private readonly usersService: UsersService) {}
+    constructor(
+        @InjectModel(Problem.name) private readonly problemModel: Model<Problem>,
+        private readonly usersService: UsersService,
+        private readonly categoriesService: CategoriesService
+    ) {}
 
     findAll() {
         return this.problemModel.find().exec();
@@ -23,8 +28,12 @@ export class ProblemsService {
         return problem;
     }
 
-    create(createProblemDto: CreateProblemInput) {
-        const problem = new this.problemModel(createProblemDto);
+    async create(createProblemDto: CreateProblemInput) {
+        const categories = await this.categoriesService.findByIds(createProblemDto.categories);
+        const problem = new this.problemModel({
+            ...createProblemDto,
+            categories
+        });
         return problem.save();
     }
 

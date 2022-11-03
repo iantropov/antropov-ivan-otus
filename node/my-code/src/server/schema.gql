@@ -10,11 +10,17 @@ type GraphQLUser {
   favorites: [String!]!
 }
 
+type Category {
+  _id: String!
+  name: String!
+}
+
 type Problem {
   _id: String!
   summary: String!
   description: String!
   solution: String!
+  categories: [Category!]!
 }
 
 type AccessToken {
@@ -26,6 +32,8 @@ type Query {
   user(id: ID!): GraphQLUser!
   problems: [Problem!]!
   problem(id: ID!): Problem!
+  categories: [Category!]!
+  category(id: ID!): Category!
   whoAmI: GraphQLUser
 }
 
@@ -38,6 +46,7 @@ type Mutation {
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   updateProblem(id: ID!, updateProblemInput: UpdateProblemInput!): Problem!
   deleteProblem(id: ID!): Problem!
+  createCategory(name: String!): Category!
   registerUser(registerUserInput: RegisterUserInput!): GraphQLUser!
   loginUser(email: String!, password: String!): AccessToken!
   logoutUser: String!
@@ -58,6 +67,7 @@ input CreateProblemInput {
   summary: String!
   description: String!
   solution: String!
+  categories: [String!]!
 }
 
 input UpdateProblemInput {
