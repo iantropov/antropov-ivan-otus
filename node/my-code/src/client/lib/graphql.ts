@@ -17,7 +17,7 @@ export const WHO_AM_I_QUERY = gql`
             _id
             name
             email
-            isAdmin,
+            isAdmin
             favorites
         }
     }
@@ -29,6 +29,10 @@ export const GET_PROBLEMS_QUERY = gql`
             summary
             description
             solution
+            categories {
+                _id
+                name
+            }
             _id
         }
     }
@@ -40,6 +44,16 @@ export const GET_PROBLEM_QUERY = gql`
             summary
             description
             solution
+            categoryIds
+            _id
+        }
+    }
+`;
+
+export const GET_CATEGORIES_QUERY = gql`
+    query {
+        categories {
+            name
             _id
         }
     }
@@ -78,35 +92,58 @@ export const DELETE_USER_MUTATION = gql`
 `;
 
 export const CREATE_PROBLEM_MUTATION = gql`
-    mutation createProblem($summary: String!, $description: String!, $solution: String!) {
+    mutation createProblem(
+        $summary: String!
+        $description: String!
+        $solution: String!
+        $categoryIds: [String!]!
+    ) {
         createProblem(
             createProblemInput: {
                 summary: $summary
                 description: $description
                 solution: $solution
+                categoryIds: $categoryIds
             }
         ) {
             summary
             description
             solution
+            categories {
+                _id
+                name
+            }
+            categoryIds
             _id
         }
     }
 `;
 
 export const UPDATE_PROBLEM_MUTATION = gql`
-    mutation updateProblem($id: ID!, $summary: String!, $description: String!, $solution: String!) {
+    mutation updateProblem(
+        $id: ID!
+        $summary: String!
+        $description: String!
+        $solution: String!
+        $categoryIds: [String!]!
+    ) {
         updateProblem(
             id: $id
             updateProblemInput: {
                 summary: $summary
                 description: $description
                 solution: $solution
+                categoryIds: $categoryIds
             }
         ) {
             summary
             description
             solution
+            categories {
+                _id
+                name
+            }
+            categoryIds
             _id
         }
     }

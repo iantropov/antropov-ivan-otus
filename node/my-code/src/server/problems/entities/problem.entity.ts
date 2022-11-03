@@ -4,22 +4,32 @@ import { Document, ObjectId } from 'mongoose';
 import { Category, CategorySchema } from './category.entity';
 
 @ObjectType()
-@Schema()
+@Schema({
+    toJSON: {
+        virtuals: true
+    }
+})
 export class Problem extends Document {
-  @Field(() => String)
-  _id: ObjectId;
+    @Field(() => String)
+    _id: ObjectId;
 
-  @Prop()
-  summary: string
+    @Prop()
+    summary: string;
 
-  @Prop()
-  description: string
+    @Prop()
+    description: string;
 
-  @Prop()
-  solution: string
+    @Prop()
+    solution: string;
 
-  @Prop({ type: [CategorySchema], default: [] })
-  categories: Category[]
+    @Prop({ type: [CategorySchema], default: [] })
+    categories: Category[];
+
+    categoryIds: string[];
 }
 
 export const ProblemSchema = SchemaFactory.createForClass(Problem);
+
+ProblemSchema.virtual('categoryIds').get(function (this: Problem) {
+    return this.categories.map(({ _id }) => _id);
+});

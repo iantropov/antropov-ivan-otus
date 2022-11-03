@@ -67,7 +67,6 @@ export class UsersService {
     async unlikeProblem(user: GraphQLUser, problemId: string) {
         const problemIdIdx = user.favorites.findIndex(id => problemId === id);
         if (problemIdIdx === -1) return Promise.resolve();
-        debugger
         user.favorites.splice(problemIdIdx, 1);
         return this.userModel.findOneAndUpdate(
             { id: user._id },

@@ -1,10 +1,10 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { CREATE_PROBLEM_MUTATION, GET_PROBLEMS_QUERY } from '../../lib/graphql';
-import { ProblemData } from '../../lib/types';
+import { CREATE_PROBLEM_MUTATION, GET_CATEGORIES_QUERY, GET_PROBLEMS_QUERY } from '../../lib/graphql';
+import { CategoriesReponse, ProblemData } from '../../lib/types';
 import { ProblemForm } from '../../components/ProblemForm';
 
 import styles from './new.module.scss';

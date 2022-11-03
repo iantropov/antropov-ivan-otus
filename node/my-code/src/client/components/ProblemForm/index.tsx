@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
+import { useQuery } from '@apollo/client';
 
-import { Problem, ProblemData } from '../../lib/types';
+import { CategoriesReponse, Problem, ProblemData } from '../../lib/types';
+import { GET_CATEGORIES_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
 
@@ -12,10 +14,16 @@ interface ProblemFormProps {
 }
 
 export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, onSubmit }) => {
+    const { data, loading } = useQuery<CategoriesReponse>(GET_CATEGORIES_QUERY);
+    const categories = data?.categories;
+
     const [summary, setSummary] = useState(problem?.summary || '');
     const [description, setDescription] = useState(problem?.description || '');
     const [solution, setSolution] = useState(problem?.solution || '');
+    const [categoryIds, setCategoryIds] = useState(problem?.categoryIds || []);
     const [isProblemCreating, setIsProblemCreating] = useState(false);
+
+    if (loading) return <p>Loading...</p>;
 
     const onSummaryChange = event => {
         setSummary(event.currentTarget.value);
@@ -29,6 +37,16 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
         setSolution(event.currentTarget.value);
     };
 
+    const onCategoryIdsChange = event => {
+        const newCategoryIds = [];
+        [...event.currentTarget.options].forEach(option => {
+            if (option.selected) {
+                newCategoryIds.push(option.value);
+            }
+        });
+        setCategoryIds(newCategoryIds);
+    };
+
     const onFormSubmit = event => {
         event.preventDefault();
 
@@ -37,7 +55,8 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
         onSubmit({
             summary,
             description,
-            solution
+            solution,
+            categoryIds
         }).catch(error => {
             setIsProblemCreating(false);
             console.log(error);
@@ -80,6 +99,23 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
                             onChange={onSolutionChange}
                             value={solution}
                         />
+                    </label>
+                </div>
+                <div className={classnames(styles.problemFormRows__row, styles.problemFormRow)}>
+                    <label className={classnames(styles.problemFormRow__label, 'form-label')}>
+                        Categories:
+                        <select
+                            className="form-control"
+                            onChange={onCategoryIdsChange}
+                            multiple={true}
+                            value={categoryIds}
+                        >
+                            {categories.map(category => (
+                                <option key={category._id} value={category._id}>
+                                    {category.name}
+                                </option>
+                            ))}
+                        </select>
                     </label>
                 </div>
                 <div className={styles.problemFormRows__row}>

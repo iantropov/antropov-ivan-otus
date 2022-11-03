@@ -29,7 +29,7 @@ export class ProblemsService {
     }
 
     async create(createProblemDto: CreateProblemInput) {
-        const categories = await this.categoriesService.findByIds(createProblemDto.categories);
+        const categories = await this.categoriesService.findByIds(createProblemDto.categoryIds);
         const problem = new this.problemModel({
             ...createProblemDto,
             categories

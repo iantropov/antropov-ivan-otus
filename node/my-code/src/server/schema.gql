@@ -21,6 +21,7 @@ type Problem {
   description: String!
   solution: String!
   categories: [Category!]!
+  categoryIds: [String!]!
 }
 
 type AccessToken {
@@ -67,7 +68,7 @@ input CreateProblemInput {
   summary: String!
   description: String!
   solution: String!
-  categories: [String!]!
+  categoryIds: [String!]!
 }
 
 input UpdateProblemInput {

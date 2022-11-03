@@ -11,6 +11,7 @@
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
+        align-items: center;
         margin-bottom: 10px;
     }
 
@@ -20,6 +21,11 @@
 
     &__summary {
         margin-right: auto;
+    }
+
+    &__categories {
+        font-weight: bold;
+        opacity: .75;
     }
 
     &__description {

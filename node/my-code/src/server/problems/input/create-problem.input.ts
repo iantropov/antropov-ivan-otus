@@ -5,5 +5,5 @@ export class CreateProblemInput {
     readonly summary: string;
     readonly description: string;
     readonly solution: string;
-    readonly categories: string[];
+    readonly categoryIds: string[];
 }

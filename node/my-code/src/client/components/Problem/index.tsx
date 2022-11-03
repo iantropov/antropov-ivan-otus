@@ -91,6 +91,9 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                         <small className="opacity-50 text-nowrap">#{problem._id}</small>
                     </div>
                 </div>
+                <p className={styles.problem__categories}>
+                    {problem.categories.map(({ name }) => `@${name}`).join(', ')}
+                </p>
                 <p className={styles.problem__description}>{problem.description}</p>
                 <div className={styles.problem__solution}>
                     <p>

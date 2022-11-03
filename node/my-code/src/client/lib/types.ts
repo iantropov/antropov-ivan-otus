@@ -6,14 +6,21 @@ export interface User {
     favorites: string[];
 }
 
+export interface Category {
+    _id: string;
+    name: string;
+}
+
 export interface Problem {
     _id: string;
     summary: string;
     description: string;
     solution: string;
+    categories: Category[];
+    categoryIds: string[];
 }
 
-export type ProblemData = Omit<Problem, '_id'>;
+export type ProblemData = Omit<Problem, '_id' | 'categories'>;
 
 export interface WhoAmIResponse {
     whoAmI: User;
@@ -29,4 +36,8 @@ export interface ProblemReponse {
 
 export interface UsersResponse {
     users: User[];
+}
+
+export interface CategoriesReponse {
+    categories: Category[];
 }

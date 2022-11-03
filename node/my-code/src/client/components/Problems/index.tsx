@@ -28,7 +28,7 @@ export const Problems: React.FC<ProblemsProps> = ({
     }
 
     return (
-        <ul className={classnames(className, styles.problems, 'list-group', 'w-auto')}>
+        <ul className={classnames(className, styles.problems, 'list-group')}>
             {problems.map(problem => (
                 <li className={styles.problems__problem} key={problem._id}>
                     <ProblemComponent
