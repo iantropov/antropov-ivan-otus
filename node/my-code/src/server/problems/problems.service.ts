@@ -39,7 +39,7 @@ export class ProblemsService {
 
     async update(id: string, updateProblemDto: UpdateProblemInput) {
         const existingProblem = await this.problemModel
-            .findOneAndUpdate({ id }, { $set: updateProblemDto }, { new: true })
+            .findOneAndUpdate({ _id: id }, { $set: updateProblemDto }, { new: true })
             .exec();
 
         if (!existingProblem) {

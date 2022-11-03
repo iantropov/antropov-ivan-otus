@@ -24,7 +24,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
         logoutUser().then(
             () => {
                 client.resetStore();
-                router.push('/users/login');
+                setTimeout(() => router.push('/users/login'));
             },
             error => {
                 alert(error);

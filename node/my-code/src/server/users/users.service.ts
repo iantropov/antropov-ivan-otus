@@ -38,7 +38,7 @@ export class UsersService {
 
     async update(id: string, updateUserDto: UpdateUserInput) {
         const existingUser = await this.userModel
-            .findOneAndUpdate({ id }, { $set: updateUserDto }, { new: true })
+            .findOneAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
             .exec();
 
         if (!existingUser) {
@@ -54,33 +54,30 @@ export class UsersService {
 
     async likeProblem(user: GraphQLUser, problemId: string) {
         user.favorites.push(problemId);
-        return this.userModel.findOneAndUpdate(
-            { id: user._id },
-            {
-                $set: {
-                    favorites: user.favorites
-                }
-            }
-        );
+        return this.updateUserFavorites(user);
     }
 
     async unlikeProblem(user: GraphQLUser, problemId: string) {
         const problemIdIdx = user.favorites.findIndex(id => problemId === id);
         if (problemIdIdx === -1) return Promise.resolve();
         user.favorites.splice(problemIdIdx, 1);
+        return this.updateUserFavorites(user);
+    }
+
+    async unlinkeProblemForAllUsers(problemId: string) {
+        const users = await this.findAll();
+        return Promise.all(users.map(user => this.unlikeProblem(user, problemId)));
+    }
+
+    private updateUserFavorites(user: GraphQLUser) {
         return this.userModel.findOneAndUpdate(
-            { id: user._id },
+            { _id: user._id },
             {
                 $set: {
                     favorites: user.favorites
                 }
             }
         );
-    }
-
-    async unlinkeProblemForAllUsers(problemId: string) {
-        const users = await this.findAll();
-        return Promise.all(users.map(user => this.unlikeProblem(user, problemId)));
     }
 
     serialize(user: User): GraphQLUser {
