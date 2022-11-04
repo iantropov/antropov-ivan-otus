@@ -23,30 +23,29 @@ export class ProblemsService {
     }
 
     search(user: GraphQLUser, args: SearchProblemsArgs) {
-        let options = {};
+        let searchCriteria = [];
         if (args.text) {
-            options = {
-                ...options,
-                summary: { $regex: new RegExp(args.text, 'i')},
-                description: { $regex: new RegExp(args.text, 'i')}
-            }
+            searchCriteria.push({
+                summary: new RegExp(args.text, 'i')
+            });
+            searchCriteria.push({
+                description: new RegExp(args.text, 'i')
+            });
         }
 
         if (args.categoryIds) {
-            options = {
-                ...options,
-                categories: { _id: { $in: args.categoryIds }}
-            }
+            searchCriteria.push({
+                'categories._id': { $in: args.categoryIds }
+            });
         }
 
         if (args.favorite) {
-            options = {
-                ...options,
+            searchCriteria.push({
                 _id: { $in: user.favorites }
-            }
+            });
         }
 
-        return this.problemModel.find(options);
+        return this.problemModel.find({ $or: searchCriteria });
     }
 
     async findOne(id: string) {
