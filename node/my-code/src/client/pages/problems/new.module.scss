@@ -1,4 +1,9 @@
 .newProblem {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+
     &__header {
         text-align: center;
         margin-bottom: 30px;

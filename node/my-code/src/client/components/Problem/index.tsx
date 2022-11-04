@@ -55,7 +55,9 @@ const ProblemComponent: React.FC<ProblemProps> = ({
     const onLikeProblemClick = () => {
         (isLiked ? unlikeProblem : likeProblem)({ variables: { problemId: problem._id } }).then(
             () => {
-                console.log(`${isLiked ? 'Unliked' : 'Liked'} problem #${problem._id} successfully!`);
+                console.log(
+                    `${isLiked ? 'Unliked' : 'Liked'} problem #${problem._id} successfully!`
+                );
             },
             error => {
                 alert(error);
@@ -96,18 +98,16 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                 </p>
                 <p className={styles.problem__description}>{problem.description}</p>
                 <div className={styles.problem__solution}>
-                    <p>
-                        <a
-                            className={styles.problem__collapse}
-                            data-bs-toggle="collapse"
-                            href={`#solution-${problem._id}`}
-                        >
-                            Solution
-                        </a>
-                    </p>
+                    <a
+                        className={styles.problem__collapse}
+                        data-bs-toggle="collapse"
+                        href={`#solution-${problem._id}`}
+                    >
+                        Solution
+                    </a>
                     <div className="collapse" id={`solution-${problem._id}`}>
                         <p className="mb-0 opacity-75">{problem.solution}</p>
-                    </div>{' '}
+                    </div>
                 </div>
             </div>
             <div className={styles.problem__footer}>

@@ -59,6 +59,21 @@ export const GET_CATEGORIES_QUERY = gql`
     }
 `;
 
+export const SEARCH_PROBLEMS_QUERY = gql`
+    query ($text: String, $categoryIds: [String!], $favorites: Boolean) {
+        searchProblems(text: $text, categoryIds: $categoryIds, favorites: $favorites) {
+            summary
+            description
+            solution
+            categories {
+                _id
+                name
+            }
+            _id
+        }
+    }
+`;
+
 export const LOGOUT_USER_MUTATION = gql`
     mutation {
         logoutUser

@@ -9,5 +9,5 @@ export class SearchProblemsArgs {
   @MinLength(1)
   categoryIds?: string[];
 
-  favorite?: boolean;
+  favorites?: boolean;
 }

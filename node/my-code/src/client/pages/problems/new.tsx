@@ -24,12 +24,12 @@ const NewProblem: NextPage = () => {
     };
 
     return (
-        <section className={styles.register}>
-            <div className={styles.register__header}>
+        <main className={styles.newProblem}>
+            <div className={styles.newProblem__header}>
                 <h1>Create New Problem</h1>
             </div>
             <ProblemForm onSubmit={onSubmit} />
-        </section>
+        </main>
     );
 };
 

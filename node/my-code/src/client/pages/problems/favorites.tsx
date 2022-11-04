@@ -18,7 +18,7 @@ const Favorites: NextPage = () => {
     if (!user) return null;
 
     return (
-        <section className={classnames(styles.favorites)}>
+        <main className={classnames(styles.favorites)}>
             <h2 className={classnames(styles.favorites__header)}>You have some problems:</h2>
             <Problems
                 className={classnames(styles.favorites__problems)}
@@ -26,7 +26,7 @@ const Favorites: NextPage = () => {
                 allowEdit={false}
                 allowRemove={false}
             />
-        </section>
+        </main>
     );
 };
 

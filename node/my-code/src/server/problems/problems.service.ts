@@ -19,37 +19,52 @@ export class ProblemsService {
     ) {}
 
     findAll() {
-        return this.problemModel.find().exec();
+        return this.problemModel.find();
     }
 
     search(user: GraphQLUser, args: SearchProblemsArgs) {
-        let searchCriteria = [];
+        let orSearchCriteria = [];
         if (args.text) {
-            searchCriteria.push({
+            orSearchCriteria.push({
                 summary: new RegExp(args.text, 'i')
             });
-            searchCriteria.push({
+            orSearchCriteria.push({
                 description: new RegExp(args.text, 'i')
             });
         }
 
-        if (args.categoryIds) {
-            searchCriteria.push({
+        if (args.categoryIds && args.categoryIds.length > 0) {
+            orSearchCriteria.push({
                 'categories._id': { $in: args.categoryIds }
             });
         }
 
-        if (args.favorite) {
-            searchCriteria.push({
+        let andSearchCriteria = [];
+        if (args.favorites) {
+            andSearchCriteria.push({
                 _id: { $in: user.favorites }
             });
         }
 
-        return this.problemModel.find({ $or: searchCriteria });
+        let filter = {};
+        if (orSearchCriteria.length > 0) {
+            filter = {
+                ...filter,
+                $or: orSearchCriteria
+            };
+        }
+        if (andSearchCriteria.length > 0) {
+            filter = {
+                ...filter,
+                $and: andSearchCriteria
+            };
+        }
+
+        return this.problemModel.find(filter);
     }
 
     async findOne(id: string) {
-        const problem = await this.problemModel.findOne({ _id: id }).exec();
+        const problem = await this.problemModel.findOne({ _id: id });
         if (!problem) {
             throw new NotFoundException(`Problem #${id} not found`);
         }
@@ -66,9 +81,11 @@ export class ProblemsService {
     }
 
     async update(id: string, updateProblemDto: UpdateProblemInput) {
-        const existingProblem = await this.problemModel
-            .findOneAndUpdate({ _id: id }, { $set: updateProblemDto }, { new: true })
-            .exec();
+        const existingProblem = await this.problemModel.findOneAndUpdate(
+            { _id: id },
+            { $set: updateProblemDto },
+            { new: true }
+        );
 
         if (!existingProblem) {
             throw new NotFoundException(`Problem #${id} not found`);

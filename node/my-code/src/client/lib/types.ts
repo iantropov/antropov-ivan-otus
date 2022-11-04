@@ -22,6 +22,12 @@ export interface Problem {
 
 export type ProblemData = Omit<Problem, '_id' | 'categories'>;
 
+export interface ProblemsSearchFilter {
+    text?: string;
+    categoryIds?: string[];
+    favorites?: boolean;
+}
+
 export interface WhoAmIResponse {
     whoAmI: User;
 }
@@ -40,4 +46,8 @@ export interface UsersResponse {
 
 export interface CategoriesReponse {
     categories: Category[];
+}
+
+export interface SearchProblemsResponse {
+    searchProblems: Problem[];
 }

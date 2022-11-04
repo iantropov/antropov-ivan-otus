@@ -4,26 +4,30 @@ import { useQuery } from '@apollo/client';
 import classnames from 'classnames';
 import Link from 'next/link';
 
-import { GET_PROBLEMS_QUERY } from '../../lib/graphql';
+import { SEARCH_PROBLEMS_QUERY } from '../../lib/graphql';
 import { useUser } from '../../hooks/use-user';
-import { ProblemsReponse } from '../../lib/types';
+import { SearchProblemsResponse } from '../../lib/types';
 import { Problems as ProblemsComponent } from '../../components/Problems';
+import { ProblemsSearchFilter as ProblemsSearchFilterComponent } from '../../components/ProblemsSearchFilter';
 
 import styles from './all.module.scss';
 
 const Problems: NextPage = () => {
-    const { data, loading } = useQuery<ProblemsReponse>(GET_PROBLEMS_QUERY);
+    const { data, loading, refetch } = useQuery<SearchProblemsResponse>(SEARCH_PROBLEMS_QUERY);
     const [user, isUserLoading] = useUser();
 
     if (loading || isUserLoading) return <p>Loading...</p>;
     if (!user) return null;
 
     return (
-        <section className={classnames(styles.problems)}>
-            <h2 className={classnames(styles.problems__header)}>You have some problems:</h2>
+        <main className={classnames(styles.problems)}>
+            <ProblemsSearchFilterComponent
+                className={classnames(styles.problems__problemsFilterSearch)}
+                onApply={refetch}
+            />
             <ProblemsComponent
                 className={classnames(styles.problems__problems)}
-                problems={data.problems}
+                problems={data.searchProblems}
                 allowEdit={user.isAdmin}
                 allowRemove={user.isAdmin}
             />
@@ -32,7 +36,7 @@ const Problems: NextPage = () => {
                     <a className="btn btn-primary">Create Problem</a>
                 </Link>
             )}
-        </section>
+        </main>
     );
 };
 
