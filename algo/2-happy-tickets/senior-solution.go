@@ -13,6 +13,14 @@ func findCountOfSum(n, sum, count int) int {
 		}
 	}
 
+	if sum < 0 {
+		return count
+	}
+
+	if sum > 9*n {
+		return count
+	}
+
 	for i := 0; i < 10; i++ {
 		count = findCountOfSum(n-1, sum-i, count)
 	}
