@@ -9,15 +9,23 @@ import styles from './styles.module.scss';
 interface ProblemsProps {
     className?: string;
     problems: Problem[];
+    favorites: string[];
     allowEdit: boolean;
-    allowRemove: boolean;
+    allowDelete: boolean;
+    onDelete?: (problem: Problem) => Promise<void>;
+    onLike?: (problem: Problem) => Promise<void>;
+    onUnlike?: (problem: Problem) => Promise<void>;
 }
 
 export const Problems: React.FC<ProblemsProps> = ({
     className,
     problems,
+    favorites,
     allowEdit,
-    allowRemove
+    allowDelete,
+    onDelete,
+    onLike,
+    onUnlike
 }) => {
     if (problems.length === 0) {
         return (
@@ -33,8 +41,12 @@ export const Problems: React.FC<ProblemsProps> = ({
                 <li className={styles.problems__problem} key={problem._id}>
                     <ProblemComponent
                         problem={problem}
+                        isLiked={favorites.includes(problem._id)}
                         allowEdit={allowEdit}
-                        allowRemove={allowRemove}
+                        allowDelete={allowDelete}
+                        onDelete={onDelete}
+                        onLike={onLike}
+                        onUnlike={onUnlike}
                     />
                 </li>
             ))}

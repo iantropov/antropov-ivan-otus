@@ -1,82 +1,46 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
 import classnames from 'classnames';
 import Link from 'next/link';
-import { useMutation } from '@apollo/client';
 
 import { Problem } from '../../lib/types';
-import {
-    DELETE_PROBLEM_MUTATION,
-    GET_FAVORITE_PROBLEMS_QUERY,
-    LIKE_PROBLEM_MUTATION,
-    SEARCH_PROBLEMS_QUERY,
-    UNLIKE_PROBLEM_MUTATION,
-    WHO_AM_I_QUERY
-} from '../../lib/graphql';
-import { useUser } from '../../hooks/use-user';
 
 import styles from './styles.module.scss';
 
 interface ProblemProps {
     className?: string;
     problem: Problem;
+    isLiked: boolean;
     allowEdit: boolean;
-    allowRemove: boolean;
+    allowDelete: boolean;
+    onDelete?: (problem: Problem) => Promise<void>;
+    onLike?: (problem: Problem) => Promise<void>;
+    onUnlike?: (problem: Problem) => Promise<void>;
 }
 
 const ProblemComponent: React.FC<ProblemProps> = ({
     className,
     problem,
+    isLiked,
     allowEdit,
-    allowRemove
+    allowDelete,
+    onDelete,
+    onLike,
+    onUnlike
 }) => {
-    const [user] = useUser();
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const [deleteProblem] = useMutation(DELETE_PROBLEM_MUTATION, {
-        refetchQueries: [{ query: SEARCH_PROBLEMS_QUERY }, { query: GET_FAVORITE_PROBLEMS_QUERY }]
-    });
+    const processProblem = (processCallback?: (problem: Problem) => Promise<void>) => {
+        return () => {
+            if (!processCallback) return;
 
-    const [likeProblem, { loading: isProblemLiking }] = useMutation(LIKE_PROBLEM_MUTATION, {
-        refetchQueries: [
-            { query: WHO_AM_I_QUERY },
-            { query: SEARCH_PROBLEMS_QUERY },
-            { query: GET_FAVORITE_PROBLEMS_QUERY }
-        ]
-    });
-    const [unlikeProblem, { loading: isProblemUnliking }] = useMutation(UNLIKE_PROBLEM_MUTATION, {
-        refetchQueries: [
-            { query: WHO_AM_I_QUERY },
-            { query: SEARCH_PROBLEMS_QUERY },
-            { query: GET_FAVORITE_PROBLEMS_QUERY }
-        ]
-    });
-
-    const onDeleteProblemClick = () => {
-        deleteProblem({ variables: { problemId: problem._id } }).then(
-            () => {
-                console.log(`Removed problem #${problem._id} successfully!`);
-            },
-            error => {
-                alert(error);
-            }
-        );
+            setIsProcessing(true);
+            processCallback(problem).finally(() => setIsProcessing(false));
+        }
     };
 
-    const onLikeProblemClick = () => {
-        (isLiked ? unlikeProblem : likeProblem)({ variables: { problemId: problem._id } }).then(
-            () => {
-                console.log(
-                    `${isLiked ? 'Unliked' : 'Liked'} problem #${problem._id} successfully!`
-                );
-            },
-            error => {
-                alert(error);
-            }
-        );
-    };
-
-    const isLiked = useMemo(() => {
-        return user.favorites.includes(problem._id);
-    }, [user.favorites.length]);
+    const onDeleteProblem = processProblem(onDelete);
+    const onLikeProblem = processProblem(onLike);
+    const onUnlikeProblem = processProblem(onUnlike);
 
     return (
         <div
@@ -125,8 +89,8 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                         styles.problem__button,
                         `btn btn-sm ${isLiked ? 'btn-warning' : 'btn-success'}`
                     )}
-                    disabled={isProblemLiking || isProblemUnliking}
-                    onClick={onLikeProblemClick}
+                    disabled={isProcessing}
+                    onClick={isLiked ? onUnlikeProblem : onLikeProblem}
                 >
                     {isLiked ? 'Unlike' : 'Like'}
                 </button>
@@ -137,10 +101,11 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                         </a>
                     </Link>
                 )}
-                {allowRemove && (
+                {allowDelete && (
                     <button
                         className={classnames(styles.problem__button, 'btn btn-sm btn-danger')}
-                        onClick={onDeleteProblemClick}
+                        onClick={onDeleteProblem}
+                        disabled={isProcessing}
                     >
                         Delete
                     </button>
