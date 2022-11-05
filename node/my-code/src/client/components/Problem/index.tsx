@@ -6,8 +6,9 @@ import { useMutation } from '@apollo/client';
 import { Problem } from '../../lib/types';
 import {
     DELETE_PROBLEM_MUTATION,
-    GET_PROBLEMS_QUERY,
+    GET_FAVORITE_PROBLEMS_QUERY,
     LIKE_PROBLEM_MUTATION,
+    SEARCH_PROBLEMS_QUERY,
     UNLIKE_PROBLEM_MUTATION,
     WHO_AM_I_QUERY
 } from '../../lib/graphql';
@@ -31,14 +32,22 @@ const ProblemComponent: React.FC<ProblemProps> = ({
     const [user] = useUser();
 
     const [deleteProblem] = useMutation(DELETE_PROBLEM_MUTATION, {
-        refetchQueries: [{ query: GET_PROBLEMS_QUERY }]
+        refetchQueries: [{ query: SEARCH_PROBLEMS_QUERY }, { query: GET_FAVORITE_PROBLEMS_QUERY }]
     });
 
     const [likeProblem, { loading: isProblemLiking }] = useMutation(LIKE_PROBLEM_MUTATION, {
-        refetchQueries: [{ query: WHO_AM_I_QUERY }]
+        refetchQueries: [
+            { query: WHO_AM_I_QUERY },
+            { query: SEARCH_PROBLEMS_QUERY },
+            { query: GET_FAVORITE_PROBLEMS_QUERY }
+        ]
     });
     const [unlikeProblem, { loading: isProblemUnliking }] = useMutation(UNLIKE_PROBLEM_MUTATION, {
-        refetchQueries: [{ query: WHO_AM_I_QUERY }]
+        refetchQueries: [
+            { query: WHO_AM_I_QUERY },
+            { query: SEARCH_PROBLEMS_QUERY },
+            { query: GET_FAVORITE_PROBLEMS_QUERY }
+        ]
     });
 
     const onDeleteProblemClick = () => {

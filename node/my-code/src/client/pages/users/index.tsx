@@ -7,7 +7,7 @@ import { useUser } from '../../hooks/use-user';
 import { UsersResponse } from '../../lib/types';
 import { DELETE_USER_MUTATION, GET_USERS_QUERY, WHO_AM_I_QUERY } from '../../lib/graphql';
 
-import styles from './styles.module.scss';
+import styles from './index.module.scss';
 
 const Users: NextPage = () => {
     const { data, loading } = useQuery<UsersResponse>(GET_USERS_QUERY);

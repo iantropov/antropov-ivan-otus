@@ -1,15 +1,11 @@
 .problems {
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: center;
-
     &__header {
         margin-bottom: 20px;
     }
 
     &__problemsFilterSearch {
         margin-bottom: 20px;
+        width: 100%;
     }
 
     &__problems {

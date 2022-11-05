@@ -1,11 +1,12 @@
 import React from 'react';
 import { NextPage } from 'next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 
-import { CREATE_PROBLEM_MUTATION, GET_CATEGORIES_QUERY, GET_PROBLEMS_QUERY } from '../../lib/graphql';
-import { CategoriesReponse, ProblemData } from '../../lib/types';
+import { CREATE_PROBLEM_MUTATION, SEARCH_PROBLEMS_QUERY } from '../../lib/graphql';
+import { ProblemData } from '../../lib/types';
 import { ProblemForm } from '../../components/ProblemForm';
+import { Main } from '../../components/Main';
 
 import styles from './new.module.scss';
 
@@ -13,7 +14,7 @@ const NewProblem: NextPage = () => {
     const router = useRouter();
 
     const [createProblem] = useMutation(CREATE_PROBLEM_MUTATION, {
-        refetchQueries: [{ query: GET_PROBLEMS_QUERY }]
+        refetchQueries: [{ query: SEARCH_PROBLEMS_QUERY }]
     });
 
     const onSubmit = (problem: ProblemData) => {
@@ -24,12 +25,12 @@ const NewProblem: NextPage = () => {
     };
 
     return (
-        <main className={styles.newProblem}>
+        <Main className={styles.newProblem}>
             <div className={styles.newProblem__header}>
                 <h1>Create New Problem</h1>
             </div>
             <ProblemForm onSubmit={onSubmit} />
-        </main>
+        </Main>
     );
 };
 

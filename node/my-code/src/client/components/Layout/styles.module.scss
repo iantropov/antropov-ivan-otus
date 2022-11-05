@@ -10,6 +10,10 @@
 
     &__main {
         flex-grow: 1;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
     }
 
     &__footer {

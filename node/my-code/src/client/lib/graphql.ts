@@ -74,6 +74,21 @@ export const SEARCH_PROBLEMS_QUERY = gql`
     }
 `;
 
+export const GET_FAVORITE_PROBLEMS_QUERY = gql`
+    query GetFavoriteProblems {
+        searchProblems(favorites: true) {
+            summary
+            description
+            solution
+            categories {
+                _id
+                name
+            }
+            _id
+        }
+    }
+`;
+
 export const LOGOUT_USER_MUTATION = gql`
     mutation {
         logoutUser

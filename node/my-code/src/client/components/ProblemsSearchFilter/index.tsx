@@ -98,7 +98,7 @@ const ProblemsSearchFilterComponent: React.FC<ProblemsSearchFilterProps> = ({
                                 id="only-favorites"
                             />
                             <label className="form-check-label" htmlFor="only-favorites">
-                                Default checkbox
+                                Only Favorites
                             </label>
                         </div>
                         <label

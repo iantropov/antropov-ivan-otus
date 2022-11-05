@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { NextPage } from 'next';
-import { gql, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import classnames from 'classnames';
 
 import { LOGIN_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
+import { Main } from '../../components/Main';
 
 import styles from './login.module.scss';
 
@@ -45,7 +46,7 @@ const Login: NextPage = () => {
     };
 
     return (
-        <section className={styles.login}>
+        <Main className={styles.login}>
             <div className={styles.login__header}>
                 <h1>Login page</h1>
             </div>
@@ -86,7 +87,7 @@ const Login: NextPage = () => {
                     </div>
                 </form>
             </div>
-        </section>
+        </Main>
     );
 };
 

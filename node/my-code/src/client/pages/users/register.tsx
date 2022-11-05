@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import classnames from 'classnames';
 
 import { REGISTER_USER_MUTATION } from '../../lib/graphql';
+import { Main } from '../../components/Main';
 
 import styles from './register.module.scss';
 
@@ -53,7 +54,7 @@ const Register: NextPage = () => {
     };
 
     return (
-        <section className={styles.register}>
+        <Main className={styles.register}>
             <div className={styles.register__header}>
                 <h1>Register page</h1>
             </div>
@@ -124,7 +125,7 @@ const Register: NextPage = () => {
                     </div>
                 </form>
             </div>
-        </section>
+        </Main>
     );
 };
 

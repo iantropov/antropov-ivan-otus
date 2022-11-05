@@ -9,6 +9,7 @@ import { useUser } from '../../hooks/use-user';
 import { SearchProblemsResponse } from '../../lib/types';
 import { Problems as ProblemsComponent } from '../../components/Problems';
 import { ProblemsSearchFilter as ProblemsSearchFilterComponent } from '../../components/ProblemsSearchFilter';
+import { Main } from '../../components/Main';
 
 import styles from './all.module.scss';
 
@@ -20,7 +21,7 @@ const Problems: NextPage = () => {
     if (!user) return null;
 
     return (
-        <main className={classnames(styles.problems)}>
+        <Main className={classnames(styles.problems)} align='top'>
             <ProblemsSearchFilterComponent
                 className={classnames(styles.problems__problemsFilterSearch)}
                 onApply={refetch}
@@ -36,7 +37,7 @@ const Problems: NextPage = () => {
                     <a className="btn btn-primary">Create Problem</a>
                 </Link>
             )}
-        </main>
+        </Main>
     );
 };
 

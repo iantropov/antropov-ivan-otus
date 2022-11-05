@@ -1,19 +1,14 @@
 .register {
     width: 300px;
-    display: flex;
-    flex-flow: column nowrap;
 
     &__header {
         text-align: center;
         margin-bottom: 30px;
     }
-
-    &__body {
-
-    }
 }
 
 .registerBody {
+    width: 100%;
     display: flex;
     flex-flow: column nowrap;
 
