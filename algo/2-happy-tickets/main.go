@@ -11,7 +11,7 @@ func main() {
 	// 	fmt.Printf("There are %d happy tickets with %d digits.\n", FindHappyTicketsAsSenior(i), i)
 	// }
 
-	for i := 9; i <= 9; i++ {
+	for i := 9; i <= 10; i++ {
 		fmt.Printf("There are %d happy tickets with %d digits.\n", FindHappyTicketsAsSenior(i), i)
 	}
 }
