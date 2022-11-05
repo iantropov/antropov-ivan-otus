@@ -24,6 +24,16 @@ type Problem {
   categoryIds: [String!]!
 }
 
+type PageInfo {
+  cursor: String
+  hasNextPage: Boolean!
+}
+
+type SearchProblemsResult {
+  edges: [Problem!]!
+  pageInfo: PageInfo!
+}
+
 type AccessToken {
   accessToken: String!
 }
@@ -33,7 +43,7 @@ type Query {
   user(id: ID!): GraphQLUser!
   problems: [Problem!]!
   problem(id: ID!): Problem!
-  searchProblems(text: String, categoryIds: [String!], favorites: Boolean): [Problem!]!
+  searchProblems(text: String, categoryIds: [String!], favorites: Boolean, cursor: String, limit: Float): SearchProblemsResult!
   categories: [Category!]!
   category(id: ID!): Category!
   whoAmI: GraphQLUser

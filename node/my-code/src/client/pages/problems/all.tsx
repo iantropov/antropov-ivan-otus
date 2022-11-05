@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NextPage } from 'next';
 import { useMutation, useQuery } from '@apollo/client';
 import classnames from 'classnames';
@@ -12,18 +12,27 @@ import {
     WHO_AM_I_QUERY
 } from '../../lib/graphql';
 import { useUser } from '../../hooks/use-user';
-import { Problem, SearchProblemsResponse } from '../../lib/types';
+import { Problem, ProblemsSearchFilter, SearchProblemsResponse } from '../../lib/types';
 import { Problems as ProblemsComponent } from '../../components/Problems';
 import { ProblemsSearchFilter as ProblemsSearchFilterComponent } from '../../components/ProblemsSearchFilter';
 import { Main } from '../../components/Main';
 
 import styles from './all.module.scss';
 
+const PROBLEMS_LIMIT = 1;
+
 const Problems: NextPage = () => {
-    const { data, loading, refetch } = useQuery<SearchProblemsResponse>(SEARCH_PROBLEMS_QUERY, {
-        fetchPolicy: 'network-only'
-    });
+    const { data, loading, refetch, fetchMore } = useQuery<SearchProblemsResponse>(
+        SEARCH_PROBLEMS_QUERY,
+        {
+            fetchPolicy: 'network-only',
+            variables: {
+                limit: PROBLEMS_LIMIT
+            }
+        }
+    );
     const [user, isUserLoading] = useUser();
+    const [filter, setFilter] = useState({});
 
     const [deleteProblem] = useMutation(DELETE_PROBLEM_MUTATION, {
         refetchQueries: [SEARCH_PROBLEMS_QUERY]
@@ -35,6 +44,22 @@ const Problems: NextPage = () => {
     const [unlikeProblem] = useMutation(UNLIKE_PROBLEM_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }]
     });
+
+    const onApplyFilter = (filter: ProblemsSearchFilter) => {
+        setFilter(filter);
+        refetch({
+            ...filter
+        });
+    };
+
+    const onFetchMore = () => {
+        fetchMore({
+            variables: {
+                ...filter,
+                cursor: data.searchProblems.pageInfo.cursor
+            }
+        });
+    };
 
     const onDelete = (problem: Problem) => {
         return deleteProblem({ variables: { problemId: problem._id } }).then(
@@ -76,17 +101,19 @@ const Problems: NextPage = () => {
         <Main className={classnames(styles.problems)} align="top">
             <ProblemsSearchFilterComponent
                 className={classnames(styles.problems__problemsFilterSearch)}
-                onApply={refetch}
+                onApply={onApplyFilter}
             />
             <ProblemsComponent
                 className={classnames(styles.problems__problems)}
-                problems={data.searchProblems}
+                problems={data.searchProblems.edges}
                 favorites={user.favorites}
                 allowEdit={user.isAdmin}
                 allowDelete={user.isAdmin}
+                hasNextPage={data.searchProblems.pageInfo.hasNextPage}
                 onDelete={onDelete}
                 onLike={onLike}
                 onUnlike={onUnlike}
+                onFetchMore={onFetchMore}
             />
             {user.isAdmin && (
                 <Link href="/problems/new">

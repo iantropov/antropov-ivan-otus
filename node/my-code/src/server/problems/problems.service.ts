@@ -10,6 +10,8 @@ import { CategoriesService } from './categories.service';
 import { SearchProblemsArgs } from './dto/search-problems.args';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
 
+const DEFAULT_LIMIT = 10;
+
 @Injectable()
 export class ProblemsService {
     constructor(
@@ -22,7 +24,7 @@ export class ProblemsService {
         return this.problemModel.find();
     }
 
-    search(user: GraphQLUser, args: SearchProblemsArgs) {
+    async search(user: GraphQLUser, args: SearchProblemsArgs) {
         let orSearchCriteria = [];
         if (args.text) {
             orSearchCriteria.push({
@@ -46,6 +48,12 @@ export class ProblemsService {
             });
         }
 
+        if (args.cursor) {
+            andSearchCriteria.push({
+                _id: { $gte: args.cursor }
+            });
+        }
+
         let filter = {};
         if (orSearchCriteria.length > 0) {
             filter = {
@@ -60,7 +68,19 @@ export class ProblemsService {
             };
         }
 
-        return this.problemModel.find(filter);
+        const limit = args.limit || DEFAULT_LIMIT;
+        const problems = await this.problemModel
+            .find(filter)
+            .sort({ _id: 1 })
+            .limit(limit + 1);
+
+        return {
+            edges: problems.length === limit + 1 ? problems.slice(0, -1) : problems,
+            pageInfo: {
+                cursor: problems[problems.length - 1]?._id,
+                hasNextPage: problems.length === limit + 1
+            }
+        };
     }
 
     async findOne(id: string) {

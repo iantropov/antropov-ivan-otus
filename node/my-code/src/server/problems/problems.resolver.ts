@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
@@ -6,6 +7,7 @@ import { SearchProblemsArgs } from './dto/search-problems.args';
 
 import { UpdateProblemInput } from './dto/update-problem.input';
 import { Problem } from './entities/problem.entity';
+import { SearchProblemsResult } from './entities/search-problem-result.entity';
 import { ProblemsService } from './problems.service';
 
 @Resolver()
@@ -22,15 +24,16 @@ export class ProblemsResolver {
         return this.problemsService.findOne(id);
     }
 
-    @Query(() => [Problem], { name: 'searchProblems' })
-    async search(@CurrentUser() user: GraphQLUser, @Args() args: SearchProblemsArgs) {
+    @Query(() => SearchProblemsResult, { name: 'searchProblems' })
+    async search(
+        @CurrentUser() user: GraphQLUser,
+        @Args(new ValidationPipe({ skipMissingProperties: true })) args: SearchProblemsArgs
+    ) {
         return this.problemsService.search(user, args);
     }
 
     @Mutation(() => Problem, { name: 'createProblem' })
-    async create(
-        @Args('createProblemInput') createProblemInput: CreateProblemInput
-    ) {
+    async create(@Args('createProblemInput') createProblemInput: CreateProblemInput) {
         return this.problemsService.create(createProblemInput);
     }
 

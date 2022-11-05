@@ -17,7 +17,7 @@ import { Main } from '../../components/Main';
 import styles from './favorites.module.scss';
 
 const Favorites: NextPage = () => {
-    const { data, loading } = useQuery<SearchProblemsResponse>(GET_FAVORITE_PROBLEMS_QUERY, {
+    const { data, loading, fetchMore } = useQuery<SearchProblemsResponse>(GET_FAVORITE_PROBLEMS_QUERY, {
         fetchPolicy: 'network-only'
     });
     const [user, isUserLoading] = useUser();
@@ -28,6 +28,14 @@ const Favorites: NextPage = () => {
     const [unlikeProblem] = useMutation(UNLIKE_PROBLEM_MUTATION, {
         refetchQueries: [{ query: WHO_AM_I_QUERY }, GET_FAVORITE_PROBLEMS_QUERY]
     });
+
+    const onFetchMore = () => {
+        fetchMore({
+            variables: {
+                cursor: data.searchProblems.pageInfo.cursor
+            }
+        });
+    };
 
     const onLike = (problem: Problem) => {
         return likeProblem({ variables: { problemId: problem._id } }).then(
@@ -59,10 +67,12 @@ const Favorites: NextPage = () => {
             <h2 className={classnames(styles.favorites__header)}>You have favorite problems:</h2>
             <Problems
                 className={classnames(styles.favorites__problems)}
-                problems={data.searchProblems}
+                problems={data.searchProblems.edges}
                 favorites={user.favorites}
+                hasNextPage={data.searchProblems.pageInfo.hasNextPage}
                 allowEdit={false}
                 allowDelete={false}
+                onFetchMore={onFetchMode}
                 onLike={onLike}
                 onUnlike={onUnlike}
             />

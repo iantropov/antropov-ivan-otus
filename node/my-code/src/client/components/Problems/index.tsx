@@ -12,6 +12,8 @@ interface ProblemsProps {
     favorites: string[];
     allowEdit: boolean;
     allowDelete: boolean;
+    hasNextPage: boolean;
+    onFetchMore: () => void;
     onDelete?: (problem: Problem) => Promise<void>;
     onLike?: (problem: Problem) => Promise<void>;
     onUnlike?: (problem: Problem) => Promise<void>;
@@ -23,6 +25,8 @@ export const Problems: React.FC<ProblemsProps> = ({
     favorites,
     allowEdit,
     allowDelete,
+    hasNextPage,
+    onFetchMore,
     onDelete,
     onLike,
     onUnlike
@@ -36,20 +40,27 @@ export const Problems: React.FC<ProblemsProps> = ({
     }
 
     return (
-        <ul className={classnames(className, styles.problems, 'list-group')}>
-            {problems.map(problem => (
-                <li className={styles.problems__problem} key={problem._id}>
-                    <ProblemComponent
-                        problem={problem}
-                        isLiked={favorites.includes(problem._id)}
-                        allowEdit={allowEdit}
-                        allowDelete={allowDelete}
-                        onDelete={onDelete}
-                        onLike={onLike}
-                        onUnlike={onUnlike}
-                    />
-                </li>
-            ))}
-        </ul>
+        <div className={classnames(className, styles.problems)}>
+            <ul className={classnames(className, styles.problems__list, 'list-group')}>
+                {problems.map(problem => (
+                    <li className={styles.problems__problem} key={problem._id}>
+                        <ProblemComponent
+                            problem={problem}
+                            isLiked={favorites.includes(problem._id)}
+                            allowEdit={allowEdit}
+                            allowDelete={allowDelete}
+                            onDelete={onDelete}
+                            onLike={onLike}
+                            onUnlike={onUnlike}
+                        />
+                    </li>
+                ))}
+            </ul>
+            {hasNextPage && (
+                <div className={classnames(styles.problems__more)}>
+                    <button className="btn btn-primary" onClick={onFetchMore}>Fetch More</button>
+                </div>
+            )}
+        </div>
     );
 };

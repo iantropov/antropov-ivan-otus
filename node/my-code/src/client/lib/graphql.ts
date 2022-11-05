@@ -60,23 +60,29 @@ export const GET_CATEGORIES_QUERY = gql`
 `;
 
 export const SEARCH_PROBLEMS_QUERY = gql`
-    query ($text: String, $categoryIds: [String!], $favorites: Boolean) {
-        searchProblems(text: $text, categoryIds: $categoryIds, favorites: $favorites) {
-            summary
-            description
-            solution
-            categories {
+    query ($text: String, $categoryIds: [String!], $favorites: Boolean, $cursor: String, $limit: Float) {
+        searchProblems(text: $text, categoryIds: $categoryIds, favorites: $favorites, cursor: $cursor, limit: $limit) {
+            edges {
+                summary
+                description
+                solution
+                categories {
+                    _id
+                    name
+                }
                 _id
-                name
             }
-            _id
+            pageInfo {
+                hasNextPage
+                cursor
+            }
         }
     }
 `;
 
 export const GET_FAVORITE_PROBLEMS_QUERY = gql`
-    query GetFavoriteProblems {
-        searchProblems(favorites: true) {
+    query GetFavoriteProblems($cursor: String, $limit: Float) {
+        searchProblems(favorites: true, cursor: $cursor, limit: $limit) {
             summary
             description
             solution

@@ -49,5 +49,11 @@ export interface CategoriesReponse {
 }
 
 export interface SearchProblemsResponse {
-    searchProblems: Problem[];
+    searchProblems: {
+        edges: Problem[];
+        pageInfo: {
+            cursor?: string;
+            hasNextPage: boolean;
+        }
+    }
 }
