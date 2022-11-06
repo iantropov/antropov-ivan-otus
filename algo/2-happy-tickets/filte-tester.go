@@ -64,7 +64,7 @@ func buildTestSets(filesDir string) (map[string]*TestSet, error) {
 		}
 	}
 
-	fmt.Printf("Found %v test sets. Starting testing...", len(testSets))
+	fmt.Printf("Found %v test sets. Starting testing...\n", len(testSets))
 
 	return testSets, nil
 }
