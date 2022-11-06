@@ -7,9 +7,13 @@ const apolloClient = new ApolloClient({
             Query: {
                 fields: {
                     searchProblems: {
-                        keyArgs: false,
+                        keyArgs: ["text", "categoryIds", "favorites"],
 
                         merge(existing, incoming, { args: { cursor }, readField }) {
+                            if (!cursor) {
+                                return incoming;
+                            }
+
                             const merged = existing ? existing.edges.slice(0) : [];
 
                             let offset = offsetFromCursor(merged, cursor, readField);

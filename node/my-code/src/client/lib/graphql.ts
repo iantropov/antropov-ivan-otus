@@ -83,14 +83,20 @@ export const SEARCH_PROBLEMS_QUERY = gql`
 export const GET_FAVORITE_PROBLEMS_QUERY = gql`
     query GetFavoriteProblems($cursor: String, $limit: Float) {
         searchProblems(favorites: true, cursor: $cursor, limit: $limit) {
-            summary
-            description
-            solution
-            categories {
+            edges {
+                summary
+                description
+                solution
+                categories {
+                    _id
+                    name
+                }
                 _id
-                name
             }
-            _id
+            pageInfo {
+                hasNextPage
+                cursor
+            }
         }
     }
 `;

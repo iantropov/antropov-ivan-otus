@@ -1,4 +1,7 @@
 .problems {
-    list-style: none;
     width: 800px;
+
+    &__list {
+        list-style: none;
+    }
 }

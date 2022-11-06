@@ -72,7 +72,7 @@ const Favorites: NextPage = () => {
                 hasNextPage={data.searchProblems.pageInfo.hasNextPage}
                 allowEdit={false}
                 allowDelete={false}
-                onFetchMore={onFetchMode}
+                onFetchMore={onFetchMore}
                 onLike={onLike}
                 onUnlike={onUnlike}
             />

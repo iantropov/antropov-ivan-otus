@@ -103,6 +103,13 @@ const Problems: NextPage = () => {
                 className={classnames(styles.problems__problemsFilterSearch)}
                 onApply={onApplyFilter}
             />
+            {user.isAdmin && (
+                <Link href="/problems/new">
+                    <a className={classnames(styles.problems__createProblem, 'btn btn-primary')}>
+                        Create Problem
+                    </a>
+                </Link>
+            )}
             <ProblemsComponent
                 className={classnames(styles.problems__problems)}
                 problems={data.searchProblems.edges}
@@ -115,11 +122,6 @@ const Problems: NextPage = () => {
                 onUnlike={onUnlike}
                 onFetchMore={onFetchMore}
             />
-            {user.isAdmin && (
-                <Link href="/problems/new">
-                    <a className="btn btn-primary">Create Problem</a>
-                </Link>
-            )}
         </Main>
     );
 };
