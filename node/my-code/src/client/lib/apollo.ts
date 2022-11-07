@@ -1,13 +1,20 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 
+let graphqlUri = '';
+if (process.env.NODE_ENV === 'production') {
+    graphqlUri = 'https://otus-my-code.herokuapp.com/graphql';
+} else {
+    graphqlUri = 'http://localhost:3000/graphql';
+}
+
 const apolloClient = new ApolloClient({
-    uri: 'http://localhost:3000/graphql',
+    uri: graphqlUri,
     cache: new InMemoryCache({
         typePolicies: {
             Query: {
                 fields: {
                     searchProblems: {
-                        keyArgs: ["text", "categoryIds", "favorites"],
+                        keyArgs: ['text', 'categoryIds', 'favorites'],
 
                         merge(existing, incoming, { args: { cursor }, readField }) {
                             if (!cursor) {
