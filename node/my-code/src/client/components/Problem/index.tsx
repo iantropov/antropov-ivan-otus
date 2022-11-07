@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Problem } from '../../lib/types';
 
 import styles from './styles.module.scss';
+import Image from 'next/image';
 
 interface ProblemProps {
     className?: string;
@@ -53,7 +54,7 @@ const ProblemComponent: React.FC<ProblemProps> = ({
             <div className={styles.problem__content}>
                 <div className={styles.problem__header}>
                     <div className={styles.problem__icon}>
-                        <img
+                        <Image
                             src="https://github.com/twbs.png"
                             alt="twbs"
                             width="32"

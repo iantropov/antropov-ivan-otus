@@ -40,12 +40,11 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                 'd-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom'
             )}
         >
-            <a
-                href="/"
-                className="d-flex align-items-center h3 col-md-3 mb-2 mb-md-0 text-dark text-decoration-none"
-            >
-                MyCode
-            </a>
+            <Link href="/">
+                <a className="d-flex align-items-center h3 col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                    MyCode
+                </a>
+            </Link>
 
             {!userLoading && userData?.whoAmI && (
                 <ul className="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">

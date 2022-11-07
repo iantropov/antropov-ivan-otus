@@ -42,7 +42,7 @@ const Register: NextPage = () => {
         setIsUserRegistering(true);
 
         registerUser({ variables: { name, email, password } }).then(
-            result => {
+            () => {
                 router.push('/users/login');
             },
             error => {

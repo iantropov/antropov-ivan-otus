@@ -34,7 +34,7 @@ export const Problems: React.FC<ProblemsProps> = ({
     if (problems.length === 0) {
         return (
             <div className={classnames(className, styles.problems, styles.problems_empty)}>
-                You don't have any problems yet :(
+                You don&apos;t have any problems yet :(
             </div>
         );
     }

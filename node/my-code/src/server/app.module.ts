@@ -12,11 +12,22 @@ import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { ProblemsModule } from './problems/problems.module';
 import { AuthModule } from './auth/auth.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [
+        ConfigModule.forRoot({
+            envFilePath: '.development.env',
+            ignoreEnvFile: process.env.NODE_ENV === 'production'
+        }),
         ViewModule,
-        MongooseModule.forRoot('mongodb://localhost:27017/my-code'),
+        MongooseModule.forRootAsync({
+            imports: [ConfigModule],
+            useFactory: async (configService: ConfigService) => ({
+                uri: configService.get<string>('MONGODB_URI')
+            }),
+            inject: [ConfigService]
+        }),
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/server/schema.gql')

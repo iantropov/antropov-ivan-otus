@@ -33,7 +33,7 @@ const Login: NextPage = () => {
         setIsUserLoggingIn(true);
 
         loginUser({ variables: { email, password } }).then(
-            result => {
+            () => {
                 client.resetStore();
                 router.push('/');
             },

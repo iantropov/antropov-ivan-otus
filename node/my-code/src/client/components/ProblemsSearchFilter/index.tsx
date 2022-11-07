@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@apollo/client';
 
-import { CategoriesReponse, Problem, ProblemsSearchFilter } from '../../lib/types';
+import { CategoriesReponse, ProblemsSearchFilter } from '../../lib/types';
 import { GET_CATEGORIES_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
