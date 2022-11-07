@@ -3,6 +3,7 @@
 ## Deployment
 
 Приложение развёрнуто в Heroku: https://otus-my-code.herokuapp.com/
+
 В развёрнутом приложении используется MongoDB Atlas
 
 ## DevCycle
@@ -124,6 +125,8 @@ Roadmap:
 
 =================================
 
+```
 show databases;
 use my-code;
 db.users.updateOne({_id: ObjectId("63635a5ac773205aea27306c")}, {$set:{isAdmin: true}})
+```
