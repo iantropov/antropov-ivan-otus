@@ -22,13 +22,12 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
     });
 
     const onLogoutClick = () => {
-        logoutUser().then(
-            () => {
+        logoutUser().then(() => {
+            router.push('/users/login').then(() => {
                 client.resetStore();
-                setTimeout(() => router.push('/users/login'));
-                messageBroker.addSuccessMessage('Logged out successfully!');
-            }
-        );
+            });
+            messageBroker.addSuccessMessage('Logged out successfully!');
+        });
     };
 
     return (

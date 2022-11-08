@@ -1,3 +1,6 @@
 module.exports = {
-    distDir: '../../.next'
+    distDir: '../../.next',
+    images: {
+        domains: ['github.com']
+    }
 };

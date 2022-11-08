@@ -57,10 +57,8 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
             description,
             solution,
             categoryIds
-        }).catch(error => {
+        }).catch(() => {
             setIsProblemCreating(false);
-            console.log(error);
-            alert(error);
         });
     };
 

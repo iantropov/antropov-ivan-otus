@@ -1,8 +1,9 @@
 import { ApolloClient, ApolloLink, HttpLink } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
-import { makeUniqueId } from '@apollo/client/utilities';
+
 import { apolloCache } from './apollo-cache';
 import { messageBroker } from './message-broker';
+import { GraphQLExtensions } from './types';
 
 let graphqlUri = '';
 if (process.env.NODE_ENV === 'production') {
@@ -16,15 +17,18 @@ const httpLink = new HttpLink({
 });
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
-    debugger;
     if (graphQLErrors)
-        graphQLErrors.forEach(
-            ({ message, locations, path }) => messageBroker.addErrorMessage(message)
-            // console.log(
-            //     `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-            // )
-        );
-    if (networkError) console.log(`[Network error]: ${networkError}`);
+        graphQLErrors.forEach(({ message, extensions }) => {
+            let errorMessage = message;
+            const responseMessage = (extensions as GraphQLExtensions).response?.message;
+            if (Array.isArray(responseMessage) && responseMessage.length > 0) {
+                errorMessage = `${message}: ${responseMessage.join(', ')}`;
+            } else if (responseMessage && responseMessage !== errorMessage) {
+                errorMessage = `${message}: ${responseMessage}`
+            }
+            messageBroker.addErrorMessage(errorMessage);
+        });
+    if (networkError) messageBroker.addErrorMessage(`[Network error]: ${networkError}`);
 });
 
 const apolloClient = new ApolloClient({

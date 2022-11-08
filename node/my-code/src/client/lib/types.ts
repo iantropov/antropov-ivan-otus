@@ -58,6 +58,12 @@ export interface SearchProblemsResponse {
     }
 }
 
+export interface GraphQLExtensions {
+    response?: {
+        message?: string[] | string
+    }
+}
+
 export interface Message {
     id: string;
     type: 'error' | 'success',

@@ -13,9 +13,9 @@ import { useUser } from '../../hooks/use-user';
 import { Problem, SearchProblemsResponse } from '../../lib/types';
 import { Problems } from '../../components/Problems';
 import { Main } from '../../components/Main';
+import { messageBroker } from '../../lib/message-broker';
 
 import styles from './favorites.module.scss';
-import { messageBroker } from '../../lib/message-broker';
 
 const Favorites: NextPage = () => {
     const { data, loading, fetchMore } = useQuery<SearchProblemsResponse>(

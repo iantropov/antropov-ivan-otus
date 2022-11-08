@@ -16,11 +16,11 @@ import { Problem, ProblemsSearchFilter, SearchProblemsResponse } from '../../lib
 import { Problems as ProblemsComponent } from '../../components/Problems';
 import { ProblemsSearchFilter as ProblemsSearchFilterComponent } from '../../components/ProblemsSearchFilter';
 import { Main } from '../../components/Main';
-
-import styles from './all.module.scss';
 import { messageBroker } from '../../lib/message-broker';
 
-const PROBLEMS_LIMIT = 1;
+import styles from './all.module.scss';
+
+const PROBLEMS_LIMIT = 5;
 
 const Problems: NextPage = () => {
     const { data, loading, refetch, fetchMore } = useQuery<SearchProblemsResponse>(

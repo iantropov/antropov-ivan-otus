@@ -10,7 +10,7 @@ import { CategoriesService } from './categories.service';
 import { SearchProblemsArgs } from './dto/search-problems.args';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
 
-const DEFAULT_LIMIT = 10;
+const DEFAULT_LIMIT = 5;
 
 @Injectable()
 export class ProblemsService {

@@ -13,7 +13,6 @@ export const Layout: React.FC<{ children?: ReactNode }> = ({ children }) => {
 
     useEffect(() => {
         messageBroker.subsribe(messages => {
-            debugger
             setMessages(messages);
         });
     }, []);
