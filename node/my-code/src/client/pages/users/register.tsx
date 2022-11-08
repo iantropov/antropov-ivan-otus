@@ -6,9 +6,9 @@ import classnames from 'classnames';
 
 import { REGISTER_USER_MUTATION } from '../../lib/graphql';
 import { Main } from '../../components/Main';
+import { messageBroker } from '../../lib/message-broker';
 
 import styles from './register.module.scss';
-import { messageBroker } from '../../lib/message-broker';
 
 const Register: NextPage = () => {
     const router = useRouter();

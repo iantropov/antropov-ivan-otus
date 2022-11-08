@@ -1,8 +1,9 @@
 import React from 'react';
 import classnames from 'classnames';
 
-import styles from './styles.module.scss';
 import { Message } from '../../lib/types';
+
+import styles from './styles.module.scss';
 
 interface ToastsProps {
     className?: string;

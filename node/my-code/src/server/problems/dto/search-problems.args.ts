@@ -1,6 +1,7 @@
 import { ArgsType } from '@nestjs/graphql';
 import { Validate } from 'class-validator';
-import { ObjectId } from 'src/server/common/validators/object-id.validator';
+
+import { ObjectId } from '../../common/validators/object-id.validator';
 
 @ArgsType()
 export class SearchProblemsArgs {

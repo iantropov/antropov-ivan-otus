@@ -1,6 +1,7 @@
 import { InputType } from '@nestjs/graphql';
 import { Length, Validate } from 'class-validator';
-import { ObjectId } from 'src/server/common/validators/object-id.validator';
+
+import { ObjectId } from '../../common/validators/object-id.validator';
 
 @InputType()
 export class CreateProblemInput {

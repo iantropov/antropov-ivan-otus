@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PassportSerializer } from '@nestjs/passport';
 import { Types } from 'mongoose';
+
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 

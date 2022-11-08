@@ -1,15 +1,15 @@
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
-import { CreateUserInput } from './input/create-user.input';
+import { Types } from 'mongoose';
+import { UseGuards } from '@nestjs/common';
 
+import { CreateUserInput } from './input/create-user.input';
 import { UpdateUserInput } from './input/update-user.input';
 import { UsersService } from './users.service';
 import { GraphQLUser } from './entities/user-graphql.entity';
 import { CurrentUser } from '../auth/current-user.decorator';
-import { UseGuards } from '@nestjs/common';
 import { LoggedInGraphQLGuard } from '../auth/logged-in.graphql.guard';
 import { AdminRequiredGraphQLGuard } from '../auth/admin-required.graphql.guard';
 import { ParseObjectIdPipe } from '../common/pipes/object-id.pipe';
-import { Types } from 'mongoose';
 
 @Resolver()
 export class UsersResolver {

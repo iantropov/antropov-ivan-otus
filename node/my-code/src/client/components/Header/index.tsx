@@ -5,9 +5,9 @@ import Link from 'next/link';
 import { useMutation, useQuery } from '@apollo/client';
 
 import { LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
+import { messageBroker } from '../../lib/message-broker';
 
 import styles from './styles.module.scss';
-import { messageBroker } from '../../lib/message-broker';
 
 interface HeaderProps {
     className?: string;

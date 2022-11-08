@@ -7,9 +7,9 @@ import { CREATE_PROBLEM_MUTATION, SEARCH_PROBLEMS_QUERY } from '../../lib/graphq
 import { ProblemData } from '../../lib/types';
 import { ProblemForm } from '../../components/ProblemForm';
 import { Main } from '../../components/Main';
+import { messageBroker } from '../../lib/message-broker';
 
 import styles from './new.module.scss';
-import { messageBroker } from '../../lib/message-broker';
 
 const NewProblem: NextPage = () => {
     const router = useRouter();

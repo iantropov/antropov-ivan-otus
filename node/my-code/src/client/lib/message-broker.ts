@@ -1,4 +1,5 @@
 import { makeUniqueId } from '@apollo/client/utilities';
+
 import { Message } from './types';
 
 let messages = [];

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { Problem } from '../../lib/types';
 
 import styles from './styles.module.scss';
-import Image from 'next/image';
 
 interface ProblemProps {
     className?: string;

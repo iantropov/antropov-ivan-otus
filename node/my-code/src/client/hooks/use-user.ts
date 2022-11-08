@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
+
 import { WHO_AM_I_QUERY } from '../lib/graphql';
 import { User, WhoAmIResponse } from '../lib/types';
 

@@ -6,6 +6,7 @@ import { join } from 'path';
 import passport from 'passport';
 import mongoose from 'mongoose';
 import * as util from 'node:util';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,7 +15,6 @@ import { UsersModule } from './users/users.module';
 import { LoggerMiddleware } from './common/middlewares/logger.middleware';
 import { ProblemsModule } from './problems/problems.module';
 import { AuthModule } from './auth/auth.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
     imports: [

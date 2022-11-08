@@ -6,9 +6,9 @@ import classnames from 'classnames';
 
 import { LOGIN_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
 import { Main } from '../../components/Main';
+import { messageBroker } from '../../lib/message-broker';
 
 import styles from './login.module.scss';
-import { messageBroker } from '../../lib/message-broker';
 
 const Login: NextPage = () => {
     const router = useRouter();

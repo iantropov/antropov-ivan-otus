@@ -6,9 +6,9 @@ import classnames from 'classnames';
 import { useUser } from '../../hooks/use-user';
 import { UsersResponse } from '../../lib/types';
 import { DELETE_USER_MUTATION, GET_USERS_QUERY, WHO_AM_I_QUERY } from '../../lib/graphql';
+import { messageBroker } from '../../lib/message-broker';
 
 import styles from './index.module.scss';
-import { messageBroker } from '../../lib/message-broker';
 
 const Users: NextPage = () => {
     const { data, loading } = useQuery<UsersResponse>(GET_USERS_QUERY);
