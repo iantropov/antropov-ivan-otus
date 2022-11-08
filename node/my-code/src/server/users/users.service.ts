@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, ObjectId, Types } from 'mongoose';
 
 import { CreateUserInput } from './input/create-user.input';
 import { UpdateUserInput } from './input/update-user.input';
@@ -15,7 +15,7 @@ export class UsersService {
         return this.userModel.find().exec();
     }
 
-    async findOne(id: string) {
+    async findOne(id: Types.ObjectId) {
         const user = await this.userModel.findOne({ _id: id }).exec();
         if (!user) {
             throw new NotFoundException(`User #${id} not found`);
@@ -43,7 +43,7 @@ export class UsersService {
         return user.save();
     }
 
-    async update(id: string, updateUserDto: UpdateUserInput) {
+    async update(id: Types.ObjectId, updateUserDto: UpdateUserInput) {
         const currentUser = await this.findOne(id);
 
         if (updateUserDto.email) {
@@ -60,41 +60,42 @@ export class UsersService {
         return this.userModel.findOneAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true });
     }
 
-    async remove(id: string) {
+    async remove(id: Types.ObjectId) {
         const user = await this.findOne(id);
         return user.remove();
     }
 
-    async likeProblem(user: GraphQLUser, problemId: string) {
+    likeProblem(user: User, problemId: Types.ObjectId) {
         user.favorites.push(problemId);
         return this.updateUserFavorites(user);
     }
 
-    async unlikeProblem(user: GraphQLUser, problemId: string) {
-        const problemIdIdx = user.favorites.findIndex(id => problemId === id);
-        if (problemIdIdx === -1) return Promise.resolve();
+    unlikeProblem(user: User, problemId: Types.ObjectId) {
+        const problemIdIdx = user.favorites.findIndex(id => problemId.equals(id));
+        if (problemIdIdx === -1) return Promise.resolve(user);
         user.favorites.splice(problemIdIdx, 1);
         return this.updateUserFavorites(user);
     }
 
-    async unlinkeProblemForAllUsers(problemId: string) {
+    async unlinkProblemForAllUsers(problemId: Types.ObjectId) {
         const users = await this.findAll();
         return Promise.all(users.map(user => this.unlikeProblem(user, problemId)));
     }
 
-    private updateUserFavorites(user: GraphQLUser) {
+    private updateUserFavorites(user: User) {
         return this.userModel.findOneAndUpdate(
             { _id: user._id },
             {
                 $set: {
                     favorites: user.favorites
                 }
-            }
+            },
+            { new: true }
         );
     }
 
     serialize(user: User): GraphQLUser {
         const { _id, email, name, isAdmin, favorites } = user;
-        return { _id, email, name, isAdmin, favorites };
+        return { _id, email, name, isAdmin, favorites: favorites.map(String) };
     }
 }
