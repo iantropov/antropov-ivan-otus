@@ -122,7 +122,7 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
                     <button
                         type="submit"
                         className={classnames(styles.problemFormRow__button, 'btn', 'btn-primary')}
-                        disabled={isProblemCreating || !summary || !description || !solution}
+                        disabled={isProblemCreating || !summary || !description}
                     >
                         {isProblemCreating ? 'Saving...' : 'Save'}
                     </button>

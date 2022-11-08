@@ -19,8 +19,9 @@ export class Problem extends Document {
     @Prop()
     description: string;
 
+    @Field(() => String, { nullable: true })
     @Prop()
-    solution: string;
+    solution?: string;
 
     @Prop({ type: [CategorySchema], default: [] })
     categories: Category[];

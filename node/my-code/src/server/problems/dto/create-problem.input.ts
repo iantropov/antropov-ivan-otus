@@ -11,7 +11,7 @@ export class CreateProblemInput {
     readonly description: string;
 
     @Length(3, 200)
-    readonly solution: string;
+    readonly solution?: string;
 
     @Validate(ObjectId, {
         each: true

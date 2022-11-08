@@ -17,9 +17,9 @@ type Category {
 
 type Problem {
   _id: String!
+  solution: String
   summary: String!
   description: String!
-  solution: String!
   categories: [Category!]!
   categoryIds: [String!]!
 }
@@ -78,7 +78,7 @@ input UpdateUserInput {
 input CreateProblemInput {
   summary: String!
   description: String!
-  solution: String!
+  solution: String
   categoryIds: [String!]!
 }
 
