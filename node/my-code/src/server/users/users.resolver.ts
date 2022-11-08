@@ -5,21 +5,26 @@ import { UpdateUserInput } from './input/update-user.input';
 import { UsersService } from './users.service';
 import { GraphQLUser } from './entities/user-graphql.entity';
 import { CurrentUser } from '../auth/current-user.decorator';
+import { UseGuards } from '@nestjs/common';
+import { LoggedInGraphQLGuard } from '../auth/logged-in.graphql.guard';
 
 @Resolver()
 export class UsersResolver {
     constructor(private readonly usersService: UsersService) {}
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Query(() => [GraphQLUser], { name: 'users' })
     async findAll() {
         return this.usersService.findAll();
     }
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Query(() => GraphQLUser, { name: 'user' })
     async findOne(@Args('id', { type: () => ID }) id: string) {
         return this.usersService.findOne(id);
     }
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'createUser' })
     async create(
         @Args('createUserInput') createUserInput: CreateUserInput
@@ -27,6 +32,7 @@ export class UsersResolver {
         return this.usersService.create(createUserInput);
     }
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'updateUser' })
     async update(
         @Args('id', { type: () => ID }) userId: string,
@@ -35,16 +41,19 @@ export class UsersResolver {
         return this.usersService.update(userId, updateUserInput);
     }
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'deleteUser' })
     async delete(@Args('id', { type: () => ID }) userId: string) {
         return this.usersService.remove(userId);
     }
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'likeProblem' })
     async like(@CurrentUser() user, @Args('id', { type: () => ID }) problemId: string) {
         return this.usersService.likeProblem(user, problemId);
     }
 
+    @UseGuards(LoggedInGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'unlikeProblem' })
     async unlike(@CurrentUser() user, @Args('id', { type: () => ID }) problemId: string) {
         return this.usersService.unlikeProblem(user, problemId);
