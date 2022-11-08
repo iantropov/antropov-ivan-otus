@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -31,20 +31,33 @@ export class UsersService {
         return user;
     }
 
-    create(createUserInput: CreateUserInput) {
+    async create(createUserInput: CreateUserInput) {
+        const existingUser = await this.userModel.findOne({ email: createUserInput.email }).exec();
+        if (existingUser) {
+            throw new BadRequestException(
+                `User with such email=${createUserInput.email} already exists`
+            );
+        }
+
         const user = new this.userModel(createUserInput);
         return user.save();
     }
 
     async update(id: string, updateUserDto: UpdateUserInput) {
-        const existingUser = await this.userModel
-            .findOneAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true })
-            .exec();
+        const currentUser = await this.findOne(id);
 
-        if (!existingUser) {
-            throw new NotFoundException(`User #${id} not found`);
+        if (updateUserDto.email) {
+            const existingUserByEmail = await this.userModel
+                .findOne({ email: updateUserDto.email })
+                .exec();
+            if (existingUserByEmail && !existingUserByEmail._id.equals(currentUser._id)) {
+                throw new BadRequestException(
+                    `User with such email=${updateUserDto.email} already exists`
+                );
+            }
         }
-        return existingUser;
+
+        return this.userModel.findOneAndUpdate({ _id: id }, { $set: updateUserDto }, { new: true });
     }
 
     async remove(id: string) {

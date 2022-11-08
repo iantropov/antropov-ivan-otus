@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
@@ -24,7 +24,12 @@ export class CategoriesService {
         return category;
     }
 
-    create(name: string) {
+    async create(name: string) {
+        const existingCategory = await this.categoryModel.findOne({ name }).exec();
+        if (existingCategory) {
+            throw new BadRequestException(`Category with such name=${name} already exists`);
+        }
+
         const category = new this.categoryModel({ name });
         return category.save();
     }

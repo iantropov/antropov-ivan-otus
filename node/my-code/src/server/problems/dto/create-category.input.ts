@@ -3,6 +3,6 @@ import { Length } from 'class-validator';
 
 @InputType()
 export class CreateCategoryInput {
-    @Length(3, 10)
+    @Length(3, 20)
     name: string;
 }
