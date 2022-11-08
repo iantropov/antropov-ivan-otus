@@ -1,8 +1,8 @@
-import { InputType } from "@nestjs/graphql";
+import { InputType } from '@nestjs/graphql';
+import { Length } from 'class-validator';
 
 @InputType()
-export class CreateProblemInput {
-    readonly summary: string;
-    readonly description: string;
-    readonly solution: string;
+export class CreateCategoryInput {
+    @Length(3, 10)
+    name: string;
 }

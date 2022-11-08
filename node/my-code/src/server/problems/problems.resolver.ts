@@ -30,10 +30,7 @@ export class ProblemsResolver {
 
     @UseGuards(LoggedInGraphQLGuard)
     @Query(() => SearchProblemsResult, { name: 'searchProblems' })
-    async search(
-        @CurrentUser() user: GraphQLUser,
-        @Args(new ValidationPipe({ skipMissingProperties: true })) args: SearchProblemsArgs
-    ) {
+    async search(@CurrentUser() user: GraphQLUser, @Args() args: SearchProblemsArgs) {
         return this.problemsService.search(user, args);
     }
 

@@ -1,10 +1,19 @@
 import { ArgsType } from '@nestjs/graphql';
+import { Validate } from 'class-validator';
+import { ObjectId } from 'src/server/common/validators/object-id.validator';
 
 @ArgsType()
 export class SearchProblemsArgs {
-  text?: string;
-  categoryIds?: string[];
-  favorites?: boolean;
-  cursor?: string;
-  limit?: number;
+    text?: string;
+
+    @Validate(ObjectId, {
+        each: true
+    })
+    categoryIds?: string[];
+
+    favorites?: boolean;
+
+    cursor?: string;
+
+    limit?: number;
 }

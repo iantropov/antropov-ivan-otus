@@ -58,7 +58,7 @@ type Mutation {
   createProblem(createProblemInput: CreateProblemInput!): Problem!
   updateProblem(id: ID!, updateProblemInput: UpdateProblemInput!): Problem!
   deleteProblem(id: ID!): Problem!
-  createCategory(name: String!): Category!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
   registerUser(registerUserInput: RegisterUserInput!): GraphQLUser!
   loginUser(email: String!, password: String!): AccessToken!
   logoutUser: String!
@@ -86,6 +86,11 @@ input UpdateProblemInput {
   summary: String
   description: String
   solution: String
+  categoryIds: [String!]
+}
+
+input CreateCategoryInput {
+  name: String!
 }
 
 input RegisterUserInput {

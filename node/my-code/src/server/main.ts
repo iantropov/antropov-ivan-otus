@@ -1,3 +1,4 @@
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import cookieParser from 'cookie-parser';
@@ -10,6 +11,7 @@ async function bootstrap() {
     const app = await NestFactory.create(AppModule);
     const configService = app.get(ConfigService);
     app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalPipes(new ValidationPipe({ skipMissingProperties: true }));
     app.use(cookieParser());
     app.use(
         session({
