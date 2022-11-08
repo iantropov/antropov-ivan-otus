@@ -9,6 +9,7 @@ import { ProblemForm } from '../../components/ProblemForm';
 import { Main } from '../../components/Main';
 
 import styles from './new.module.scss';
+import { messageBroker } from '../../lib/message-broker';
 
 const NewProblem: NextPage = () => {
     const router = useRouter();
@@ -19,7 +20,7 @@ const NewProblem: NextPage = () => {
 
     const onSubmit = (problem: ProblemData) => {
         return createProblem({ variables: problem }).then(() => {
-            console.log(`Created a problem successfully!`);
+            messageBroker.addSuccessMessage(`Created a problem successfully!`);
             router.push('/problems/all');
         });
     };

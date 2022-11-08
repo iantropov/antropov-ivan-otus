@@ -15,11 +15,15 @@ import { Problems } from '../../components/Problems';
 import { Main } from '../../components/Main';
 
 import styles from './favorites.module.scss';
+import { messageBroker } from '../../lib/message-broker';
 
 const Favorites: NextPage = () => {
-    const { data, loading, fetchMore } = useQuery<SearchProblemsResponse>(GET_FAVORITE_PROBLEMS_QUERY, {
-        fetchPolicy: 'network-only'
-    });
+    const { data, loading, fetchMore } = useQuery<SearchProblemsResponse>(
+        GET_FAVORITE_PROBLEMS_QUERY,
+        {
+            fetchPolicy: 'network-only'
+        }
+    );
     const [user, isUserLoading] = useUser();
 
     const [likeProblem] = useMutation(LIKE_PROBLEM_MUTATION, {
@@ -38,25 +42,15 @@ const Favorites: NextPage = () => {
     };
 
     const onLike = (problem: Problem) => {
-        return likeProblem({ variables: { problemId: problem._id } }).then(
-            () => {
-                console.log('Liked problem #${problem._id} successfully!');
-            },
-            error => {
-                alert(error);
-            }
-        );
+        return likeProblem({ variables: { problemId: problem._id } }).then(() => {
+            messageBroker.addSuccessMessage(`Liked problem #${problem._id} successfully!`);
+        });
     };
 
     const onUnlike = (problem: Problem) => {
-        return unlikeProblem({ variables: { problemId: problem._id } }).then(
-            () => {
-                console.log('Unliked problem #${problem._id} successfully!');
-            },
-            error => {
-                alert(error);
-            }
-        );
+        return unlikeProblem({ variables: { problemId: problem._id } }).then(() => {
+            messageBroker.addSuccessMessage(`Unliked problem #${problem._id} successfully!`);
+        });
     };
 
     if (loading || isUserLoading) return <p>Loading...</p>;

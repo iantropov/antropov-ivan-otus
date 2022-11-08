@@ -8,11 +8,12 @@ import { UsersResponse } from '../../lib/types';
 import { DELETE_USER_MUTATION, GET_USERS_QUERY, WHO_AM_I_QUERY } from '../../lib/graphql';
 
 import styles from './index.module.scss';
+import { messageBroker } from '../../lib/message-broker';
 
 const Users: NextPage = () => {
     const { data, loading } = useQuery<UsersResponse>(GET_USERS_QUERY);
     const [deleteUser] = useMutation(DELETE_USER_MUTATION, {
-        refetchQueries: [{ query: WHO_AM_I_QUERY }, GET_USERS_QUERY ]
+        refetchQueries: [{ query: WHO_AM_I_QUERY }, GET_USERS_QUERY]
     });
 
     const [user, isUserLoading] = useUser({ isAdmin: true });
@@ -21,14 +22,9 @@ const Users: NextPage = () => {
     if (!user) return null;
 
     const onDeleteUserClick = userId => {
-        deleteUser({ variables: { userId } }).then(
-            () => {
-                console.log(`Removed the user #${userId} successfully!`);
-            },
-            error => {
-                alert(error);
-            }
-        );
+        deleteUser({ variables: { userId } }).then(() => {
+            messageBroker.addSuccessMessage(`Removed the user #${userId} successfully!`);
+        });
     };
 
     return (

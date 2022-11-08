@@ -7,6 +7,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { LOGOUT_USER_MUTATION, WHO_AM_I_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
+import { messageBroker } from '../../lib/message-broker';
 
 interface HeaderProps {
     className?: string;
@@ -25,9 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
             () => {
                 client.resetStore();
                 setTimeout(() => router.push('/users/login'));
-            },
-            error => {
-                alert(error);
+                messageBroker.addSuccessMessage('Logged out successfully!');
             }
         );
     };

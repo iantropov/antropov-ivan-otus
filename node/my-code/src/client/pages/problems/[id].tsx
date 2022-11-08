@@ -8,6 +8,7 @@ import { ProblemData, ProblemReponse } from '../../lib/types';
 import { ProblemForm } from '../../components/ProblemForm';
 import { useUser } from '../../hooks/use-user';
 import { Main } from '../../components/Main';
+import { messageBroker } from '../../lib/message-broker';
 
 interface EditProblemProps {
     id: string;
@@ -43,7 +44,7 @@ const EditProblem: React.FC<EditProblemProps> = ({ id }) => {
 
     const onSubmit = (problem: ProblemData) => {
         return updateProblem({ variables: { id, ...problem } }).then(() => {
-            console.log(`Updated problem #${id} successfully!`);
+            messageBroker.addSuccessMessage(`Updated problem #${id} successfully!`);
             router.push('/problems/all');
         });
     };

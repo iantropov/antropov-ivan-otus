@@ -3,6 +3,16 @@
     flex-flow: column nowrap;
     justify-content: stretch;
     min-height: 100vh;
+    min-width: 800px;
+    position: relative;
+    box-sizing: border-box;
+
+    &__toasts {
+        position: absolute;
+        right: 20px;
+        top: 100px;
+        width: 300px;
+    }
 
     &__header {
         min-height: 70px;

@@ -57,3 +57,9 @@ export interface SearchProblemsResponse {
         }
     }
 }
+
+export interface Message {
+    id: string;
+    type: 'error' | 'success',
+    text: string;
+}
