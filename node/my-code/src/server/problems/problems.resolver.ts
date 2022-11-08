@@ -1,5 +1,6 @@
 import { UseGuards, ValidationPipe } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AdminRequiredGraphQLGuard } from '../auth/admin-required.graphql.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { LoggedInGraphQLGuard } from '../auth/logged-in.graphql.guard';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
@@ -37,12 +38,14 @@ export class ProblemsResolver {
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => Problem, { name: 'createProblem' })
     async create(@Args('createProblemInput') createProblemInput: CreateProblemInput) {
         return this.problemsService.create(createProblemInput);
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => Problem, { name: 'updateProblem' })
     async update(
         @Args('id', { type: () => ID }) problemId: string,
@@ -52,6 +55,7 @@ export class ProblemsResolver {
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => Problem, { name: 'deleteProblem' })
     async delete(@Args('id', { type: () => ID }) problemId: string) {
         return this.problemsService.remove(problemId);

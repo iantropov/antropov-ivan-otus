@@ -7,24 +7,28 @@ import { GraphQLUser } from './entities/user-graphql.entity';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { UseGuards } from '@nestjs/common';
 import { LoggedInGraphQLGuard } from '../auth/logged-in.graphql.guard';
+import { AdminRequiredGraphQLGuard } from '../auth/admin-required.graphql.guard';
 
 @Resolver()
 export class UsersResolver {
     constructor(private readonly usersService: UsersService) {}
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Query(() => [GraphQLUser], { name: 'users' })
     async findAll() {
         return this.usersService.findAll();
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Query(() => GraphQLUser, { name: 'user' })
     async findOne(@Args('id', { type: () => ID }) id: string) {
         return this.usersService.findOne(id);
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'createUser' })
     async create(
         @Args('createUserInput') createUserInput: CreateUserInput
@@ -33,6 +37,7 @@ export class UsersResolver {
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'updateUser' })
     async update(
         @Args('id', { type: () => ID }) userId: string,
@@ -42,6 +47,7 @@ export class UsersResolver {
     }
 
     @UseGuards(LoggedInGraphQLGuard)
+    @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => GraphQLUser, { name: 'deleteUser' })
     async delete(@Args('id', { type: () => ID }) userId: string) {
         return this.usersService.remove(userId);
