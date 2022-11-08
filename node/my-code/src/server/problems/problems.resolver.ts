@@ -3,6 +3,7 @@ import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AdminRequiredGraphQLGuard } from '../auth/admin-required.graphql.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 import { LoggedInGraphQLGuard } from '../auth/logged-in.graphql.guard';
+import { ParseObjectIdPipe } from '../common/pipes/object-id.pipe';
 import { GraphQLUser } from '../users/entities/user-graphql.entity';
 import { CreateProblemInput } from './dto/create-problem.input';
 import { SearchProblemsArgs } from './dto/search-problems.args';
@@ -24,7 +25,7 @@ export class ProblemsResolver {
 
     @UseGuards(LoggedInGraphQLGuard)
     @Query(() => Problem, { name: 'problem' })
-    async findOne(@Args('id', { type: () => ID }) id: string) {
+    async findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: string) {
         return this.problemsService.findOne(id);
     }
 
@@ -45,7 +46,7 @@ export class ProblemsResolver {
     @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => Problem, { name: 'updateProblem' })
     async update(
-        @Args('id', { type: () => ID }) problemId: string,
+        @Args('id', { type: () => ID }, ParseObjectIdPipe) problemId: string,
         @Args('updateProblemInput') updateProblemInput: UpdateProblemInput
     ) {
         return this.problemsService.update(problemId, updateProblemInput);
@@ -54,7 +55,7 @@ export class ProblemsResolver {
     @UseGuards(LoggedInGraphQLGuard)
     @UseGuards(AdminRequiredGraphQLGuard)
     @Mutation(() => Problem, { name: 'deleteProblem' })
-    async delete(@Args('id', { type: () => ID }) problemId: string) {
+    async delete(@Args('id', { type: () => ID }, ParseObjectIdPipe) problemId: string) {
         return this.problemsService.remove(problemId);
     }
 }
