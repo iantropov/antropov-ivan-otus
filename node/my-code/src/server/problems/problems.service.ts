@@ -101,16 +101,28 @@ export class ProblemsService {
     }
 
     async update(id: Types.ObjectId, updateProblemDto: UpdateProblemInput) {
-        const existingProblem = await this.problemModel.findOneAndUpdate(
-            { _id: id },
-            { $set: updateProblemDto },
-            { new: true }
-        );
-
+        const existingProblem = await this.problemModel.findOne({ _id: id });
         if (!existingProblem) {
             throw new NotFoundException(`Problem #${id} not found`);
         }
-        return existingProblem;
+
+        let categories = [];
+        if (updateProblemDto.categoryIds) {
+            categories = await this.categoriesService.findByIds(updateProblemDto.categoryIds);
+        } else {
+            categories = existingProblem.categories;
+        }
+
+        return this.problemModel.findOneAndUpdate(
+            { _id: id },
+            {
+                $set: {
+                    ...updateProblemDto,
+                    categories
+                }
+            },
+            { new: true }
+        );
     }
 
     async remove(id: Types.ObjectId) {

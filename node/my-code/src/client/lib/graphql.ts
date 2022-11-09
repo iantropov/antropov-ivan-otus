@@ -137,7 +137,7 @@ export const CREATE_PROBLEM_MUTATION = gql`
     mutation createProblem(
         $summary: String!
         $description: String!
-        $solution: String!
+        $solution: String
         $categoryIds: [String!]!
     ) {
         createProblem(
@@ -166,7 +166,7 @@ export const UPDATE_PROBLEM_MUTATION = gql`
         $id: ID!
         $summary: String!
         $description: String!
-        $solution: String!
+        $solution: String
         $categoryIds: [String!]!
     ) {
         updateProblem(

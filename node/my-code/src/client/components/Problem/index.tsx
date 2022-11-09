@@ -36,7 +36,7 @@ const ProblemComponent: React.FC<ProblemProps> = ({
 
             setIsProcessing(true);
             processCallback(problem).finally(() => setIsProcessing(false));
-        }
+        };
     };
 
     const onDeleteProblem = processProblem(onDelete);
@@ -71,18 +71,20 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                     {problem.categories.map(({ name }) => `@${name}`).join(', ')}
                 </p>
                 <p className={styles.problem__description}>{problem.description}</p>
-                <div className={styles.problem__solution}>
-                    <a
-                        className={styles.problem__collapse}
-                        data-bs-toggle="collapse"
-                        href={`#solution-${problem._id}`}
-                    >
-                        Solution
-                    </a>
-                    <div className="collapse" id={`solution-${problem._id}`}>
-                        <p className="mb-0 opacity-75">{problem.solution}</p>
+                {problem.solution && (
+                    <div className={styles.problem__solution}>
+                        <a
+                            className={styles.problem__collapse}
+                            data-bs-toggle="collapse"
+                            href={`#solution-${problem._id}`}
+                        >
+                            Solution
+                        </a>
+                        <div className="collapse" id={`solution-${problem._id}`}>
+                            <p className="mb-0 opacity-75">{problem.solution}</p>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
             <div className={styles.problem__footer}>
                 <button

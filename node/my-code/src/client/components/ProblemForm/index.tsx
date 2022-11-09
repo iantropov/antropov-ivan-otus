@@ -52,12 +52,14 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
 
         setIsProblemCreating(true);
 
-        onSubmit({
-            summary,
-            description,
-            solution,
-            categoryIds
-        }).catch(() => {
+        onSubmit(
+            excludeEmpty({
+                summary,
+                description,
+                solution,
+                categoryIds
+            })
+        ).catch(() => {
             setIsProblemCreating(false);
         });
     };
@@ -129,3 +131,12 @@ export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, on
         </section>
     );
 };
+
+function excludeEmpty(data: ProblemData) {
+    return Object.keys(data).reduce((result, key) => {
+        if (data[key]) {
+            result[key] = data[key];
+        }
+        return result;
+    }, {} as ProblemData);
+}

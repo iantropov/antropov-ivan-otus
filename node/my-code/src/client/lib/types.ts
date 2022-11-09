@@ -15,7 +15,7 @@ export interface Problem {
     _id: string;
     summary: string;
     description: string;
-    solution: string;
+    solution?: string;
     categories: Category[];
     categoryIds: string[];
 }
