@@ -1,6 +1,6 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Document, ObjectId } from 'mongoose';
+import { Document, Types } from 'mongoose';
 
 import { Category, CategorySchema } from './category.entity';
 
@@ -12,7 +12,7 @@ import { Category, CategorySchema } from './category.entity';
 })
 export class Problem extends Document {
     @Field(() => String)
-    _id: ObjectId;
+    _id: Types.ObjectId;
 
     @Prop()
     summary: string;
