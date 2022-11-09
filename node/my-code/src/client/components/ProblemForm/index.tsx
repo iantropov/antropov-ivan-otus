@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@apollo/client';
 
-import { CategoriesReponse, Problem, ProblemData } from '../../lib/types';
+import { CategoriesResponse, Problem, ProblemData } from '../../lib/types';
 import { GET_CATEGORIES_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
@@ -14,7 +14,7 @@ interface ProblemFormProps {
 }
 
 export const ProblemForm: React.FC<ProblemFormProps> = ({ className, problem, onSubmit }) => {
-    const { data, loading } = useQuery<CategoriesReponse>(GET_CATEGORIES_QUERY);
+    const { data, loading } = useQuery<CategoriesResponse>(GET_CATEGORIES_QUERY);
     const categories = data?.categories;
 
     const [summary, setSummary] = useState(problem?.summary || '');

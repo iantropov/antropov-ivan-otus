@@ -44,7 +44,7 @@ export interface UsersResponse {
     users: User[];
 }
 
-export interface CategoriesReponse {
+export interface CategoriesResponse {
     categories: Category[];
 }
 

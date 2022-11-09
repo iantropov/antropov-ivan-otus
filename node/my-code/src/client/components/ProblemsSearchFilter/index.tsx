@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import classnames from 'classnames';
 import { useQuery } from '@apollo/client';
 
-import { CategoriesReponse, ProblemsSearchFilter } from '../../lib/types';
+import { CategoriesResponse, ProblemsSearchFilter } from '../../lib/types';
 import { GET_CATEGORIES_QUERY } from '../../lib/graphql';
 
 import styles from './styles.module.scss';
@@ -16,7 +16,7 @@ const ProblemsSearchFilterComponent: React.FC<ProblemsSearchFilterProps> = ({
     className,
     onApply
 }) => {
-    const { data } = useQuery<CategoriesReponse>(GET_CATEGORIES_QUERY);
+    const { data } = useQuery<CategoriesResponse>(GET_CATEGORIES_QUERY);
     const categories = data?.categories;
 
     const [text, setText] = useState('');

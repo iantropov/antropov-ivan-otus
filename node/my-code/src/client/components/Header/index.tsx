@@ -62,11 +62,18 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
                         </Link>
                     </li>
                     {userData?.whoAmI.isAdmin && (
-                        <li>
-                            <Link href="/users">
-                                <a className="nav-link px-2 link-secondary">Users</a>
-                            </Link>
-                        </li>
+                        <>
+                            <li>
+                                <Link href="/categories/all">
+                                    <a className="nav-link px-2 link-secondary">Categories</a>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/users">
+                                    <a className="nav-link px-2 link-secondary">Users</a>
+                                </Link>
+                            </li>
+                        </>
                     )}
                 </ul>
             )}

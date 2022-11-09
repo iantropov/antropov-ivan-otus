@@ -60,8 +60,20 @@ export const GET_CATEGORIES_QUERY = gql`
 `;
 
 export const SEARCH_PROBLEMS_QUERY = gql`
-    query ($text: String, $categoryIds: [String!], $favorites: Boolean, $cursor: String, $limit: Float) {
-        searchProblems(text: $text, categoryIds: $categoryIds, favorites: $favorites, cursor: $cursor, limit: $limit) {
+    query (
+        $text: String
+        $categoryIds: [String!]
+        $favorites: Boolean
+        $cursor: String
+        $limit: Float
+    ) {
+        searchProblems(
+            text: $text
+            categoryIds: $categoryIds
+            favorites: $favorites
+            cursor: $cursor
+            limit: $limit
+        ) {
             edges {
                 summary
                 description
@@ -210,6 +222,15 @@ export const LIKE_PROBLEM_MUTATION = gql`
 export const UNLIKE_PROBLEM_MUTATION = gql`
     mutation unlikeProblem($problemId: ID!) {
         unlikeProblem(id: $problemId) {
+            _id
+        }
+    }
+`;
+
+export const CREATE_CATEGORY_MUTATION = gql`
+    mutation createCategory($name: String!) {
+        createCategory(createCategoryInput: { name: $name }) {
+            name
             _id
         }
     }

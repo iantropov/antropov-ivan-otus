@@ -55,6 +55,7 @@ const ProblemComponent: React.FC<ProblemProps> = ({
                 <div className={styles.problem__header}>
                     <div className={styles.problem__icon}>
                         <Image
+                            unoptimized
                             src="https://github.com/twbs.png"
                             alt="twbs"
                             width="32"
