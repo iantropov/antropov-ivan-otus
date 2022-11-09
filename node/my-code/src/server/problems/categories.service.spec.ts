@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CategoriesService } from './categories.service';
 import { getModelToken } from '@nestjs/mongoose';
-import { Category } from './entities/category.entity';
 import { Model, Types } from 'mongoose';
+
+import { CategoriesService } from './categories.service';
+import { Category } from './entities/category.entity';
 
 const mockCategory = (name = 'category'): Partial<Category> => ({
     name,

@@ -1,5 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Types } from 'mongoose';
 
 import { AdminRequiredGraphQLGuard } from '../auth/admin-required.graphql.guard';
 import { LoggedInGraphQLGuard } from '../auth/logged-in.graphql.guard';
@@ -21,7 +22,7 @@ export class CategoriesResolver {
 
     @UseGuards(LoggedInGraphQLGuard)
     @Query(() => Category, { name: 'category' })
-    async findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: string) {
+    async findOne(@Args('id', { type: () => ID }, ParseObjectIdPipe) id: Types.ObjectId) {
         return this.categoriesService.findOne(id);
     }
 
