@@ -1,41 +1,90 @@
 # Project Work: MyCode
 
+## Описание
+
+**MyCode** - каталог задач по программированию
+
+### Функционал:
+
+- Для работы с каталогом нужно зарегистрировать пользователя и аутентифицироваться в системе
+- В системе существуют 2 типа пользователей администраторы и обычные пользователи
+- Администраторы могут создавать/удалять/редактировать/читать задачи
+- Администраторы могут создавать/читать категории задач
+- Администраторы могут смотреть/удалять пользователей
+- Администраторы и обычные пользователи могут лайкать задачи
+- Администраторы и обычные пользователи могут просматривать списки залайканных задачи
+- Администраторы и обычные пользователи могут искать задачи по фильтрам:
+  - Текст в заголовке/описании задачи
+  - Присутствие в списке избранных у пользователя
+  - Наличие выбранных категорий у задачи
+
+### Особенности реализации:
+
+- В качестве языка системы был выбран TypeScript
+- Система реализована с использованием фреймворков
+  - NestJS для бэкенда приложения
+  - NextJS для фронтенда приложения
+- Для хранения данных используется MongoDB
+  - В среде разработки - в docker контейнере
+  - В развёрнутой версии - в MongoDB Atlas
+- Для обмена данными между клиентом/сервером используется GraphQL
+  - На сервере используется ApolloServer
+  - На клиенте используется ApolloClient
+- Реализована аутентификация с использованием Passport и стратегий:
+  - Сессий через cookie
+  - JWT токенов в заголовках
+- Для развертывания приложения был выбран PaaS Heroku
+
 ## Deployment
 
 Приложение развёрнуто в Heroku: https://otus-my-code.herokuapp.com/
 
 В развёрнутом приложении используется MongoDB Atlas
 
-## DevCycle
+## Playbook
+
+### Локальная разработка
 
 ```
+docker-compose -d up
 npm run start:dev
 ```
 
+### Развёртывание
+
 ```
-npm run build
-NODE_ENV=production node dist/main
+heroku login
+heroku git:remote -a otus-my-code
+heroku config:push --file=.production.env
+git push heroku master
 ```
 
-## Links
+## Interesting Links
 
-https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design-part-1
+### MongoDB
 
-## Roadmap
+https://www.mongodb.com/blog/post/6-rules-of-thumb-for-mongodb-schema-design
 
+
+## Реализация
+
+```
 Сущности:
 - User
-  - id: number
+  - id: ObjectId
   - name: string
   - email: sting
-  - role: {id: number, name: role}
-  - favouriteProblems: number[]
+  - isAdmin: boolean
+  - favourites: ObjectId[]
 - Problem
-  - id: number
-  - categories: [{id: number, name: string}]
+  - id: ObjectId
+  - categories: [{id: ObjectId, name: string}]
   - description: string
-  - summary: string
+  - summary?: string
   - solution: string
+- Category
+  - id: ObjectId
+  - name: string
 
 Админ заводится при старте системы
 
@@ -44,18 +93,21 @@ Use Cases:
 - Логин пользователя
 - Под админом:
   - просмотр категорий
+  - добавление категорий
   - просмотр пользователей
   - удаление пользователей
-  - просмотр задач
+  - поиск задач
   - добавление задач
   - редактирование задач
   - удаление задач
   - добавление в избранные
   - удаление из избранного
+  - просмотр избранных задач
 - Под пользователем
-  - Просмотр задач
+  - поиск задач
   - добавление в избранное
   - удаление из избранного
+  - просмотр избранных задач
 
 Roadmap:
 - бэкенд
@@ -130,8 +182,11 @@ Roadmap:
     - in-memory database
   - Тесты на фронт
     - e2e тесты на Playwright
+```
 
 =================================
+
+## Useful snippets
 
 ```
 show databases;
