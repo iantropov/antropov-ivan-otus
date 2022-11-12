@@ -14,5 +14,6 @@ func main() {
 	fmt.Printf("5 ^ 5 (optimal) = %d\n", power.Optimal(5, 5))
 	fmt.Printf("Fibonnaci(5) (recursive) = %d\n", fibonacci.Recursive(5))
 	fmt.Printf("Fibonnaci(5) (iterative) = %d\n", fibonacci.Iterative(5))
+	fmt.Printf("Fibonnaci(5) (golden-ratio) = %d\n", fibonacci.GoldenRatio(5))
 	fmt.Printf("5 first primers (brute-force) = %v\n", primes.BruteForce(5))
 }
