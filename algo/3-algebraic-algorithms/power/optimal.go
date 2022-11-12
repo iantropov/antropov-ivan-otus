@@ -5,13 +5,13 @@ func Optimal(num, pow int) int {
 		return num
 	}
 
-	res := 0
-	d := 2
-	for n := num; n >= 1; {
-		d *= d
+	res := 1
+	d := num
+	for n := pow; n > 0; {
 		if n%2 == 1 {
-			res += d
+			res *= d
 		}
+		d *= d
 		n /= 2
 	}
 
