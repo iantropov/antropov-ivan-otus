@@ -2,7 +2,7 @@ package primes
 
 func BruteForce(num int) []int {
 	primes := make([]int, 0)
-	for i := 1; len(primes) < num; i++ {
+	for i := 2; len(primes) < num; i++ {
 		if isPrime(i) {
 			primes = append(primes, i)
 		}
