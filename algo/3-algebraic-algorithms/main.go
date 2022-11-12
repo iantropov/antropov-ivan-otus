@@ -9,9 +9,9 @@ import (
 
 func main() {
 	fmt.Println("Hello, the third chapter!")
-	fmt.Printf("5 ^ 5 (iterative) = %d\n", power.Iterative(5, 5))
-	fmt.Printf("5 ^ 5 (suboptimal) = %d\n", power.Suboptimal(5, 5))
-	fmt.Printf("5 ^ 5 (optimal) = %d\n", power.Optimal(5, 5))
+	fmt.Printf("5 ^ 5 (iterative) = %v\n", power.Iterative(5, 5))
+	fmt.Printf("5 ^ 5 (suboptimal) = %v\n", power.Suboptimal(5, 5))
+	fmt.Printf("5 ^ 5 (optimal) = %v\n", power.Optimal(5, 5))
 	fmt.Printf("Fibonnaci(5) (recursive) = %d\n", fibonacci.Recursive(5))
 	fmt.Printf("Fibonnaci(5) (iterative) = %d\n", fibonacci.Iterative(5))
 	fmt.Printf("Fibonnaci(5) (golden-ratio) = %d\n", fibonacci.GoldenRatio(5))

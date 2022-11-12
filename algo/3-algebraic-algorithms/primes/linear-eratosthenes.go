@@ -1,7 +1,5 @@
 package primes
 
-import "fmt"
-
 /*
 Вход: натуральное число n
 
@@ -24,12 +22,10 @@ https://habr.com/ru/post/452388/
 func LinearEratosthenes(num int) int {
 	pr := make([]int, 0)
 	lp := make([]int, num)
-	counts := make([]int, num)
 
 	for i := 2; i < num; i++ {
 		if lp[i] == 0 {
 			lp[i] = i
-			counts[i]++
 			pr = append(pr, i)
 		}
 		for pi := 0; pi < len(pr); pi++ {
@@ -38,10 +34,8 @@ func LinearEratosthenes(num int) int {
 				break
 			}
 			lp[p*i] = p
-			counts[p*i]++
 		}
 	}
 
-	fmt.Println(counts)
 	return len(pr)
 }

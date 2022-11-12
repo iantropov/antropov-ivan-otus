@@ -1,8 +1,8 @@
 package power
 
-func Suboptimal(num, pow int) int {
-	if pow <= 1 {
-		return 1
+func Suboptimal(num float64, pow int) float64 {
+	if pow == 0 {
+		return 1.
 	}
 
 	baseCounter := num
