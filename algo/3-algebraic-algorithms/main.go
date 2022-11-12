@@ -20,4 +20,5 @@ func main() {
 	fmt.Printf("Number of primers less than 100 (optimal) = %v\n", primes.Optimal(100))
 	fmt.Printf("Number of primers less than 100 (eratosthenes) = %v\n", primes.Eratosthenes(100))
 	fmt.Printf("Number of primers less than 100 (eratosthenes-with-bits) = %v\n", primes.EratosthenesWithBits(100))
+	fmt.Printf("Number of primers less than 100 (linear-eratosthenes) = %v\n", primes.LinearEratosthenes(100))
 }
