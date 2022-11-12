@@ -3,23 +3,22 @@ import request from 'supertest';
 import mongoose, { Types } from 'mongoose';
 import { INestApplication } from '@nestjs/common';
 import { MongoMemoryServer } from 'mongodb-memory-server';
+import { ConfigModule } from '@nestjs/config';
+import { GraphQLModule } from '@nestjs/graphql';
+import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 
 import { ProblemsModule } from '../src/server/problems/problems.module';
 import { CategoriesService } from '../src/server/problems/categories.service';
-import { Category } from '../src/server/problems/entities/category.entity';
-import { MongooseModule, MongooseModuleOptions } from '@nestjs/mongoose';
-import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { join } from 'path';
 import { UsersModule } from '../src/server/users/users.module';
 import { AuthModule } from '../src/server/auth/auth.module';
-import { ConfigModule } from '@nestjs/config';
+import { LoggedInGraphQLGuard } from '../src/server/auth/logged-in.graphql.guard';
 
-const gql = '/graphql';
+const GQL_URL = '/graphql';
 
-const mockCategory = (name = 'category'): Partial<Category> => ({
+const mockCategory = (name = 'category') => ({
     name,
-    _id: new Types.ObjectId()
+    _id: String(new Types.ObjectId())
 });
 
 const category = mockCategory();
@@ -30,7 +29,7 @@ const categoriesArray = [category, category1, category2];
 
 let mongod: MongoMemoryServer;
 
-let config = {
+let testConfig = {
     PORT: '80',
     MONGODB_URI: 'mongodb',
     JWT_SECRET: 'secret',
@@ -42,9 +41,7 @@ export const rootMongooseTestModule = (options: MongooseModuleOptions = {}) =>
         useFactory: async () => {
             mongod = await MongoMemoryServer.create();
             const mongoUri = mongod.getUri();
-            console.log(mongoUri);
-            console.log(join(process.cwd(), '../src/server/*.gql'));
-            config.MONGODB_URI = mongoUri; //==========> logs mongodb://127.0.0.1:37345/
+            testConfig.MONGODB_URI = mongoUri;
             return {
                 uri: mongoUri,
                 ...options
@@ -57,16 +54,17 @@ export const closeInMongodConnection = async () => {
     if (mongod) await mongod.stop();
 };
 
-describe('GraphQL AppResolver (e2e) {Supertest}', () => {
+describe('GraphQL CategoriesResolver (e2e)', () => {
     let app: INestApplication;
     let categoriesService = { findAll: () => categoriesArray };
+    let loggedInGuard = { canActivate: () => true };
 
     beforeAll(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
             imports: [
                 await rootMongooseTestModule(),
                 ConfigModule.forRoot({
-                    load: [() => config]
+                    load: [() => testConfig]
                 }),
                 GraphQLModule.forRoot<ApolloDriverConfig>({
                     driver: ApolloDriver,
@@ -79,10 +77,11 @@ describe('GraphQL AppResolver (e2e) {Supertest}', () => {
         })
             .overrideProvider(CategoriesService)
             .useValue(categoriesService)
+            .overrideGuard(LoggedInGraphQLGuard)
+            .useValue(loggedInGuard)
             .compile();
 
         app = moduleFixture.createNestApplication();
-        // await app.listen(80);
         await app.init();
     });
 
@@ -91,83 +90,17 @@ describe('GraphQL AppResolver (e2e) {Supertest}', () => {
         await closeInMongodConnection();
     });
 
-    describe(gql, () => {
+    describe(GQL_URL, () => {
         describe('categories', () => {
-            it('should get the cats array', () => {
+            it('should get the categories array', () => {
                 return request(app.getHttpServer())
-                    .post(gql)
+                    .post(GQL_URL)
                     .send({ query: '{categories {_id name }}' })
                     .expect(200)
                     .expect(res => {
-                        expect(res.body.data.getCats).toEqual(categoriesArray);
+                        expect(res.body.data.categories).toEqual(categoriesArray);
                     });
             });
-            // describe('one cat', () => {
-            //   it('should get a single cat', () => {
-            //     return request(app.getHttpServer())
-            //       .post(gql)
-            //       .send({ query: '{getCat(catId:{id:"2"}){id name age breed}}' })
-            //       .expect(200)
-            //       .expect((res) => {
-            //         expect(res.body.data.getCat).toEqual({
-            //           name: 'Terra',
-            //           age: 5,
-            //           breed: 'Siberian',
-            //           id: '2',
-            //         });
-            //       });
-            //   });
-            //   it('should get an error for bad id', () => {
-            //     return request(app.getHttpServer())
-            //       .post(gql)
-            //       .send({ query: '{getCat(catId: {id:"500"}){id name age breed}}' })
-            //       .expect(200)
-            //       .expect((res) => {
-            //         expect(res.body.data).toBe(null);
-            //         expect(res.body.errors[0].message).toBe(
-            //           'No cat with id 500 found',
-            //         );
-            //       });
-            //   });
-            // });
-            // it('should create a new cat and have it added to the array', () => {
-            //   return (
-            //     request(app.getHttpServer())
-            //       .post(gql)
-            //       .send({
-            //         query:
-            //           'mutation {insertCat(newCat: { name: "Vanitas", breed: "Calico", age: 100 }) {breed name id age}}',
-            //       })
-            //       .expect(200)
-            //       .expect((res) => {
-            //         expect(res.body.data.insertCat).toEqual({
-            //           name: 'Vanitas',
-            //           breed: 'Calico',
-            //           age: 100,
-            //           id: '4',
-            //         });
-            //       })
-            //       // chain another request to see our original one works as expected
-            //       .then(() =>
-            //         request(app.getHttpServer())
-            //           .post(gql)
-            //           .send({ query: '{getCats {id name breed age}}' })
-            //           .expect(200)
-            //           .expect((res) => {
-            //             expect(res.body.data.getCats).toEqual(
-            //               cats.concat([
-            //                 {
-            //                   name: 'Vanitas',
-            //                   breed: 'Calico',
-            //                   age: 100,
-            //                   id: '4',
-            //                 },
-            //               ]),
-            //             );
-            //           }),
-            //       )
-            //   );
-            // });
         });
     });
 });
