@@ -4,7 +4,7 @@ import "math"
 
 func Optimal(n int) []int {
 	primes := make([]int, 0)
-	for i := 2; len(primes) < n; i++ {
+	for i := 2; i < n; i++ {
 		if isPrimeWithPrimes(i, primes) {
 			primes = append(primes, i)
 		}
