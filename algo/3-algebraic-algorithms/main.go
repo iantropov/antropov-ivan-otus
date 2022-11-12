@@ -16,7 +16,8 @@ func main() {
 	fmt.Printf("Fibonnaci(5) (iterative) = %d\n", fibonacci.Iterative(5))
 	fmt.Printf("Fibonnaci(5) (golden-ratio) = %d\n", fibonacci.GoldenRatio(5))
 	fmt.Printf("Fibonnaci(5) (matrix) = %d\n", fibonacci.Matrix(5))
-	fmt.Printf("Primers less than 100 (brute-force) = %v\n", primes.BruteForce(100))
-	fmt.Printf("Primers less than 100 (optimal) = %v\n", primes.Optimal(100))
-	fmt.Printf("Primers less than 100 (eratosthenes) = %v\n", primes.Eratosthenes(100))
+	fmt.Printf("Number of primers less than 100 (brute-force) = %v\n", primes.BruteForce(100))
+	fmt.Printf("Number of primers less than 100 (optimal) = %v\n", primes.Optimal(100))
+	fmt.Printf("Number of primers less than 100 (eratosthenes) = %v\n", primes.Eratosthenes(100))
+	fmt.Printf("Number of primers less than 100 (eratosthenes-with-bits) = %v\n", primes.EratosthenesWithBits(100))
 }

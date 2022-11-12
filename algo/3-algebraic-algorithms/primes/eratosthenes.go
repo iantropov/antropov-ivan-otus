@@ -1,16 +1,21 @@
 package primes
 
-func Eratosthenes(num int) []int {
+func Eratosthenes(num int) int {
 	notPrimers := make([]bool, num)
-	primes := make([]int, 0)
 
 	for i := 2; i < num; i++ {
 		if notPrimers[i] != true {
-			primes = append(primes, i)
 			markNotPrimers(i, notPrimers)
 		}
 	}
-	return primes
+
+	count := 0
+	for i := 2; i < num; i++ {
+		if notPrimers[i] == false {
+			count++
+		}
+	}
+	return count
 }
 
 func markNotPrimers(n int, notPrimers []bool) {

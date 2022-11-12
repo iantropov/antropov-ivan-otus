@@ -1,6 +1,6 @@
 package primes
 
-func BruteForce(num int) []int {
+func BruteForce(num int) int {
 	primes := make([]int, 0)
 	for i := 2; i < num; i++ {
 		if isPrime(i) {
@@ -8,7 +8,7 @@ func BruteForce(num int) []int {
 		}
 	}
 
-	return primes
+	return len(primes)
 }
 
 func isPrime(num int) bool {
