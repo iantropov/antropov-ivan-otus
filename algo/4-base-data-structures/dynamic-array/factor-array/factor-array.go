@@ -10,9 +10,13 @@ type FactorArray[T any] struct {
 
 func NewFactorArray[T any]() *FactorArray[T] {
 	fa := new(FactorArray[T])
+	fa.Initialize()
+	return fa
+}
+
+func (fa *FactorArray[T]) Initialize() {
 	fa.items = make([]T, 0)
 	fa.factor = 2
-	return fa
 }
 
 func (fa *FactorArray[T]) Length() int {
@@ -51,8 +55,8 @@ func (fa *FactorArray[T]) Add(item T, index int) error {
 		fa.resize()
 	}
 
-	for i := index; i < fa.length; i++ {
-		fa.items[i+1] = fa.items[i]
+	for i := fa.length; i > index; i-- {
+		fa.items[i] = fa.items[i-1]
 	}
 
 	fa.items[index] = item
