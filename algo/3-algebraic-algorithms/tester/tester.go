@@ -1,4 +1,4 @@
-package main
+package tester
 
 import (
 	"errors"
@@ -12,20 +12,21 @@ import (
 
 type TestSet struct {
 	hasIn, hasOut         bool
+	fileName              string
 	inContent, outContent []string
 }
 
-func buildTestSets(filesDir string) (map[string]*TestSet, error) {
+func buildTestSets(filesDir, testSuteName string) (map[string]*TestSet, error) {
 	files, err := ioutil.ReadDir(filesDir)
 	if err != nil {
 		fmt.Println(err)
 	}
 	if len(files) == 0 {
-		fmt.Printf("There are no test files in %s\n", filesDir)
+		fmt.Printf("[#%s] There are no test files in %s\n", testSuteName, filesDir)
 		return nil, errors.New("Empty dir")
 	}
 
-	fmt.Printf("Searching test code files from %s\n", filesDir)
+	fmt.Printf("[#%s] Searching test code files from %s\n", testSuteName, filesDir)
 
 	testSets := make(map[string]*TestSet)
 
@@ -35,7 +36,7 @@ func buildTestSets(filesDir string) (map[string]*TestSet, error) {
 		hasInSuffix := strings.HasSuffix(fileName, ".in")
 		hasOutSuffix := strings.HasSuffix(fileName, ".out")
 		if !hasInSuffix && !hasOutSuffix {
-			fmt.Printf("Unexpected filename %s, ignored.\n", fileName)
+			fmt.Printf("[#%s] Unexpected filename %s, ignored.\n", testSuteName, fileName)
 			continue
 		}
 
@@ -43,7 +44,7 @@ func buildTestSets(filesDir string) (map[string]*TestSet, error) {
 
 		fileContent, readError := ioutil.ReadFile(path.Join(filesDir, fileName))
 		if readError != nil {
-			fmt.Printf("Failed to read file %s. Error: %v. ignored.\n", fileName, readError)
+			fmt.Printf("[#%s] Failed to read file %s. Error: %v. ignored.\n", testSuteName, fileName, readError)
 			continue
 		}
 
@@ -58,6 +59,7 @@ func buildTestSets(filesDir string) (map[string]*TestSet, error) {
 			testSets[testName] = testSet
 		}
 
+		testSet.fileName = fileName
 		testSet.hasIn = testSet.hasIn || hasInSuffix
 		testSet.hasOut = testSet.hasOut || hasOutSuffix
 
@@ -68,13 +70,13 @@ func buildTestSets(filesDir string) (map[string]*TestSet, error) {
 		}
 	}
 
-	fmt.Printf("Found %v test sets. Starting testing...\n", len(testSets))
+	fmt.Printf("[#%s] Found %v test sets. Starting testing...\n", testSuteName, len(testSets))
 
 	return testSets, nil
 }
 
-func testWithFiles(filesDir string, t *testing.T, testCallback func([]string) []string) {
-	testSets, err := buildTestSets(filesDir)
+func TestWithFiles(filesDir string, testSuteName string, t *testing.T, testCallback func([]string) []string, compareCallback func(string, string) bool) {
+	testSets, err := buildTestSets(filesDir, testSuteName)
 	if err != nil {
 		return
 	}
@@ -83,8 +85,8 @@ func testWithFiles(filesDir string, t *testing.T, testCallback func([]string) []
 		t.Run(testName, func(t *testing.T) {
 			actualOutput := testCallback(testSet.inContent)
 			for i := range actualOutput {
-				if actualOutput[i] != testSet.outContent[i] && !strings.HasPrefix(actualOutput[i], testSet.outContent[i]) {
-					t.Errorf("Test Failed. Expected: %s, Received: %s", testSet.outContent, actualOutput)
+				if !compareCallback(testSet.outContent[i], actualOutput[i]) {
+					t.Errorf("[#%s] [.%s] Test Failed. Expected: %s, Received: %s", testSuteName, testSet.fileName, testSet.outContent, actualOutput)
 				}
 			}
 		})
