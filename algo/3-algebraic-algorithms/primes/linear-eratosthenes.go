@@ -21,16 +21,16 @@ https://habr.com/ru/post/452388/
 
 func LinearEratosthenes(num int) int {
 	pr := make([]int, 0)
-	lp := make([]int, num)
+	lp := make([]int, num+1)
 
-	for i := 2; i < num; i++ {
+	for i := 2; i <= num; i++ {
 		if lp[i] == 0 {
 			lp[i] = i
 			pr = append(pr, i)
 		}
 		for pi := 0; pi < len(pr); pi++ {
 			p := pr[pi]
-			if p > lp[i] || p*i >= num {
+			if p > lp[i] || p*i > num {
 				break
 			}
 			lp[p*i] = p

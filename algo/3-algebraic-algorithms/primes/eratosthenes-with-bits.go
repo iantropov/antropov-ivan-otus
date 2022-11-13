@@ -1,6 +1,10 @@
 package primes
 
 func EratosthenesWithBits(num int) int {
+	if num < 2 {
+		return 0
+	}
+
 	correctedN := num / 2
 	lengthInInt32 := correctedN / 32
 	if correctedN%32 > 0 {
@@ -8,14 +12,14 @@ func EratosthenesWithBits(num int) int {
 	}
 	notPrimers := make([]int32, lengthInInt32)
 
-	for i := 3; i < num; i++ {
+	for i := 3; i <= num; i++ {
 		if i%2 == 1 && isNotPrimer(i, notPrimers) == false {
 			markNotPrimersWithBits(i, num, notPrimers)
 		}
 	}
 
 	count := 0
-	for i := 3; i < num; i++ {
+	for i := 3; i <= num; i++ {
 		if i%2 == 1 && isNotPrimer(i, notPrimers) == false {
 			count++
 		}
@@ -28,7 +32,7 @@ func markNotPrimersWithBits(n, num int, notPrimers []int32) {
 	if n > 2 {
 		addition += n
 	}
-	for i := n * n; i < num; i += addition {
+	for i := n * n; i <= num; i += addition {
 		markAsNotPrimer(i, notPrimers)
 	}
 }
