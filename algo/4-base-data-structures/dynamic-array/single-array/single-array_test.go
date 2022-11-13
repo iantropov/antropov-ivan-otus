@@ -1,41 +1,12 @@
-package dynamicArray
+package singleArray
 
 import (
-	singleArray "base-data-structures/dynamic-array/single-array"
-	"strings"
 	"testing"
 )
 
-func Test_stacks(t *testing.T) {
-	cases := []struct {
-		newStack func() DynamicArray[int]
-		name     string
-	}{
-		{func() DynamicArray[int] { return singleArray.NewSingleArray[int]() }, "Single Array"},
-	}
-	for _, tc := range cases {
-		t.Run(strings.Join([]string{tc.name, "testNewDynamicArray"}, " : "), func(t *testing.T) {
-			testNewDynamicArray(tc.newStack(), t)
-		})
-		t.Run(strings.Join([]string{tc.name, "testPushToDynamicArray"}, " : "), func(t *testing.T) {
-			testPushToDynamicArray(tc.newStack(), t)
-		})
-		t.Run(strings.Join([]string{tc.name, "testPopFromDynamicArray"}, " : "), func(t *testing.T) {
-			testPopFromDynamicArray(tc.newStack(), t)
-		})
-		t.Run(strings.Join([]string{tc.name, "testPushAfterPopForDynamicArray"}, " : "), func(t *testing.T) {
-			testPushAfterPopForDynamicArray(tc.newStack(), t)
-		})
-		t.Run(strings.Join([]string{tc.name, "testAddToDynamicArray"}, " : "), func(t *testing.T) {
-			testAddToDynamicArray(tc.newStack(), t)
-		})
-		t.Run(strings.Join([]string{tc.name, "testRemoveFromDynamicArray"}, " : "), func(t *testing.T) {
-			testRemoveFromDynamicArray(tc.newStack(), t)
-		})
-	}
-}
+func TestNewDynamicArray(t *testing.T) {
+	array := NewSingleArray[int]()
 
-func testNewDynamicArray(array DynamicArray[int], t *testing.T) {
 	length := array.Length()
 	if length != 0 {
 		t.Errorf("Incorrect length - %d", length)
@@ -47,7 +18,9 @@ func testNewDynamicArray(array DynamicArray[int], t *testing.T) {
 	}
 }
 
-func testPushToDynamicArray(array DynamicArray[int], t *testing.T) {
+func TestPushToDynamicArray(t *testing.T) {
+	array := NewSingleArray[int]()
+
 	error := array.Push(1)
 	if error != nil {
 		t.Errorf("Failed to push 1 - %v", error)
@@ -65,7 +38,7 @@ func testPushToDynamicArray(array DynamicArray[int], t *testing.T) {
 
 	error = array.Push(2)
 	if error != nil {
-		t.Errorf("Failed to push 1 - %v", error)
+		t.Errorf("Failed to push 2 - %v", error)
 	}
 
 	length = array.Length()
@@ -79,7 +52,9 @@ func testPushToDynamicArray(array DynamicArray[int], t *testing.T) {
 	}
 }
 
-func testPopFromDynamicArray(array DynamicArray[int], t *testing.T) {
+func TestPopFromDynamicArray(t *testing.T) {
+	array := NewSingleArray[int]()
+
 	array.Push(1)
 	array.Push(2)
 
@@ -120,7 +95,9 @@ func testPopFromDynamicArray(array DynamicArray[int], t *testing.T) {
 	}
 }
 
-func testPushAfterPopForDynamicArray(array DynamicArray[int], t *testing.T) {
+func TestPushAfterPopForDynamicArray(t *testing.T) {
+	array := NewSingleArray[int]()
+
 	array.Push(1)
 	array.Push(2)
 	array.Pop()
@@ -159,7 +136,9 @@ func testPushAfterPopForDynamicArray(array DynamicArray[int], t *testing.T) {
 	}
 }
 
-func testAddToDynamicArray(array DynamicArray[int], t *testing.T) {
+func TestAddToDynamicArray(t *testing.T) {
+	array := NewSingleArray[int]()
+
 	array.Push(1)
 	array.Push(2)
 
@@ -203,7 +182,9 @@ func testAddToDynamicArray(array DynamicArray[int], t *testing.T) {
 	}
 }
 
-func testRemoveFromDynamicArray(array DynamicArray[int], t *testing.T) {
+func TestRemoveFromDynamicArray(t *testing.T) {
+	array := NewSingleArray[int]()
+
 	array.Push(1)
 	array.Push(2)
 	array.Push(3)
