@@ -9,89 +9,89 @@ type VectorArray[T any] struct {
 }
 
 func NewVectorArray[T any](vector int) *VectorArray[T] {
-	sa := new(VectorArray[T])
-	sa.items = make([]T, vector)
-	sa.vector = vector
-	sa.capacity = vector
-	return sa
+	va := new(VectorArray[T])
+	va.items = make([]T, vector)
+	va.vector = vector
+	va.capacity = vector
+	return va
 }
 
-func (sa *VectorArray[T]) Length() int {
-	return sa.length
+func (va *VectorArray[T]) Length() int {
+	return va.length
 }
 
-func (sa *VectorArray[T]) Capacity() int {
-	return sa.capacity
+func (va *VectorArray[T]) Capacity() int {
+	return va.capacity
 }
 
-func (sa *VectorArray[T]) Get(index int) (T, error) {
-	if index < 0 || index >= sa.length {
-		return sa.zeroValue, errors.New("invalid index")
+func (va *VectorArray[T]) Get(index int) (T, error) {
+	if index < 0 || index >= va.length {
+		return va.zeroValue, errors.New("invalid index")
 	}
 
-	return sa.items[index], nil
+	return va.items[index], nil
 }
 
-func (sa *VectorArray[T]) Push(item T) error {
-	if sa.length == sa.capacity {
-		sa.resize()
+func (va *VectorArray[T]) Push(item T) error {
+	if va.length == va.capacity {
+		va.resize()
 	}
 
-	sa.items[sa.length] = item
-	sa.length++
+	va.items[va.length] = item
+	va.length++
 
 	return nil
 }
 
-func (sa *VectorArray[T]) Add(item T, index int) error {
-	if index < 0 || index >= sa.length {
+func (va *VectorArray[T]) Add(item T, index int) error {
+	if index < 0 || index >= va.length {
 		return errors.New("invalid index")
 	}
 
-	if sa.length == sa.capacity {
-		sa.resize()
+	if va.length == va.capacity {
+		va.resize()
 	}
 
-	for i := index; i < sa.length; i++ {
-		sa.items[i+1] = sa.items[i]
+	for i := index; i < va.length; i++ {
+		va.items[i+1] = va.items[i]
 	}
 
-	sa.items[index] = item
-	sa.length++
+	va.items[index] = item
+	va.length++
 
 	return nil
 }
 
-func (sa *VectorArray[T]) Pop() (T, error) {
-	if sa.length == 0 {
-		return sa.zeroValue, errors.New("invalid index")
+func (va *VectorArray[T]) Pop() (T, error) {
+	if va.length == 0 {
+		return va.zeroValue, errors.New("invalid index")
 	}
 
-	res := sa.items[sa.length-1]
-	sa.length--
+	res := va.items[va.length-1]
+	va.length--
 
 	return res, nil
 }
 
-func (sa *VectorArray[T]) Remove(index int) (T, error) {
-	if index < 0 || index >= sa.length {
-		return sa.zeroValue, errors.New("invalid index")
+func (va *VectorArray[T]) Remove(index int) (T, error) {
+	if index < 0 || index >= va.length {
+		return va.zeroValue, errors.New("invalid index")
 	}
 
-	res := sa.items[index]
-	for i := index; i < sa.length-1; i++ {
-		sa.items[i] = sa.items[i+1]
+	res := va.items[index]
+	for i := index; i < va.length-1; i++ {
+		va.items[i] = va.items[i+1]
 	}
-	sa.length--
+	va.length--
 
 	return res, nil
 }
 
-func (sa *VectorArray[T]) resize() {
-	newItems := make([]T, sa.capacity+sa.vector)
-	for i, item := range sa.items {
+func (va *VectorArray[T]) resize() {
+	newItems := make([]T, va.capacity+va.vector)
+	for i, item := range va.items {
 		newItems[i] = item
 	}
-	sa.items = newItems
-	sa.capacity += sa.vector
+	va.items = newItems
+	va.capacity += va.vector
 }

@@ -91,5 +91,5 @@ func (sa *SingleArray[T]) resize() {
 		newItems[i] = item
 	}
 	sa.items = newItems
-	sa.capacity += 1
+	sa.capacity++
 }

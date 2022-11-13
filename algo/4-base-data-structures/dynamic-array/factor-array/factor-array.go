@@ -9,88 +9,88 @@ type FactorArray[T any] struct {
 }
 
 func NewFactorArray[T any]() *FactorArray[T] {
-	sa := new(FactorArray[T])
-	sa.items = make([]T, 0)
-	sa.factor = 2
-	return sa
+	fa := new(FactorArray[T])
+	fa.items = make([]T, 0)
+	fa.factor = 2
+	return fa
 }
 
-func (sa *FactorArray[T]) Length() int {
-	return sa.length
+func (fa *FactorArray[T]) Length() int {
+	return fa.length
 }
 
-func (sa *FactorArray[T]) Capacity() int {
-	return sa.capacity
+func (fa *FactorArray[T]) Capacity() int {
+	return fa.capacity
 }
 
-func (sa *FactorArray[T]) Get(index int) (T, error) {
-	if index < 0 || index >= sa.length {
-		return sa.zeroValue, errors.New("invalid index")
+func (fa *FactorArray[T]) Get(index int) (T, error) {
+	if index < 0 || index >= fa.length {
+		return fa.zeroValue, errors.New("invalid index")
 	}
 
-	return sa.items[index], nil
+	return fa.items[index], nil
 }
 
-func (sa *FactorArray[T]) Push(item T) error {
-	if sa.length == sa.capacity {
-		sa.resize()
+func (fa *FactorArray[T]) Push(item T) error {
+	if fa.length == fa.capacity {
+		fa.resize()
 	}
 
-	sa.items[sa.length] = item
-	sa.length++
+	fa.items[fa.length] = item
+	fa.length++
 
 	return nil
 }
 
-func (sa *FactorArray[T]) Add(item T, index int) error {
-	if index < 0 || index >= sa.length {
+func (fa *FactorArray[T]) Add(item T, index int) error {
+	if index < 0 || index >= fa.length {
 		return errors.New("invalid index")
 	}
 
-	if sa.length == sa.capacity {
-		sa.resize()
+	if fa.length == fa.capacity {
+		fa.resize()
 	}
 
-	for i := index; i < sa.length; i++ {
-		sa.items[i+1] = sa.items[i]
+	for i := index; i < fa.length; i++ {
+		fa.items[i+1] = fa.items[i]
 	}
 
-	sa.items[index] = item
-	sa.length++
+	fa.items[index] = item
+	fa.length++
 
 	return nil
 }
 
-func (sa *FactorArray[T]) Pop() (T, error) {
-	if sa.length == 0 {
-		return sa.zeroValue, errors.New("invalid index")
+func (fa *FactorArray[T]) Pop() (T, error) {
+	if fa.length == 0 {
+		return fa.zeroValue, errors.New("invalid index")
 	}
 
-	res := sa.items[sa.length-1]
-	sa.length--
+	res := fa.items[fa.length-1]
+	fa.length--
 
 	return res, nil
 }
 
-func (sa *FactorArray[T]) Remove(index int) (T, error) {
-	if index < 0 || index >= sa.length {
-		return sa.zeroValue, errors.New("invalid index")
+func (fa *FactorArray[T]) Remove(index int) (T, error) {
+	if index < 0 || index >= fa.length {
+		return fa.zeroValue, errors.New("invalid index")
 	}
 
-	res := sa.items[index]
-	for i := index; i < sa.length-1; i++ {
-		sa.items[i] = sa.items[i+1]
+	res := fa.items[index]
+	for i := index; i < fa.length-1; i++ {
+		fa.items[i] = fa.items[i+1]
 	}
-	sa.length--
+	fa.length--
 
 	return res, nil
 }
 
-func (sa *FactorArray[T]) resize() {
-	newItems := make([]T, sa.capacity*sa.factor+1)
-	for i, item := range sa.items {
+func (fa *FactorArray[T]) resize() {
+	newItems := make([]T, fa.capacity*fa.factor+1)
+	for i, item := range fa.items {
 		newItems[i] = item
 	}
-	sa.items = newItems
-	sa.capacity = len(newItems)
+	fa.items = newItems
+	fa.capacity = len(newItems)
 }
