@@ -1,3 +1,5 @@
 package fibonacci
 
-type Fibonacci func(int) int
+import "math/big"
+
+type Fibonacci func(int) *big.Int

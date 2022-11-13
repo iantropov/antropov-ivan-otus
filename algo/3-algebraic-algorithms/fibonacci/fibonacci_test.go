@@ -31,7 +31,7 @@ func testPowerWithFiles(implementation Fibonacci, testSuiteName string, t *testi
 			panic(err)
 		}
 		outputNumber := implementation(num)
-		return []string{strconv.FormatInt(int64(outputNumber), 10)}
+		return []string{outputNumber.String()}
 	}, func(expected, actual string) bool {
 		return expected == actual
 	})

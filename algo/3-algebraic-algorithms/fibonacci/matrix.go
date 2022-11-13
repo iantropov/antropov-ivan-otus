@@ -1,11 +1,13 @@
 package fibonacci
 
-func Matrix(n int) int {
+import "math/big"
+
+func Matrix(n int) *big.Int {
 	if n == 1 || n == 2 {
-		return 1
+		return big.NewInt(1)
 	}
 
-	return powerMatrix([][]int{{1, 1}, {1, 0}}, n-1)[0][0]
+	return big.NewInt(int64(powerMatrix([][]int{{1, 1}, {1, 0}}, n-1)[0][0]))
 }
 
 func powerMatrix(a [][]int, pow int) [][]int {
