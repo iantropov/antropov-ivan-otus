@@ -50,8 +50,8 @@ func (sa *SingleArray[T]) Add(item T, index int) error {
 		sa.resize()
 	}
 
-	for i := index; i < sa.length; i++ {
-		sa.items[i+1] = sa.items[i]
+	for i := sa.length; i > index; i-- {
+		sa.items[i] = sa.items[i-1]
 	}
 
 	sa.items[index] = item

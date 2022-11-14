@@ -51,8 +51,8 @@ func (ma *MatrixArray[T]) Add(item T, index int) error {
 		ma.resize()
 	}
 
-	for i := index; i < ma.length; i++ {
-		ma.set(ma.get(i), i+1)
+	for i := ma.length; i > index; i-- {
+		ma.set(ma.get(i-1), i)
 	}
 
 	ma.set(item, index)

@@ -197,6 +197,37 @@ func TestAddToDynamicArray(t *testing.T) {
 	}
 }
 
+func TestAddAfterPushInDynamicArray(t *testing.T) {
+	array := NewMatrixArray[int](2)
+
+	array.Push(1)
+	array.Push(2)
+	array.Push(4)
+	array.Push(5)
+	array.Add(3, 2)
+
+	item, _ := array.Pop()
+	if item != 5 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 4 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 3 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 2 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 1 {
+		t.Errorf("Invalid value - %v", item)
+	}
+}
+
 func TestRemoveFromDynamicArray(t *testing.T) {
 	array := NewMatrixArray[int](2)
 
@@ -236,5 +267,38 @@ func TestRemoveFromDynamicArray(t *testing.T) {
 	}
 	if error != nil {
 		t.Errorf("Failed to get 1 - %v", error)
+	}
+}
+
+func TestRemoveAfterPushInDynamicArray(t *testing.T) {
+	array := NewMatrixArray[int](2)
+
+	array.Push(1)
+	array.Push(2)
+	array.Push(3)
+	array.Push(3)
+	array.Push(4)
+	array.Push(5)
+	array.Remove(2)
+
+	item, _ := array.Pop()
+	if item != 5 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 4 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 3 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 2 {
+		t.Errorf("Invalid value - %v", item)
+	}
+	item, _ = array.Pop()
+	if item != 1 {
+		t.Errorf("Invalid value - %v", item)
 	}
 }

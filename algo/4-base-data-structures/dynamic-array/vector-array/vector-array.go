@@ -52,8 +52,8 @@ func (va *VectorArray[T]) Add(item T, index int) error {
 		va.resize()
 	}
 
-	for i := index; i < va.length; i++ {
-		va.items[i+1] = va.items[i]
+	for i := va.length; i > index; i-- {
+		va.items[i] = va.items[i-1]
 	}
 
 	va.items[index] = item
