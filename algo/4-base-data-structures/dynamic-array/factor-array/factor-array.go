@@ -35,6 +35,15 @@ func (fa *FactorArray[T]) Get(index int) (T, error) {
 	return fa.items[index], nil
 }
 
+func (fa *FactorArray[T]) Set(value T, index int) error {
+	if index < 0 || index >= fa.length {
+		return errors.New("invalid index")
+	}
+
+	fa.items[index] = value
+	return nil
+}
+
 func (fa *FactorArray[T]) Push(item T) error {
 	if fa.length == fa.capacity {
 		fa.resize()
