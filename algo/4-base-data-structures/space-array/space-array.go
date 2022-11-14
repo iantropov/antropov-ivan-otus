@@ -148,7 +148,9 @@ func (sa *SpaceArray[T]) Add(value T, index int) error {
 		}
 
 		sa.Push(sa.zeroValue)
-		error = sa.moveElementsToTheRightFrom(i, slidingIndex)
+		sa.length++
+
+		error = sa.moveElementsToTheRightFrom(slidingIndex, i)
 		if error != nil {
 			return error
 		}
@@ -160,6 +162,35 @@ func (sa *SpaceArray[T]) Add(value T, index int) error {
 	return errors.New("array with invalid structure")
 }
 
+func (sa *SpaceArray[T]) Remove(index int) (T, error) {
+	if sa.length <= index {
+		return sa.zeroValue, errors.New("invalid index")
+	}
+
+	slidingIndex := index
+	for i := 0; i < sa.items.Length(); i++ {
+		item, error := sa.items.Get(i)
+		if error != nil {
+			return sa.zeroValue, error
+		}
+
+		if slidingIndex >= item.Length() {
+			slidingIndex -= item.Length()
+			continue
+		}
+
+		value, error := item.Remove(slidingIndex)
+		if error != nil {
+			return sa.zeroValue, error
+		}
+
+		sa.length--
+		return value, nil
+	}
+
+	return sa.zeroValue, errors.New("array with invalid structure")
+}
+
 func (sa *SpaceArray[T]) appendRow() *factorArray.FactorArray[T] {
 	newRow := new(factorArray.FactorArray[T])
 	newRow.Initialize()
@@ -167,7 +198,7 @@ func (sa *SpaceArray[T]) appendRow() *factorArray.FactorArray[T] {
 	return newRow
 }
 
-func (sa *SpaceArray[T]) moveElementsToTheRightFrom(itemIndex, valueInItemIndex int) error {
+func (sa *SpaceArray[T]) moveElementsToTheRightFrom(valueInItemIndex, itemIndex int) error {
 	item, error := sa.items.Get(itemIndex)
 	if error != nil {
 		return error
