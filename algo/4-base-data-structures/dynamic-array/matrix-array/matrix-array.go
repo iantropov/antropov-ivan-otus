@@ -82,6 +82,7 @@ func (ma *MatrixArray[T]) Remove(index int) (T, error) {
 		ma.set(ma.get(i+1), i)
 	}
 	ma.length--
+	ma.set(ma.zeroValue, ma.length)
 
 	return res, nil
 }

@@ -1,21 +1,21 @@
 package spaceArray
 
 import (
-	factorArray "base-data-structures/dynamic-array/factor-array"
+	singleArray "base-data-structures/dynamic-array/single-array"
+	vectorArray "base-data-structures/dynamic-array/vector-array"
 	"errors"
 )
 
 type SpaceArray[T any] struct {
-	items                           factorArray.FactorArray[*factorArray.FactorArray[T]]
+	items                           singleArray.SingleArray[*vectorArray.VectorArray[T]]
 	length, rowLimit, rowThreshhold int
 	zeroValue                       T
 }
 
 func NewSpaceArray[T any](rowThreshhold int) *SpaceArray[T] {
 	newSpaceArray := new(SpaceArray[T])
-	newSpaceArray.items.Initialize()
-	newSpaceArray.rowLimit = rowThreshhold * 2
 	newSpaceArray.rowThreshhold = rowThreshhold
+	newSpaceArray.rowLimit = rowThreshhold * 2
 	return newSpaceArray
 }
 
@@ -24,7 +24,7 @@ func (sa *SpaceArray[T]) Length() int {
 }
 
 func (sa *SpaceArray[T]) Capacity() int {
-	return sa.items.Capacity() * sa.rowLimit
+	return sa.items.Length() * (sa.rowLimit + 1)
 }
 
 func (sa *SpaceArray[T]) Push(item T) error {
@@ -32,7 +32,7 @@ func (sa *SpaceArray[T]) Push(item T) error {
 		sa.appendRow()
 	}
 
-	lastRow, error := sa.items.Get(sa.items.Length())
+	lastRow, error := sa.items.Get(sa.items.Length() - 1)
 	if error != nil {
 		return error
 	}
@@ -115,8 +115,7 @@ func (sa *SpaceArray[T]) Set(value T, index int) error {
 		if slidingIndex >= item.Length() {
 			slidingIndex -= item.Length()
 		} else {
-			item.Set(value, slidingIndex)
-			return nil
+			return item.Set(value, slidingIndex)
 		}
 	}
 
@@ -135,26 +134,37 @@ func (sa *SpaceArray[T]) Add(value T, index int) error {
 			return error
 		}
 
-		if slidingIndex >= item.Length() {
-			slidingIndex -= item.Length()
+		if slidingIndex >= sa.rowLimit {
+			slidingIndex -= sa.rowLimit
 			continue
 		}
 
 		itemLength := item.Length()
 		if itemLength < sa.rowLimit {
-			item.Add(value, slidingIndex)
+			if slidingIndex == item.Length() {
+				error = item.Push(value)
+			} else {
+				error = item.Add(value, slidingIndex)
+			}
+			if error != nil {
+				return error
+			}
+
 			sa.length++
 			return nil
 		}
-
-		sa.Push(sa.zeroValue)
-		sa.length++
 
 		error = sa.moveElementsToTheRightFrom(slidingIndex, i)
 		if error != nil {
 			return error
 		}
-		item.Set(value, slidingIndex)
+
+		error = item.Set(value, slidingIndex)
+		if error != nil {
+			return error
+		}
+
+		sa.length++
 
 		return nil
 	}
@@ -191,9 +201,9 @@ func (sa *SpaceArray[T]) Remove(index int) (T, error) {
 	return sa.zeroValue, errors.New("array with invalid structure")
 }
 
-func (sa *SpaceArray[T]) appendRow() *factorArray.FactorArray[T] {
-	newRow := new(factorArray.FactorArray[T])
-	newRow.Initialize()
+func (sa *SpaceArray[T]) appendRow() *vectorArray.VectorArray[T] {
+	newRow := new(vectorArray.VectorArray[T])
+	newRow.Initialize(sa.rowLimit + 1) // 1 - a reserve for 'moveElementsToTheRightFrom' operation
 	sa.items.Push(newRow)
 	return newRow
 }
@@ -204,7 +214,10 @@ func (sa *SpaceArray[T]) moveElementsToTheRightFrom(valueInItemIndex, itemIndex 
 		return error
 	}
 
-	item.Add(sa.zeroValue, valueInItemIndex)
+	error = item.Add(sa.zeroValue, valueInItemIndex)
+	if error != nil {
+		return error
+	}
 
 	relay := sa.zeroValue
 	for i := itemIndex + 1; i < sa.items.Length(); i++ {

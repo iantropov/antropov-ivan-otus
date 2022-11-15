@@ -95,6 +95,7 @@ func (fa *FactorArray[T]) Remove(index int) (T, error) {
 		fa.items[i] = fa.items[i+1]
 	}
 	fa.length--
+	fa.items[fa.length] = fa.zeroValue
 
 	return res, nil
 }

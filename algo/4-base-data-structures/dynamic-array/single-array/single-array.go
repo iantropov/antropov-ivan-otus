@@ -81,6 +81,7 @@ func (sa *SingleArray[T]) Remove(index int) (T, error) {
 		sa.items[i] = sa.items[i+1]
 	}
 	sa.length--
+	sa.items[sa.length] = sa.zeroValue
 
 	return res, nil
 }

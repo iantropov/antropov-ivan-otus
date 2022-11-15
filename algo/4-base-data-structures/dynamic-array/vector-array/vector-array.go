@@ -10,10 +10,14 @@ type VectorArray[T any] struct {
 
 func NewVectorArray[T any](vector int) *VectorArray[T] {
 	va := new(VectorArray[T])
+	va.Initialize(vector)
+	return va
+}
+
+func (va *VectorArray[T]) Initialize(vector int) {
 	va.items = make([]T, vector)
 	va.vector = vector
 	va.capacity = vector
-	return va
 }
 
 func (va *VectorArray[T]) Length() int {
@@ -30,6 +34,15 @@ func (va *VectorArray[T]) Get(index int) (T, error) {
 	}
 
 	return va.items[index], nil
+}
+
+func (va *VectorArray[T]) Set(value T, index int) error {
+	if index < 0 || index >= va.length {
+		return errors.New("invalid index")
+	}
+
+	va.items[index] = value
+	return nil
 }
 
 func (va *VectorArray[T]) Push(item T) error {
@@ -83,6 +96,7 @@ func (va *VectorArray[T]) Remove(index int) (T, error) {
 		va.items[i] = va.items[i+1]
 	}
 	va.length--
+	va.items[va.length] = va.zeroValue
 
 	return res, nil
 }
