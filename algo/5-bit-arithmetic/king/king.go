@@ -5,8 +5,6 @@ func PlaceKing(pos int) uint64 {
 
 	var nA uint64 = 0xfefefefefefefefe
 	var nH uint64 = 0x7f7f7f7f7f7f7f7f
-	// var h uint64 = 0x8080808080808080
-	// var a uint64 = 0x101010101010101
 
 	var moveBits uint64 = (nH & (kingMoves << 7)) |
 		kingMoves<<8 |

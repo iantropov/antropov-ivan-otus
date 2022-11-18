@@ -21,3 +21,24 @@ func CountBitsStraightforward(value uint64) int {
 	}
 	return count
 }
+
+func CountBitsWithPrecount(value uint64) int {
+	bits := initBits()
+
+	count := 0
+
+	for value > 0 {
+		count += bits[value&255]
+		value >>= 8
+	}
+	return count
+
+}
+
+func initBits() [256]int {
+	bits := [256]int{}
+	for i := 0; i < 255; i++ {
+		bits[i] = CountBitsBySubstraction(uint64(i))
+	}
+	return bits
+}

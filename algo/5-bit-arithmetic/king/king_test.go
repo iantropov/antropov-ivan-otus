@@ -15,3 +15,7 @@ func TestKingWithCountBitsStraightForward(t *testing.T) {
 func TestKingWithCountBitsBySubstraction(t *testing.T) {
 	chessPiece.TestChessPiece(KING_TEST_DIR, "king/count-bits-straight-forward", PlaceKing, countBits.CountBitsBySubstraction, t)
 }
+
+func TestKingWithCountBitsWithPrecount(t *testing.T) {
+	chessPiece.TestChessPiece(KING_TEST_DIR, "king/count-bits-straight-forward", PlaceKing, countBits.CountBitsWithPrecount, t)
+}
