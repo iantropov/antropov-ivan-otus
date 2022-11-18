@@ -86,7 +86,7 @@ func TestWithFiles(filesDir string, testSuteName string, t *testing.T, testCallb
 			actualOutput := testCallback(testSet.inContent)
 			for i := range actualOutput {
 				if !compareCallback(testSet.outContent[i], actualOutput[i]) {
-					t.Errorf("[#%s] [.%s] Test Failed. Expected: %s, Received: %s", testSuteName, testSet.fileName, testSet.outContent, actualOutput)
+					t.Errorf("[#%s] [.%s] Test Failed. Expected: %s, Received: %s", testSuteName, testSet.fileName, testSet.outContent[i], actualOutput[i])
 				}
 			}
 		})
