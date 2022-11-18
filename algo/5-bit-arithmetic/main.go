@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bit-arithmetic/bishop"
+	"bit-arithmetic/queen"
 	"fmt"
 )
 
 func main() {
 	fmt.Println("Hello, the fifth homework!")
-	moves := bishop.PlaceBishop(0)
-	fmt.Println("BISHOP(0) - ", moves)
+	moves := queen.PlaceQueen(0)
+	fmt.Println("QUEEN(0) - ", moves)
 }

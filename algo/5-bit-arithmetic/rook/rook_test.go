@@ -17,5 +17,5 @@ func TestRookWithCountBitsBySubstraction(t *testing.T) {
 }
 
 func TestRookWithCountBitsWithPrecount(t *testing.T) {
-	chessPiece.TestChessPiece(ROOK_TEST_DIR, "rook/count-bits-straight-forward", PlaceRook, countBits.CountBitsWithPrecount, t)
+	chessPiece.TestChessPiece(ROOK_TEST_DIR, "rook/count-bits-with-precount", PlaceRook, countBits.CountBitsWithPrecount, t)
 }
