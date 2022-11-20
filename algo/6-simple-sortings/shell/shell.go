@@ -35,7 +35,32 @@ func SortWithGap3(a []int) []int {
 
 	for ; h > 0; h /= 3 {
 		for i := h; i < n; i++ {
-			for j := i; j >= h && a[j-1] > a[j]; j -= h {
+			for j := i; j >= h && a[j-h] > a[j]; j -= h {
+				sorting.Swap(a, j-h, j)
+			}
+		}
+	}
+
+	return a
+
+}
+
+// https://en.wikipedia.org/wiki/Shellsort#Gap_sequences - 2^k + 1
+func SortWithGap2k(a []int) []int {
+	n := len(a)
+
+	k := 0
+	for ; (2<<k)+1 < n; k++ {
+	}
+	k--
+
+	for ; k >= -1; k-- {
+		h := 1
+		if k >= 0 {
+			h = (2 << k) + 1
+		}
+		for i := h; i < n; i++ {
+			for j := i; j >= h && a[j-h] > a[j]; j -= h {
 				sorting.Swap(a, j-h, j)
 			}
 		}
