@@ -12,3 +12,7 @@ func TestInsertionSorting(t *testing.T) {
 func TestInsertionWithShiftsSorting(t *testing.T) {
 	sorting.TestSorting(SortWithShifts, t)
 }
+
+func TestInsertionWithBinarySearchSorting(t *testing.T) {
+	sorting.TestSorting(SortWithBinarySearch, t)
+}
