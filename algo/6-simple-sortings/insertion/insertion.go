@@ -11,3 +11,16 @@ func Sort(a []int) []int {
 
 	return a
 }
+
+func SortWithShifts(a []int) []int {
+	for i := 1; i < len(a); i++ {
+		aI := a[i]
+		j := i
+		for ; j > 0 && a[j-1] > aI; j-- {
+			a[j] = a[j-1]
+		}
+		a[j] = aI
+	}
+
+	return a
+}
