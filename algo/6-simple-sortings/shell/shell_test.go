@@ -8,3 +8,7 @@ import (
 func TestShellNaiveSorting(t *testing.T) {
 	sorting.TestSorting(SortNaive, t)
 }
+
+func TestShellSorting(t *testing.T) {
+	sorting.TestSorting(Sort, t)
+}
