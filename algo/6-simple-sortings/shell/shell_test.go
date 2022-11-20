@@ -12,3 +12,7 @@ func TestShellNaiveSorting(t *testing.T) {
 func TestShellSorting(t *testing.T) {
 	sorting.TestSorting(Sort, t)
 }
+
+func TestShellWithGap3Sorting(t *testing.T) {
+	sorting.TestSorting(SortWithGap3, t)
+}

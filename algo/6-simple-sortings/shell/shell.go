@@ -26,3 +26,21 @@ func Sort(a []int) []int {
 
 	return a
 }
+
+func SortWithGap3(a []int) []int {
+	n := len(a)
+	h := 1
+	for ; h < n/3; h = 3*h + 1 {
+	}
+
+	for ; h > 0; h /= 3 {
+		for i := h; i < n; i++ {
+			for j := i; j >= h && a[j-1] > a[j]; j -= h {
+				sorting.Swap(a, j-h, j)
+			}
+		}
+	}
+
+	return a
+
+}
