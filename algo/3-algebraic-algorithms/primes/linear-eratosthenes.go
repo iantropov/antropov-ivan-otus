@@ -40,6 +40,7 @@ func LinearEratosthenes(num int) int {
 	return len(pr)
 }
 
+// нашёл для себя более понятное объяснение линейного алгоритма
 func LinearEratosthenes2(n int) int {
 	primes := make([]int, 0)
 	mind := make([]int, n+1)
