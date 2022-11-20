@@ -39,3 +39,23 @@ func LinearEratosthenes(num int) int {
 
 	return len(pr)
 }
+
+func LinearEratosthenes2(n int) int {
+	primes := make([]int, 0)
+	mind := make([]int, n+1)
+
+	for i := 2; i <= n; i++ {
+		if mind[i] == 0 {
+			mind[i] = i
+			primes = append(primes, i)
+		}
+
+		for j := 0; j < len(primes) && i*primes[j] <= n; j++ {
+			if primes[j] <= mind[i] {
+				mind[i*primes[j]] = primes[j]
+			}
+		}
+	}
+
+	return len(primes)
+}

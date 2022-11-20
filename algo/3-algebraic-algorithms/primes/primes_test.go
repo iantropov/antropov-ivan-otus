@@ -28,6 +28,10 @@ func TestPowerLinearEratosthenes(t *testing.T) {
 	testPowerWithFiles(LinearEratosthenes, "linear-eratosthenes.go", t)
 }
 
+func TestPowerLinearEratosthenes2(t *testing.T) {
+	testPowerWithFiles(LinearEratosthenes2, "linear-eratosthenes2.go", t)
+}
+
 func testPowerWithFiles(implementation Primes, testSuiteName string, t *testing.T) {
 	tester.TestWithFiles(PRIMES_TEST_DIR, testSuiteName, t, func(inputs []string) []string {
 		num, err := strconv.Atoi(inputs[0])
