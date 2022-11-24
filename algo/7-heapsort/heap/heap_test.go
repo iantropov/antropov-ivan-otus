@@ -5,6 +5,10 @@ import (
 	"testing"
 )
 
-func TestHeap(t *testing.T) {
-	sorting.TestSorting(Sort, t)
+func TestHeapSwimSink(t *testing.T) {
+	sorting.TestSorting(SortSwinkSink, t)
+}
+
+func TestHeapHeapify(t *testing.T) {
+	sorting.TestSorting(SortHeapify, t)
 }

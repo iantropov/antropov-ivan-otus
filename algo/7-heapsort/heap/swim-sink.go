@@ -2,7 +2,7 @@ package heap
 
 import "heapsort/sorting"
 
-func Sort(a []int) []int {
+func SortSwinkSink(a []int) []int {
 	for i := len(a) - 1; i > 0; i-- {
 		swim(a, len(a), i)
 	}
