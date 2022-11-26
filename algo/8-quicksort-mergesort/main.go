@@ -12,7 +12,8 @@ func main() {
 	fmt.Println("Hello from eighth homework!")
 
 	rand.Seed(time.Now().UnixNano())
-	external.GenerateTextFile("text.txt", 10, 100)
+	external.GenerateTextFile("input.txt", 10, 100)
+	external.SortBySplit("input.txt", "output.txt", 10, 3)
 
 	// N := 10_000_000
 	// numbers := make([]int, N)
