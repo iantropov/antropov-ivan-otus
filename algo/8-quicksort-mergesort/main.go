@@ -3,8 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
-	"quicksort-mergesort/merge"
-	"quicksort-mergesort/quick"
+	"quicksort-mergesort/external"
 	"quicksort-mergesort/sorting"
 	"time"
 )
@@ -12,18 +11,21 @@ import (
 func main() {
 	fmt.Println("Hello from eighth homework!")
 
-	N := 10_000_000
-	numbers := make([]int, N)
-	for i := range numbers {
-		numbers[i] = i
-	}
+	rand.Seed(time.Now().UnixNano())
+	external.GenerateTextFile("text.txt", 10, 100)
 
-	rand.Shuffle(N, func(i, j int) { numbers[i], numbers[j] = numbers[j], numbers[i] })
+	// N := 10_000_000
+	// numbers := make([]int, N)
+	// for i := range numbers {
+	// 	numbers[i] = i
+	// }
 
-	fmt.Println("Sorting of a shuffled array of length ", N)
+	// rand.Shuffle(N, func(i, j int) { numbers[i], numbers[j] = numbers[j], numbers[i] })
 
-	measureSorting("#quick", quick.Sort, numbers)
-	measureSorting("#merge", merge.Sort, numbers)
+	// fmt.Println("Sorting of a shuffled array of length ", N)
+
+	// measureSorting("#quick", quick.Sort, numbers)
+	// measureSorting("#merge", merge.Sort, numbers)
 }
 
 func measureSorting(name string, sort sorting.Sort, numbers []int) {
