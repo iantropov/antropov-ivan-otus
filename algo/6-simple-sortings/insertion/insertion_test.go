@@ -16,3 +16,19 @@ func TestInsertionWithShiftsSorting(t *testing.T) {
 func TestInsertionWithBinarySearchSorting(t *testing.T) {
 	sorting.TestSorting(SortWithBinarySearch, t)
 }
+
+func TestInsertionWithBinarySearchWithRandomFiles(t *testing.T) {
+	sorting.TestSortingWithRandomFiles(SortWithBinarySearch, t)
+}
+
+func TestInsertionWithBinarySearchWithDigitsFiles(t *testing.T) {
+	sorting.TestSortingWithDigitsFiles(SortWithBinarySearch, t)
+}
+
+func TestInsertionWithBinarySearchWithSortedFiles(t *testing.T) {
+	sorting.TestSortingWithSortedFiles(SortWithBinarySearch, t)
+}
+
+func TestInsertionWithBinarySearchWithReversFiles(t *testing.T) {
+	sorting.TestSortingWithReversFiles(SortWithBinarySearch, t)
+}
