@@ -18,13 +18,11 @@ func SortBySplit(inputFilename, outputFilename string, n, t int) {
 	tempFiles := make([]*os.File, tLen)
 	tempScanners := make([]*bufio.Scanner, tLen)
 	tempValues := make([]int, tLen)
-	outputFile, error := os.Create(outputFilename)
-	if error != nil {
-		panic(error)
-	}
 
+	outputFile := createFile(outputFilename)
 	defer outputFile.Close()
 
+	var error error
 	for i := 0; i < tLen; i++ {
 		tempFiles[i], error = os.Open(tempFilenames[i])
 		if error != nil {
@@ -61,53 +59,68 @@ func SortBySplit(inputFilename, outputFilename string, n, t int) {
 func generateTempFiles(inputFilename string, n, t int) []string {
 	numbersPerFile := int(math.Ceil(float64(n) / float64(t)))
 
-	inputFile, error := os.Open(inputFilename)
-	if error != nil {
-		panic(error)
-	}
+	inputFile := openFile(inputFilename)
+	defer inputFile.Close()
 
 	inputScanner := bufio.NewScanner(inputFile)
 
-	defer inputFile.Close()
-
-	linesCounter := 0
-	filesCounter := 0
 	s := make([]string, 0)
 	tempFilenames := make([]string, 0)
-
 	for inputScanner.Scan() {
 		s = append(s, strings.TrimSpace(inputScanner.Text()))
-		linesCounter++
 
-		if linesCounter == numbersPerFile {
-			tempFilenames = append(tempFilenames, dumpStrings(s, filesCounter))
-			filesCounter++
+		if len(s) == numbersPerFile {
+			nextTempFilename := tempFilename(len(tempFilenames))
+			dumpSortedStringsIntoFile(s, nextTempFilename)
+			tempFilenames = append(tempFilenames, nextTempFilename)
 
 			s = make([]string, 0)
-			linesCounter = 0
 		}
 	}
 
-	if linesCounter > 0 {
-		tempFilenames = append(tempFilenames, dumpStrings(s, filesCounter))
+	if len(s) > 0 {
+		nextTempFilename := tempFilename(len(tempFilenames))
+		dumpSortedStringsIntoFile(s, nextTempFilename)
+		tempFilenames = append(tempFilenames, nextTempFilename)
 	}
 
 	return tempFilenames
 }
 
-func dumpStrings(s []string, filesCounter int) string {
-	tempFilename := "temp-" + fmt.Sprint(filesCounter) + ".txt"
-	tempFile, error := os.Create(tempFilename)
+func openFile(filename string) *os.File {
+	file, error := os.Open(filename)
 	if error != nil {
 		panic(error)
 	}
+	return file
+}
 
-	sorted := sortStrings(s)
-	tempFile.WriteString(strings.Join(sorted, "\n"))
-	tempFile.Sync()
+func createFile(filename string) *os.File {
+	file, error := os.Create(filename)
+	if error != nil {
+		panic(error)
+	}
+	return file
+}
+
+func tempFilename(filesCounter int) string {
+	return "temp-" + fmt.Sprint(filesCounter) + ".txt"
+}
+
+func dumpSortedStringsIntoFile(s []string, filename string) {
+	tempFile, error := os.Create(filename)
+	if error != nil {
+		panic(error)
+	}
+	dumpSortedSrings(s, tempFile)
 	tempFile.Close()
+}
 
-	return tempFilename
+func dumpSortedSrings(s []string, file *os.File) {
+	sorted := sortStrings(s)
+	file.WriteString(strings.Join(sorted, "\n"))
+	file.WriteString("\n")
+	file.Sync()
 }
 
 func sortStrings(a []string) []string {

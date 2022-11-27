@@ -27,10 +27,7 @@ func SortByMerge(inputFilename, outputFilename string, n int) {
 }
 
 func singleMergePass(inputFilename, outputFilename string, l int) {
-	outputFile, error := os.Create(outputFilename)
-	if error != nil {
-		panic(error)
-	}
+	outputFile := createFile(outputFilename)
 	defer outputFile.Close()
 
 	files := []*os.File{openFile(inputFilename), openFile(inputFilename)}
@@ -42,6 +39,7 @@ func singleMergePass(inputFilename, outputFilename string, l int) {
 
 	values := []int{readNextNumberUntil(readers[0], l), readNextNumberUntil(readers[1], l)}
 
+	var error error
 	for isThereAvailableValue(values) {
 		for i := 0; i < 2*l && isThereAvailableValue(values); i++ {
 			minIndex := findMinIndex(values)
@@ -63,14 +61,6 @@ func buildReader(file *os.File) *Reader {
 	reader := new(Reader)
 	reader.scanner = bufio.NewScanner(file)
 	return reader
-}
-
-func openFile(filename string) *os.File {
-	file, error := os.Open(filename)
-	if error != nil {
-		panic(error)
-	}
-	return file
 }
 
 func readNextNumberUntil(reader *Reader, l int) int {
