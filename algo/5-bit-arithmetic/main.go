@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bit-arithmetic/queen"
+	"bit-arithmetic/rook"
 	"fmt"
 )
 
 func main() {
 	fmt.Println("Hello, the fifth homework!")
-	moves := queen.PlaceQueen(0)
-	fmt.Println("QUEEN(0) - ", moves)
+	moves := rook.PlaceRook2(35)
+	fmt.Println("ROOK(35) - ", moves)
 }
