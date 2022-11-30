@@ -54,3 +54,9 @@ func PlaceRook2(pos int) uint64 {
 
 	return moveBits
 }
+
+func PlaceRookLikeAPro(pos int) uint64 {
+	var a uint64 = 0xFF
+	var b uint64 = 0x101010101010101
+	return (a << ((pos >> 3) << 3)) ^ (b << (pos & 7))
+}
