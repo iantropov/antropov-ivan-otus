@@ -27,11 +27,13 @@ func main() {
 }
 
 func measureSorting(name string, sort sorting.Sort, numbers []int) {
+	numbersCopy := make([]int, len(numbers))
+	copy(numbersCopy, numbers)
+
 	start := time.Now()
-
-	sorted := sort(numbers)
-
+	sorted := sort(numbersCopy)
 	elapsed := time.Since(start)
+
 	fmt.Println("Sorting Time for "+name, elapsed)
 
 	for i := 0; i < len(numbers); i++ {
