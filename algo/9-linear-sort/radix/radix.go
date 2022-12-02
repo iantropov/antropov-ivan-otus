@@ -8,14 +8,12 @@ func Sort(a []int) []int {
 		}
 	}
 
-	radixCount := getRadixCount(max)
-
 	arrays := [][]int{
 		a,
 		make([]int, len(a)),
 	}
 	d := make([]int, 10)
-	for r := 1; r <= radixCount; r++ {
+	for r := 1; r <= max; r *= 10 {
 		for i := range d {
 			d[i] = 0
 		}
@@ -35,9 +33,11 @@ func Sort(a []int) []int {
 			pos := d[elRadix]
 			arrays[1][pos] = arrays[0][i]
 		}
+
+		arrays[0], arrays[1] = arrays[1], arrays[0]
 	}
 
-	return arrays[1]
+	return arrays[0]
 }
 
 func getRadixCount(num int) int {
@@ -49,6 +49,6 @@ func getRadixCount(num int) int {
 }
 
 func getRadix(num, radix int) int {
-	num = num % (radix + 1)
+	num = num % (radix * 10)
 	return num / radix
 }
