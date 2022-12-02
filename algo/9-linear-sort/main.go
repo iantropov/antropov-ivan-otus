@@ -5,14 +5,16 @@ import (
 	"math/rand"
 	"time"
 
+	"linear-sort/bucket"
 	"linear-sort/counting"
+	"linear-sort/radix"
 	"linear-sort/sorting"
 )
 
 func main() {
 	fmt.Println("Hello from nineth homework!")
 
-	N := 10_000_000
+	N := 1_000_000
 	numbers := make([]int, N)
 	for i := range numbers {
 		numbers[i] = rand.Intn(1000)
@@ -21,6 +23,8 @@ func main() {
 	fmt.Println("Sorting of a shuffled array of length ", N)
 
 	measureSorting("#counting", counting.Sort, numbers)
+	measureSorting("#radix", radix.Sort, numbers)
+	measureSorting("#bucket", bucket.Sort, numbers)
 }
 
 func measureSorting(name string, sort sorting.Sort, numbers []int) {
