@@ -2,25 +2,30 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"time"
 
 	"linear-sort/bucket"
 	"linear-sort/counting"
 	"linear-sort/radix"
 	"linear-sort/sorting"
+	"linear-sort/tester"
 )
 
 func main() {
 	fmt.Println("Hello from nineth homework!")
 
-	N := 1_000_000
-	numbers := make([]int, N)
-	for i := range numbers {
-		numbers[i] = rand.Intn(1000)
-	}
+	// N := 1_000_000
+	// numbers := make([]int, N)
+	// for i := range numbers {
+	// 	numbers[i] = rand.Intn(1000)
+	// }
 
-	fmt.Println("Sorting of a shuffled array of length ", N)
+	// fmt.Println("Sorting of a shuffled array of length ", N)
+
+	fileName := tester.GenerateFile(100_000_000)
+	numbers := tester.ReadNumbers(fileName)
+
+	fmt.Println("Read numbers from file ", len(numbers))
 
 	measureSorting("#counting", counting.Sort, numbers)
 	measureSorting("#radix", radix.Sort, numbers)
