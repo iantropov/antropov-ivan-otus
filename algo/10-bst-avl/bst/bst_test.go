@@ -46,15 +46,25 @@ func TestBstSmallRemovals(t *testing.T) {
 }
 
 func TestBstBigRemovals(t *testing.T) {
-	values := []int{15, 10, 20, 5, 7, 6, 8, 21}
+	values := []int{15, 10, 20, 5, 12, 11, 13, 21}
 	bst := prepareBST(values)
-	bst.Remove(7)
-	checkPresenceFor(t, bst, []int{10, 20, 5, 6, 8, 21})
+	bst.Remove(12)
+	checkPresenceFor(t, bst, []int{15, 10, 20, 5, 11, 13, 21})
 	checkBSTOrder(t, bst)
 
 	bst = prepareBST(values)
 	bst.Remove(10)
-	checkPresenceFor(t, bst, []int{15, 20, 5, 7, 6, 8})
+	checkPresenceFor(t, bst, []int{15, 20, 5, 12, 11, 13, 21})
+	checkBSTOrder(t, bst)
+
+	bst = prepareBST([]int{15, 10, 20, 5, 13, 21, 12, 14, 11})
+	bst.Remove(13)
+	checkPresenceFor(t, bst, []int{15, 10, 20, 5, 21, 12, 14, 11})
+	checkBSTOrder(t, bst)
+
+	bst = prepareBST([]int{15, 9, 20, 5, 12, 11, 13, 10})
+	bst.Remove(12)
+	checkPresenceFor(t, bst, []int{15, 9, 20, 5, 11, 13, 10})
 	checkBSTOrder(t, bst)
 }
 
