@@ -20,15 +20,11 @@ func (tree *Tree) Search(val int) bool {
 
 func (tree *Tree) Insert(val int) {
 	tree.root = tree.root.insert(val)
-	tree.root.calculateHeight()
-
 	tree.root = tree.root.rebalance()
 }
 
 func (tree *Tree) Remove(val int) {
 	tree.root = tree.root.remove(val)
-	tree.root.calculateHeight()
-
 	tree.root = tree.root.rebalance()
 }
 
@@ -70,15 +66,6 @@ func newNode(val int) *Node {
 	newNode.val = val
 	newNode.height = 1
 	return newNode
-}
-
-func (node *Node) calculateHeight() int {
-	if node == nil {
-		return 0
-	} else {
-		node.height = node.left.calculateHeight() + node.right.calculateHeight() + 1
-		return node.height
-	}
 }
 
 func (node *Node) remove(val int) *Node {
@@ -138,31 +125,84 @@ func (node *Node) getHeight() int {
 	}
 }
 
+func (node *Node) calculateHeight() int {
+	if node == nil {
+		return 0
+	} else {
+		leftHeight := node.left.getHeight()
+		rightHeight := node.right.getHeight()
+		height := leftHeight
+		if rightHeight > leftHeight {
+			height = rightHeight
+		}
+		node.height = height + 1
+		return node.height
+	}
+}
+
 func (node *Node) rebalance() *Node {
 	if node == nil {
 		return nil
 	}
 
+	newNode := node
+	newNode.left = node.left.rebalance()
+	newNode.right = node.right.rebalance()
+
 	leftHeight := node.left.getHeight()
 	rightHeight := node.right.getHeight()
 
-	newNode := node
-	if leftHeight == rightHeight+2 {
+	if leftHeight > rightHeight+1 {
 		newNode = node.rotateRight()
-	} else if rightHeight == leftHeight+2 {
+	} else if rightHeight > leftHeight+1 {
 		newNode = node.rotateLeft()
 	}
 
-	newNode.left = node.left.rebalance()
-	newNode.right = node.right.rebalance()
+	newNode.calculateHeight()
 
 	return newNode
 }
 
 func (node *Node) rotateLeft() *Node {
-	return node
+	if node.right.left.getHeight() > node.right.right.getHeight() {
+		return node.bigRotateLeft()
+	} else {
+		return node.smallRotateLeft()
+	}
 }
 
 func (node *Node) rotateRight() *Node {
-	return node
+	if node.left.right.getHeight() > node.left.left.getHeight() {
+		return node.bigRotateRight()
+	} else {
+		return node.smallRotateRight()
+	}
+}
+
+func (node *Node) smallRotateLeft() *Node {
+	newNode := node.right
+	node.right = newNode.left
+	newNode.left = node
+	newNode.left.calculateHeight()
+	newNode.right.calculateHeight()
+	return newNode
+}
+
+func (node *Node) smallRotateRight() *Node {
+	newNode := node.left
+	node.left = newNode.right
+	newNode.right = node
+	newNode.left.calculateHeight()
+	newNode.right.calculateHeight()
+	return newNode
+}
+
+func (node *Node) bigRotateLeft() *Node {
+	node.right = node.right.smallRotateRight()
+	return node.smallRotateLeft()
+}
+
+func (node *Node) bigRotateRight() *Node {
+	node.left = node.left.smallRotateLeft()
+	return node.smallRotateRight()
 }

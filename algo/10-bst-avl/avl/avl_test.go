@@ -137,6 +137,106 @@ func TestTreeRootRemoval(t *testing.T) {
 	checkTreeOrder(t, tree)
 }
 
+func TestTreeSmallRotateLeft(t *testing.T) {
+	tree := NewTree()
+	tree.Insert(10)
+	tree.Insert(5)
+	tree.Insert(15)
+	tree.Insert(20)
+
+	if tree.root.height != 3 {
+		t.Error("Invalid tree height (before rotation)", tree.root.height)
+	}
+	if tree.root.left.height != 1 {
+		t.Error("Invalid left-tree height (before rotation)", tree.root.left.height)
+	}
+	if tree.root.right.height != 2 {
+		t.Error("Invalid right-tree height (before rotation)", tree.root.right.height)
+	}
+
+	tree.Insert(25)
+
+	if tree.root.height != 3 {
+		t.Error("Invalid tree height (after rotation)", tree.root.height)
+	}
+	if tree.root.left.height != 1 {
+		t.Error("Invalid left-tree height (after rotation)", tree.root.left.height)
+	}
+	if tree.root.right.height != 2 {
+		t.Error("Invalid right-tree height (after rotation)", tree.root.right.height)
+	}
+}
+
+func TestTreeSmallRotateRight(t *testing.T) {
+	tree := NewTree()
+	tree.Insert(10)
+	tree.Insert(5)
+	tree.Insert(15)
+	tree.Insert(4)
+
+	if tree.root.height != 3 {
+		t.Error("Invalid tree height (before rotation)", tree.root.height)
+	}
+	if tree.root.left.height != 2 {
+		t.Error("Invalid left-tree height (before rotation)", tree.root.left.height)
+	}
+	if tree.root.right.height != 1 {
+		t.Error("Invalid right-tree height (before rotation)", tree.root.right.height)
+	}
+
+	tree.Insert(3)
+
+	if tree.root.height != 3 {
+		t.Error("Invalid tree height (after rotation)", tree.root.height)
+	}
+	if tree.root.left.height != 2 {
+		t.Error("Invalid left-tree height (after rotation)", tree.root.left.height)
+	}
+	if tree.root.right.height != 1 {
+		t.Error("Invalid right-tree height (after rotation)", tree.root.right.height)
+	}
+}
+
+func TestTreeBigRotateLeft(t *testing.T) {
+	tree := NewTree()
+	tree.Insert(10)
+	tree.Insert(5)
+	tree.Insert(20)
+	tree.Insert(15)
+	tree.Insert(25)
+
+	tree.Insert(14)
+	if tree.root.height != 3 {
+		t.Error("Invalid tree height (after rotation)", tree.root.height)
+	}
+	if tree.root.left.height != 2 {
+		t.Error("Invalid left-tree height (after rotation)", tree.root.left.height)
+	}
+	if tree.root.right.height != 2 {
+		t.Error("Invalid right-tree height (after rotation)", tree.root.right.height)
+	}
+}
+
+func TestTreeBigRotateRight(t *testing.T) {
+	tree := NewTree()
+	tree.Insert(10)
+	tree.Insert(5)
+	tree.Insert(20)
+	tree.Insert(2)
+	tree.Insert(7)
+
+	tree.Insert(6)
+	if tree.root.height != 3 {
+		t.Error("Invalid tree height (after rotation)", tree.root.height)
+	}
+	if tree.root.left.height != 2 {
+		t.Error("Invalid left-tree height (after rotation)", tree.root.left.height)
+	}
+	if tree.root.right.height != 2 {
+		t.Error("Invalid right-tree height (after rotation)", tree.root.right.height)
+	}
+}
+
 func prepareTree(values []int) *Tree {
 	tree := NewTree()
 
