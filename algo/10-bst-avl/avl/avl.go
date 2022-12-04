@@ -20,10 +20,16 @@ func (tree *Tree) Search(val int) bool {
 
 func (tree *Tree) Insert(val int) {
 	tree.root = tree.root.insert(val)
+	tree.root.calculateHeight()
+
+	tree.root = tree.root.rebalance()
 }
 
 func (tree *Tree) Remove(val int) {
 	tree.root = tree.root.remove(val)
+	tree.root.calculateHeight()
+
+	tree.root = tree.root.rebalance()
 }
 
 func (tree *Tree) DumpValues() []int {
@@ -62,7 +68,17 @@ func (node *Node) insert(val int) *Node {
 func newNode(val int) *Node {
 	newNode := new(Node)
 	newNode.val = val
+	newNode.height = 1
 	return newNode
+}
+
+func (node *Node) calculateHeight() int {
+	if node == nil {
+		return 0
+	} else {
+		node.height = node.left.calculateHeight() + node.right.calculateHeight() + 1
+		return node.height
+	}
 }
 
 func (node *Node) remove(val int) *Node {
@@ -112,4 +128,41 @@ func (n *Node) dumpValues(values []int) []int {
 	values = n.left.dumpValues(values)
 	values = append(values, n.val)
 	return n.right.dumpValues(values)
+}
+
+func (node *Node) getHeight() int {
+	if node == nil {
+		return 0
+	} else {
+		return node.height
+	}
+}
+
+func (node *Node) rebalance() *Node {
+	if node == nil {
+		return nil
+	}
+
+	leftHeight := node.left.getHeight()
+	rightHeight := node.right.getHeight()
+
+	newNode := node
+	if leftHeight == rightHeight+2 {
+		newNode = node.rotateRight()
+	} else if rightHeight == leftHeight+2 {
+		newNode = node.rotateLeft()
+	}
+
+	newNode.left = node.left.rebalance()
+	newNode.right = node.right.rebalance()
+
+	return newNode
+}
+
+func (node *Node) rotateLeft() *Node {
+	return node
+}
+
+func (node *Node) rotateRight() *Node {
+	return node
 }
