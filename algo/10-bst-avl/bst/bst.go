@@ -1,5 +1,7 @@
 package bst
 
+import "fmt"
+
 type Node struct {
 	val                 int
 	parent, left, right *Node
@@ -64,6 +66,12 @@ func (t *BST) removeRoot() {
 		maxParent.replaceChild(max, root)
 		root.parent, root.left, root.right = maxParent, maxLeft, maxRight
 	}
+
+	max.left.updateParent(max)
+	max.right.updateParent(max)
+
+	root.left.updateParent(root)
+	root.right.updateParent(root)
 
 	root.remove()
 }
@@ -134,6 +142,12 @@ func (n *Node) switchNodes(another *Node) {
 		anotherParent.replaceChild(another, n)
 		n.parent, n.left, n.right = anotherParent, anotherLeft, anotherRight
 	}
+
+	another.left.updateParent(another)
+	another.right.updateParent(another)
+
+	n.left.updateParent(n)
+	n.right.updateParent(n)
 }
 
 func (n *Node) replaceChild(currentChild, newChild *Node) {
@@ -146,9 +160,14 @@ func (n *Node) replaceChild(currentChild, newChild *Node) {
 
 func (n *Node) upliftChild(currentChild, newChild *Node) {
 	n.replaceChild(currentChild, newChild)
-	if newChild != nil {
-		newChild.parent = n
+	newChild.updateParent(n)
+}
+
+func (n *Node) updateParent(parent *Node) {
+	if n == nil {
+		return
 	}
+	n.parent = parent
 }
 
 func (n *Node) findMaxLeftChild() *Node {
@@ -166,4 +185,18 @@ func (n *Node) dumpValues(values []int) []int {
 	values = n.left.dumpValues(values)
 	values = append(values, n.val)
 	return n.right.dumpValues(values)
+}
+
+func (t *BST) DumpValuesInDetails() {
+	t.root.dumpValuesInDetails()
+}
+
+func (n *Node) dumpValuesInDetails() {
+	if n == nil {
+		return
+	}
+
+	n.left.dumpValuesInDetails()
+	fmt.Printf("Node: %d, left - %v, right = %v, parent=%v\n", n.val, n.left, n.right, n.parent)
+	n.right.dumpValuesInDetails()
 }

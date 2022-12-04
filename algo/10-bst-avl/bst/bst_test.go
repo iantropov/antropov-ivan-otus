@@ -43,9 +43,26 @@ func TestBstSmallRemovals(t *testing.T) {
 	bst.Remove(8)
 	checkPresenceFor(t, bst, []int{15, 10, 20, 7})
 	checkBSTOrder(t, bst)
+
+	bst.Remove(7)
+	checkPresenceFor(t, bst, []int{15, 10, 20})
+	checkBSTOrder(t, bst)
+
+	bst.Remove(10)
+	checkPresenceFor(t, bst, []int{15, 20})
+	checkBSTOrder(t, bst)
+
+	bst.Remove(20)
+	checkPresenceFor(t, bst, []int{15})
+	checkBSTOrder(t, bst)
+
+	bst.Remove(15)
+	if bst.root != nil {
+		t.Error("Root should be empty")
+	}
 }
 
-func TestBstBigRemovals(t *testing.T) {
+func TestBstBigRemovalsInLeftSubtree(t *testing.T) {
 	values := []int{15, 10, 20, 5, 12, 11, 13, 21}
 	bst := prepareBST(values)
 	bst.Remove(12)
@@ -68,8 +85,53 @@ func TestBstBigRemovals(t *testing.T) {
 	checkBSTOrder(t, bst)
 }
 
+func TestBstBigRemovalsInRightSubtree(t *testing.T) {
+	bst := prepareBST([]int{15, 9, 20, 17, 25, 16, 19})
+	bst.Remove(17)
+	checkPresenceFor(t, bst, []int{15, 9, 20, 25, 16, 19})
+	checkBSTOrder(t, bst)
+	bst.Remove(17)
+
+	bst = prepareBST([]int{15, 9, 20, 17, 25, 16, 19})
+	bst.Remove(20)
+	checkPresenceFor(t, bst, []int{15, 9, 17, 25, 16, 19})
+	checkBSTOrder(t, bst)
+	bst.Remove(20)
+	bst.Remove(17)
+
+	bst.Remove(17)
+	checkPresenceFor(t, bst, []int{15, 9, 25, 16, 19})
+	checkBSTOrder(t, bst)
+	bst.Remove(15)
+	checkPresenceFor(t, bst, []int{9, 25, 16, 19})
+	checkBSTOrder(t, bst)
+	bst.Remove(15)
+	bst.Remove(20)
+	bst.Remove(17)
+
+	bst = prepareBST([]int{15, 9, 20, 17, 25, 23, 26})
+	bst.Remove(25)
+	checkPresenceFor(t, bst, []int{15, 9, 20, 17, 23, 26})
+	checkBSTOrder(t, bst)
+
+	bst = prepareBST([]int{15, 9, 20, 17, 25, 23, 26})
+	bst.Remove(20)
+	checkPresenceFor(t, bst, []int{15, 9, 17, 25, 23, 26})
+	checkBSTOrder(t, bst)
+}
+
 func TestBstRootRemoval(t *testing.T) {
-	bst := prepareBST([]int{15, 10, 20, 5, 7, 6, 8, 21})
+	bst := prepareBST([]int{15, 10, 20})
+	bst.Remove(15)
+	checkPresenceFor(t, bst, []int{10, 20})
+	checkBSTOrder(t, bst)
+
+	bst = prepareBST([]int{15, 10, 8, 21, 7, 22})
+	bst.Remove(15)
+	checkPresenceFor(t, bst, []int{10, 8, 21, 7, 22})
+	checkBSTOrder(t, bst)
+
+	bst = prepareBST([]int{15, 10, 20, 5, 7, 6, 8, 21})
 	bst.Remove(15)
 	checkPresenceFor(t, bst, []int{10, 20, 5, 7, 6, 8, 21})
 	checkBSTOrder(t, bst)
