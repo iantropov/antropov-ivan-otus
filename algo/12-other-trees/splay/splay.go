@@ -137,7 +137,18 @@ func (node *node) zigZagLeft() *node {
 }
 
 func (node *node) zigZagRight() *node {
-	return nil
+	newNode := node.right.left
+
+	oldNodeRightLeftLeft := node.right.left.left
+	oldNodeRight := node.right
+
+	node.right.left = node.right.left.right
+	node.right = oldNodeRightLeftLeft
+
+	newNode.left = node
+	newNode.right = oldNodeRight
+
+	return newNode
 }
 
 func (tree *splayTree) split(val int) (*node, *node) {
