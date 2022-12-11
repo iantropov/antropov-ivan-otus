@@ -16,7 +16,7 @@ import (
 const N = 100_000
 
 func main() {
-	fmt.Println("Hello from twelfth homework!")
+	fmt.Println("Hello from eleventh homework!")
 
 	numbersSequential := make([]int, N)
 	for i := range numbersSequential {
