@@ -1,5 +1,7 @@
 package splay
 
+import "fmt"
+
 type splayTree struct {
 	root *node
 }
@@ -14,8 +16,9 @@ func NewTree() *splayTree {
 }
 
 func (tree *splayTree) Insert(val int) {
-	t1, t2 := tree.split(val)
-	tree.root = &node{val, t1, t2}
+	// t1, t2 := tree.split(val)
+	// tree.root = &node{val, t1, t2}
+	tree.root = tree.root.insert(val)
 }
 
 func (tree *splayTree) Search(val int) bool {
@@ -29,6 +32,24 @@ func (tree *splayTree) Search(val int) bool {
 
 func (tree *splayTree) Remove(val int) {
 
+}
+
+func (t *splayTree) DumpValuesInDetails() {
+	t.root.dumpValuesInDetails()
+}
+
+func (n *node) insert(val int) *node {
+	if n == nil {
+		return &node{value: val}
+	}
+
+	if val < n.value {
+		n.left = n.left.insert(val)
+	} else if val > n.value {
+		n.right = n.right.insert(val)
+	}
+
+	return n
 }
 
 func (node *node) searchNode(val int) *node {
@@ -55,7 +76,7 @@ func (node *node) splay(val int) *node {
 	if val < node.value {
 		if node.left.value == val {
 			return node.zigLeft()
-		} else if node.left.left.value == val {
+		} else if node.left.left != nil && node.left.left.value == val {
 			return node.zigZigLeft()
 		} else if node.left.right.value == val {
 			return node.zigZagLeft()
@@ -65,7 +86,7 @@ func (node *node) splay(val int) *node {
 	} else {
 		if node.right.value == val {
 			return node.zigRight()
-		} else if node.right.left.value == val {
+		} else if node.right.left != nil && node.right.left.value == val {
 			return node.zigZagRight()
 		} else if node.right.right.value == val {
 			return node.zigZigRight()
@@ -157,4 +178,14 @@ func (tree *splayTree) split(val int) (*node, *node) {
 
 func (tree *splayTree) merge(otherTree *splayTree) {
 
+}
+
+func (n *node) dumpValuesInDetails() {
+	if n == nil {
+		return
+	}
+
+	n.left.dumpValuesInDetails()
+	fmt.Printf("Node: %d, left - %v, right = %v\n", n.value, n.left, n.right)
+	n.right.dumpValuesInDetails()
 }
