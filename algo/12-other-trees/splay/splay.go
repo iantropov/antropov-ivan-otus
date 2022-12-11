@@ -15,10 +15,13 @@ func NewTree() *splayTree {
 	return &splayTree{}
 }
 
-func (tree *splayTree) Insert(val int) {
-	// t1, t2 := tree.split(val)
-	// tree.root = &node{val, t1, t2}
+func (tree *splayTree) InsertWithoutSplay(val int) {
 	tree.root = tree.root.insert(val)
+}
+
+func (tree *splayTree) Insert(val int) {
+	tree.root = tree.root.insert(val)
+	tree.root = tree.root.splay(val)
 }
 
 func (tree *splayTree) Search(val int) bool {
@@ -31,7 +34,13 @@ func (tree *splayTree) Search(val int) bool {
 }
 
 func (tree *splayTree) Remove(val int) {
+	node := tree.root.searchNode(val)
+	if node == nil {
+		return
+	}
 
+	tree.root = tree.root.splay(val)
+	tree.root = merge(tree.root.left, tree.root.right)
 }
 
 func (t *splayTree) DumpValuesInDetails() {
@@ -78,7 +87,7 @@ func (node *node) splay(val int) *node {
 			return node.zigLeft()
 		} else if node.left.left != nil && node.left.left.value == val {
 			return node.zigZigLeft()
-		} else if node.left.right.value == val {
+		} else if node.left.right != nil && node.left.right.value == val {
 			return node.zigZagLeft()
 		} else {
 			node.left = node.left.splay(val)
@@ -88,7 +97,7 @@ func (node *node) splay(val int) *node {
 			return node.zigRight()
 		} else if node.right.left != nil && node.right.left.value == val {
 			return node.zigZagRight()
-		} else if node.right.right.value == val {
+		} else if node.right.right != nil && node.right.right.value == val {
 			return node.zigZigRight()
 		} else {
 			node.right = node.right.splay(val)
@@ -172,12 +181,53 @@ func (node *node) zigZagRight() *node {
 	return newNode
 }
 
-func (tree *splayTree) split(val int) (*node, *node) {
-	return nil, nil
+func (node *node) split(val int) (*node, *node) {
+	splitNode := node.splay(val)
+	return splitNode.left, splitNode.right
 }
 
-func (tree *splayTree) merge(otherTree *splayTree) {
+func (n *node) dup() *node {
+	if n == nil {
+		return nil
+	}
 
+	newNode := &node{value: n.value}
+	newNode.left = n.left.dup()
+	newNode.right = n.right.dup()
+
+	return newNode
+}
+
+func merge(left, right *node) *node {
+	if left == nil {
+		return right.dup()
+	} else if right == nil {
+		return left.dup()
+	}
+
+	newNode := &node{}
+	if left.value == right.value {
+		newNode.value = left.value
+		newNode.left = merge(left.left, right.left)
+		newNode.right = merge(left.right, right.right)
+		return newNode
+	}
+
+	if left.value > right.value {
+		left, right = right, left
+	}
+
+	newNode.value = left.value
+	newNode.left = merge(left.left, right.left)
+
+	rightLeft := right.left
+	right.left = nil
+
+	newNode.right = merge(left.right, right)
+
+	right.left = rightLeft
+
+	return newNode
 }
 
 func (n *node) dumpValuesInDetails() {

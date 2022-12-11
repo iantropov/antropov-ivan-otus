@@ -7,9 +7,9 @@ import (
 func TestSplayZigLeftOnSmallTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(10)
-	splayTree.Insert(15)
-	splayTree.Insert(5)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(5)
 
 	if !splayTree.Search(5) {
 		t.Errorf("Element %d should be in the tree", 5)
@@ -23,9 +23,9 @@ func TestSplayZigLeftOnSmallTree(t *testing.T) {
 func TestSplayZigRightOnSmallTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(10)
-	splayTree.Insert(15)
-	splayTree.Insert(5)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(5)
 
 	if !splayTree.Search(15) {
 		t.Errorf("Element %d should be in the tree", 15)
@@ -39,13 +39,13 @@ func TestSplayZigRightOnSmallTree(t *testing.T) {
 func TestSplayZigLeftOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(15) {
 		t.Errorf("Element %d should be in the tree", 15)
@@ -59,13 +59,13 @@ func TestSplayZigLeftOnMediumTree(t *testing.T) {
 func TestSplayDoubleSearchOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(15) {
 		t.Errorf("Element %d should be in the tree", 15)
@@ -87,13 +87,13 @@ func TestSplayDoubleSearchOnMediumTree(t *testing.T) {
 func TestSplayZigRightOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(25) {
 		t.Errorf("Element %d should be in the tree", 25)
@@ -107,13 +107,13 @@ func TestSplayZigRightOnMediumTree(t *testing.T) {
 func TestSplayZigZigLeftOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(10) {
 		t.Errorf("Element %d should be in the tree", 10)
@@ -127,13 +127,13 @@ func TestSplayZigZigLeftOnMediumTree(t *testing.T) {
 func TestSplayZigZigRightOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(30) {
 		t.Errorf("Element %d should be in the tree", 30)
@@ -147,13 +147,13 @@ func TestSplayZigZigRightOnMediumTree(t *testing.T) {
 func TestSplayZigZagLeftOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(17) {
 		t.Errorf("Element %d should be in the tree", 17)
@@ -167,13 +167,13 @@ func TestSplayZigZagLeftOnMediumTree(t *testing.T) {
 func TestSplayZigZagRightOnMediumTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(20)
-	splayTree.Insert(15)
-	splayTree.Insert(25)
-	splayTree.Insert(10)
-	splayTree.Insert(17)
-	splayTree.Insert(23)
-	splayTree.Insert(30)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
 
 	if !splayTree.Search(23) {
 		t.Errorf("Element %d should be in the tree", 23)
@@ -187,21 +187,21 @@ func TestSplayZigZagRightOnMediumTree(t *testing.T) {
 func TestSplayZigZigLeftOLargeTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(30)
-	splayTree.Insert(15)
-	splayTree.Insert(45)
-	splayTree.Insert(10)
-	splayTree.Insert(20)
-	splayTree.Insert(40)
-	splayTree.Insert(50)
-	splayTree.Insert(5)
-	splayTree.Insert(12)
-	splayTree.Insert(17)
-	splayTree.Insert(25)
-	splayTree.Insert(35)
-	splayTree.Insert(42)
-	splayTree.Insert(47)
-	splayTree.Insert(55)
+	splayTree.InsertWithoutSplay(30)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(45)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(40)
+	splayTree.InsertWithoutSplay(50)
+	splayTree.InsertWithoutSplay(5)
+	splayTree.InsertWithoutSplay(12)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(35)
+	splayTree.InsertWithoutSplay(42)
+	splayTree.InsertWithoutSplay(47)
+	splayTree.InsertWithoutSplay(55)
 
 	if !splayTree.Search(5) {
 		t.Errorf("Element %d should be in the tree", 5)
@@ -215,21 +215,21 @@ func TestSplayZigZigLeftOLargeTree(t *testing.T) {
 func TestSplayDoubleSearchOLargeTree(t *testing.T) {
 	splayTree := NewTree()
 
-	splayTree.Insert(30)
-	splayTree.Insert(15)
-	splayTree.Insert(45)
-	splayTree.Insert(10)
-	splayTree.Insert(20)
-	splayTree.Insert(40)
-	splayTree.Insert(50)
-	splayTree.Insert(5)
-	splayTree.Insert(12)
-	splayTree.Insert(17)
-	splayTree.Insert(25)
-	splayTree.Insert(35)
-	splayTree.Insert(42)
-	splayTree.Insert(47)
-	splayTree.Insert(55)
+	splayTree.InsertWithoutSplay(30)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(45)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(40)
+	splayTree.InsertWithoutSplay(50)
+	splayTree.InsertWithoutSplay(5)
+	splayTree.InsertWithoutSplay(12)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(35)
+	splayTree.InsertWithoutSplay(42)
+	splayTree.InsertWithoutSplay(47)
+	splayTree.InsertWithoutSplay(55)
 
 	if !splayTree.Search(5) {
 		t.Errorf("Element %d should be in the tree", 5)
@@ -245,5 +245,35 @@ func TestSplayDoubleSearchOLargeTree(t *testing.T) {
 
 	if splayTree.root.value != 20 {
 		t.Errorf("Element %d should be in the root", 20)
+	}
+}
+
+func TestRemove(t *testing.T) {
+	splayTree := NewTree()
+
+	splayTree.InsertWithoutSplay(20)
+	splayTree.InsertWithoutSplay(15)
+	splayTree.InsertWithoutSplay(25)
+	splayTree.InsertWithoutSplay(10)
+	splayTree.InsertWithoutSplay(17)
+	splayTree.InsertWithoutSplay(23)
+	splayTree.InsertWithoutSplay(30)
+
+	splayTree.Remove(15)
+
+	if splayTree.Search(15) {
+		t.Errorf("Element %d shouldn't be in the tree", 15)
+	}
+}
+
+func TestInsert(t *testing.T) {
+	splayTree := NewTree()
+
+	values := []int{20, 15, 25, 10, 17, 23}
+	for _, value := range values {
+		splayTree.Insert(value)
+		if splayTree.root.value != value {
+			t.Errorf("Element %d should be in the root", value)
+		}
 	}
 }
