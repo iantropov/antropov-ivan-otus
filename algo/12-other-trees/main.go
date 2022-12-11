@@ -31,20 +31,20 @@ func main() {
 	fmt.Println("Prepared a shuffled array of length ", N)
 	fmt.Println("=========================================")
 
-	measureBtree("#sequential", numbersSequential)
-	measureBtree("#random", numbersRandom)
+	// measureBtree("#sequential", numbersSequential)
+	// measureBtree("#random", numbersRandom)
 
-	measureRandom("#sequential", numbersSequential)
-	measureRandom("#random", numbersRandom)
+	// measureRandom("#sequential", numbersSequential)
+	// measureRandom("#random", numbersRandom)
 
-	measureRbt("#sequential", numbersSequential)
-	measureRbt("#random", numbersRandom)
+	// measureRbt("#sequential", numbersSequential)
+	// measureRbt("#random", numbersRandom)
 
 	measureSplay("#sequential", numbersSequential)
 	measureSplay("#random", numbersRandom)
 
-	measureTreap("#sequential", numbersSequential)
-	measureTreap("#random", numbersRandom)
+	// measureTreap("#sequential", numbersSequential)
+	// measureTreap("#random", numbersRandom)
 
 }
 
