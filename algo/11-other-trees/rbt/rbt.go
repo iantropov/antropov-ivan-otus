@@ -1,5 +1,7 @@
 package rbt
 
+import "fmt"
+
 // https://habr.com/ru/company/otus/blog/472040/
 
 type node struct {
@@ -16,50 +18,92 @@ func NewTree() *rbtTree {
 	return &rbtTree{}
 }
 
+func (tree *rbtTree) searchNode(val int) *node {
+	return tree.root.searchNode(val)
+}
+
 func (tree *rbtTree) Insert(val int) {
 	newNode := tree.root.insert(val, tree.root)
-	newNode.balance()
+	if tree.root == nil {
+		tree.root = newNode
+	}
+	rotatedNode := newNode.balance()
+	if rotatedNode != nil && rotatedNode.parent == nil {
+		tree.root = rotatedNode
+	}
+}
+
+func (tree *rbtTree) DumpValuesInDetails() {
+	tree.root.dumpValuesInDetails()
+}
+
+func (n *node) searchNode(val int) *node {
+	if n == nil {
+		return nil
+	}
+
+	if val < n.val {
+		return n.left.searchNode(val)
+	} else if val > n.val {
+		return n.right.searchNode(val)
+	} else {
+		return n
+	}
 }
 
 func (n *node) insert(val int, parent *node) *node {
 	if n == nil {
-		return &node{
-			val:    val,
-			red:    true,
-			parent: parent,
-		}
+		return buildNode(val, parent)
 	} else if val < n.val {
-		return n.left.insert(val, n)
+		if n.left == nil {
+			n.left = buildNode(val, n)
+			return n.left
+		} else {
+			return n.left.insert(val, n)
+		}
 	} else if val > n.val {
-		return n.right.insert(val, n)
+		if n.right == nil {
+			n.right = buildNode(val, n)
+			return n.right
+		} else {
+			return n.right.insert(val, n)
+		}
 	} else {
 		return nil
 	}
 }
 
-func (n *node) balance() {
+func buildNode(val int, parent *node) *node {
+	return &node{
+		val:    val,
+		red:    true,
+		parent: parent,
+	}
+}
+
+func (n *node) balance() *node {
 	if n == nil {
-		return
+		return nil
 	}
 
 	if n.parent == nil {
 		if n.red {
 			n.red = false
 		}
-		return
+		return nil
 	}
 
 	if n.parent.parent == nil {
-		return
+		return nil
 	}
 
 	p := n.parent
 	g := p.parent
-	u := g.getSibling()
+	u := p.getSibling()
 
 	// case 0 - parent is black
 	if !p.red {
-		return
+		return nil
 	}
 
 	// case 1 - uncle is red
@@ -67,8 +111,7 @@ func (n *node) balance() {
 		p.red = false
 		u.red = false
 		g.red = true
-		g.balance()
-		return
+		return g.balance()
 	}
 
 	// case 2 - uncle is black & (grandpa & parent are on different sides)
@@ -90,7 +133,11 @@ func (n *node) balance() {
 		}
 		p.red = false
 		g.red = true
+
+		return p
 	}
+
+	return nil
 }
 
 func (n *node) rotateRight() {
@@ -171,4 +218,14 @@ func (n *node) replaceChild(oldChild, newChild *node) {
 	} else {
 		n.right = newChild
 	}
+}
+
+func (n *node) dumpValuesInDetails() {
+	if n == nil {
+		return
+	}
+
+	n.left.dumpValuesInDetails()
+	fmt.Printf("Node: %d, red - %v, left - %v, right = %v, parent = %v\n", n.val, n.red, n.left, n.right, n.parent)
+	n.right.dumpValuesInDetails()
 }
