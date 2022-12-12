@@ -3,6 +3,7 @@ package rbt
 import "fmt"
 
 // https://habr.com/ru/company/otus/blog/472040/
+// https://habr.com/ru/company/otus/blog/521034/
 
 type node struct {
 	val                 int
@@ -31,6 +32,14 @@ func (tree *rbtTree) Insert(val int) {
 	if rotatedNode != nil && rotatedNode.parent == nil {
 		tree.root = rotatedNode
 	}
+}
+
+func (tree *rbtTree) Remove(val int) {
+	node := tree.root.searchNode(val)
+	if node == nil {
+		return
+	}
+
 }
 
 func (tree *rbtTree) DumpValuesInDetails() {
