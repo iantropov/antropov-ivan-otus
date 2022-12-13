@@ -1,0 +1,100 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type GraphQLUser {
+  _id: String!
+  email: String!
+  name: String!
+  isAdmin: Boolean!
+  favorites: [String!]!
+}
+
+type Category {
+  _id: String!
+  name: String!
+}
+
+type Problem {
+  _id: String!
+  solution: String
+  summary: String!
+  description: String!
+  categories: [Category!]!
+  categoryIds: [String!]!
+}
+
+type PageInfo {
+  cursor: String
+  hasNextPage: Boolean!
+}
+
+type SearchProblemsResult {
+  edges: [Problem!]!
+  pageInfo: PageInfo!
+}
+
+type AccessToken {
+  accessToken: String!
+}
+
+type Query {
+  users: [GraphQLUser!]!
+  user(id: ID!): GraphQLUser!
+  problems: [Problem!]!
+  problem(id: ID!): Problem!
+  searchProblems(text: String, categoryIds: [String!], favorites: Boolean, cursor: String, limit: Float): SearchProblemsResult!
+  categories: [Category!]!
+  category(id: ID!): Category!
+  whoAmI: GraphQLUser
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): GraphQLUser!
+  updateUser(id: ID!, updateUserInput: UpdateUserInput!): GraphQLUser!
+  deleteUser(id: ID!): GraphQLUser!
+  likeProblem(id: ID!): GraphQLUser!
+  unlikeProblem(id: ID!): GraphQLUser!
+  createProblem(createProblemInput: CreateProblemInput!): Problem!
+  updateProblem(id: ID!, updateProblemInput: UpdateProblemInput!): Problem!
+  deleteProblem(id: ID!): Problem!
+  createCategory(createCategoryInput: CreateCategoryInput!): Category!
+  registerUser(registerUserInput: RegisterUserInput!): GraphQLUser!
+  loginUser(email: String!, password: String!): AccessToken!
+  logoutUser: String!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+}
+
+input CreateProblemInput {
+  summary: String!
+  description: String!
+  solution: String
+  categoryIds: [String!]!
+}
+
+input UpdateProblemInput {
+  summary: String
+  description: String
+  solution: String
+  categoryIds: [String!]
+}
+
+input CreateCategoryInput {
+  name: String!
+}
+
+input RegisterUserInput {
+  email: String!
+  name: String!
+  password: String!
+}

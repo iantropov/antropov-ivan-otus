@@ -1,0 +1,26 @@
+.problemsSearchFilter {
+    &__top {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: flex-end;
+        margin-bottom: 10px;
+    }
+
+    &__text {
+        margin-bottom: 0;
+        flex-grow: 1;
+        margin-right: 20px;
+    }
+
+    &__more {
+        color: black;
+    }
+
+    &__moreBody {
+        padding: 10px;
+    }
+
+    &__favorites {
+        margin-bottom: 10px;
+    }
+}
