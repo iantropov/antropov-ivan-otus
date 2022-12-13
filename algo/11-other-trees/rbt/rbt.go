@@ -28,7 +28,7 @@ func (tree *rbtTree) Insert(val int) {
 	if tree.root == nil {
 		tree.root = newNode
 	}
-	rotatedNode := newNode.balance()
+	rotatedNode := newNode.balanceAfterInsertion()
 	if rotatedNode != nil && rotatedNode.parent == nil {
 		tree.root = rotatedNode
 	}
@@ -40,6 +40,13 @@ func (tree *rbtTree) Remove(val int) {
 		return
 	}
 
+	removedNode := node.remove()
+	tree.root = removedNode.findRoot()
+
+	rotatedNode := removedNode.parent.balanceAfterRemoval()
+	if rotatedNode != nil && rotatedNode.parent == nil {
+		tree.root = rotatedNode
+	}
 }
 
 func (tree *rbtTree) DumpValuesInDetails() {
@@ -90,7 +97,7 @@ func buildNode(val int, parent *node) *node {
 	}
 }
 
-func (n *node) balance() *node {
+func (n *node) balanceAfterInsertion() *node {
 	if n == nil {
 		return nil
 	}
@@ -120,7 +127,7 @@ func (n *node) balance() *node {
 		p.red = false
 		u.red = false
 		g.red = true
-		return g.balance()
+		return g.balanceAfterInsertion()
 	}
 
 	// case 2 - uncle is black & (grandpa & parent are on different sides)
@@ -177,6 +184,162 @@ func (n *node) rotateLeft() {
 	oldParent.replaceChild(n, newNode)
 }
 
+func (n *node) remove() *node {
+	// case 0 - there are no children
+	if n.left == nil && n.right == nil {
+		n.parent.replaceChild(n, nil)
+		if n.red {
+			return nil
+		} else {
+			return n
+		}
+	}
+
+	// case 1 - there is the only child
+	var onlyChild *node
+	if n.left == nil && n.right != nil {
+		onlyChild = n.right
+	} else if n.left != nil && n.right == nil {
+		onlyChild = n.left
+	}
+	if onlyChild != nil {
+		n.parent.replaceChild(n, onlyChild)
+		onlyChild.red = false
+		return nil
+	}
+
+	// case 2 - there are two children
+	nextNode := n.findNextNode()
+	n.red, nextNode.red = nextNode.red, n.red
+	nextNode.switchWith(n)
+	return nextNode.remove()
+}
+
+func (n *node) findNextNode() *node {
+	minNode := n.left
+	for ; minNode.right != nil; minNode = minNode.right {
+	}
+	return minNode
+}
+
+func (n *node) switchWith(other *node) {
+	otherParent := other.parent
+	n.parent.replaceChild(n, other)
+	otherParent.replaceChild(other, n)
+}
+
+func (n *node) balanceAfterRemoval() *node {
+	if n == nil {
+		return nil
+	}
+
+	if n.left == nil {
+		return n.balanceAfterLeftRemoval()
+	} else {
+		return n.balanceAfterRightRemoval()
+	}
+}
+
+func (n *node) balanceAfterRightRemoval() *node {
+	// case 1 - a red parent with a black left child with black grandchildren
+	if n.red && !n.left.red && !n.left.left.isRed() && !n.left.right.isRed() {
+		n.red = false
+		n.left.red = true
+		return nil
+	}
+
+	// case 2 - a red parent with a black left child with a left red grandchild
+	if n.red && !n.left.red && n.left.left.isRed() {
+		n.rotateRight()
+		n.red = false
+		n.parent.red = true
+		n.parent.left.red = false
+		return n.parent
+	}
+
+	// case 3 - a black parent with a red left child with black grandchildren with right black grand-grandchildren
+	if !n.red && n.left.isRed() && !n.left.left.isRed() && !n.left.right.isRed() && !n.left.right.left.isRed() && !n.left.right.right.isRed() {
+		n.rotateRight()
+		n.parent.red = false
+		n.left.red = true
+		return n.parent
+	}
+
+	// case 4 - a black parent with a red left child with black grandchildren with a left red grand-grandchild
+	if !n.red && n.left.isRed() && !n.left.left.isRed() && n.left.right != nil && n.left.right.left.isRed() {
+		newBlackNode := n.left.right.left
+		n.left.rotateLeft()
+		newBlackNode.red = false
+		n.rotateRight()
+		return n.parent
+	}
+
+	// case 5 - a black parent with a black left child with a red right grandchild
+	if !n.red && !n.left.red && n.left.right.isRed() {
+		n.left.rotateLeft()
+		n.left.red = false
+		n.rotateRight()
+		return n.parent
+	}
+
+	if !n.red && !n.left.red && !n.left.left.isRed() && !n.left.right.isRed() {
+		n.left.red = true
+		return n.parent.balanceAfterRightRemoval()
+	}
+
+	panic("invalid case")
+}
+
+func (n *node) balanceAfterLeftRemoval() *node {
+	// case 1 - a red parent with black children with black grandchildren
+	if n.red && !n.right.red && !n.right.left.isRed() && !n.right.right.isRed() {
+		n.red = false
+		n.right.red = true
+		return nil
+	}
+
+	// case 2 - a red parent with a black right child with a right red grandchild
+	if n.red && !n.right.red && n.right.right.isRed() {
+		n.rotateLeft()
+		n.red = false
+		n.parent.red = true
+		n.parent.right.red = false
+		return n.parent
+	}
+
+	// case 3 - a black parent with a red right child with black grandchildren with left black grand-grandchildren
+	if !n.red && n.right.isRed() && !n.right.right.isRed() && !n.right.left.left.isRed() && !n.right.left.right.isRed() {
+		n.rotateLeft()
+		n.parent.red = false
+		n.right.red = true
+		return n.parent
+	}
+
+	// case 4 - a black parent with a red right child with black grandchildren with a right red grand-grandchild
+	if !n.red && n.right.isRed() && n.right.left != nil && !n.right.left.red && n.right.left.right.isRed() {
+		newBlackNode := n.right.left.right
+		n.right.rotateRight()
+		newBlackNode.red = false
+		n.rotateLeft()
+		return n.parent
+	}
+
+	// case 5 - a black parent with a black right child with a red left grandchild
+	if !n.red && !n.right.isRed() && n.right.left.isRed() {
+		n.right.rotateRight()
+		n.right.red = false
+		n.rotateLeft()
+		return n.parent
+	}
+
+	if !n.red && !n.right.isRed() && !n.right.left.isRed() && !n.right.right.isRed() {
+		n.right.red = true
+		return n.parent.balanceAfterLeftRemoval()
+	}
+
+	panic("invalid case")
+}
+
 func (n *node) getParent() *node {
 	if n == nil {
 		return nil
@@ -227,6 +390,13 @@ func (n *node) replaceChild(oldChild, newChild *node) {
 	} else {
 		n.right = newChild
 	}
+}
+
+func (n *node) findRoot() *node {
+	root := n
+	for ; root.parent != nil; root = root.parent {
+	}
+	return root
 }
 
 func (n *node) dumpValuesInDetails() {
