@@ -24,11 +24,16 @@ func (tree *rbtTree) searchNode(val int) *node {
 }
 
 func (tree *rbtTree) Insert(val int) {
-	newNode := tree.root.insert(val, tree.root)
 	if tree.root == nil {
-		tree.root = newNode
+		tree.root = buildNode(val, nil)
+		tree.root.red = false
+		return
 	}
+
+	newNode := tree.root.insert(val, tree.root)
 	rotatedNode := newNode.balanceAfterInsertion()
+	// tree.root = newNode.findRoot()
+
 	if rotatedNode != nil && rotatedNode.parent == nil {
 		tree.root = rotatedNode
 	}
@@ -40,17 +45,38 @@ func (tree *rbtTree) Remove(val int) {
 		return
 	}
 
-	removedNode := node.remove()
-	tree.root = removedNode.findRoot()
+	nodeForBalance := node.remove()
 
-	rotatedNode := removedNode.parent.balanceAfterRemoval()
-	if rotatedNode != nil && rotatedNode.parent == nil {
-		tree.root = rotatedNode
+	if tree.root == node && node.parent == nil {
+		tree.root = node.left
+		if tree.root == nil {
+			tree.root = node.right
+		}
+		return
 	}
+
+	tree.root = node.findRoot()
+	if nodeForBalance == nil || nodeForBalance.parent == nil {
+		return
+	}
+
+	nodeForBalance.parent.balanceAfterRemoval()
+	tree.root = node.findRoot()
 }
 
 func (tree *rbtTree) DumpValuesInDetails() {
 	tree.root.dumpValuesInDetails()
+}
+
+func (tree *rbtTree) insertDirectly(val int, red bool) {
+	if tree.root == nil {
+		tree.root = buildNode(val, nil)
+		tree.root.red = red
+		return
+	}
+
+	newNode := tree.root.insert(val, tree.root)
+	newNode.red = red
 }
 
 func (n *node) searchNode(val int) *node {
@@ -68,9 +94,7 @@ func (n *node) searchNode(val int) *node {
 }
 
 func (n *node) insert(val int, parent *node) *node {
-	if n == nil {
-		return buildNode(val, parent)
-	} else if val < n.val {
+	if val < n.val {
 		if n.left == nil {
 			n.left = buildNode(val, n)
 			return n.left
@@ -166,6 +190,9 @@ func (n *node) rotateRight() {
 
 	n.parent = newNode
 	n.left = oldLeftRight
+	if oldLeftRight != nil {
+		oldLeftRight.parent = n
+	}
 
 	oldParent.replaceChild(n, newNode)
 }
@@ -180,6 +207,9 @@ func (n *node) rotateLeft() {
 
 	n.parent = newNode
 	n.right = oldRightLeft
+	if oldRightLeft != nil {
+		oldRightLeft.parent = n
+	}
 
 	oldParent.replaceChild(n, newNode)
 }
@@ -209,23 +239,37 @@ func (n *node) remove() *node {
 	}
 
 	// case 2 - there are two children
-	nextNode := n.findNextNode()
+	nextNode := n.findNextNodeFromRight()
 	n.red, nextNode.red = nextNode.red, n.red
-	nextNode.switchWith(n)
-	return nextNode.remove()
+	n.switchWithRight(nextNode)
+	return n.remove()
 }
 
-func (n *node) findNextNode() *node {
-	minNode := n.left
-	for ; minNode.right != nil; minNode = minNode.right {
+func (n *node) findNextNodeFromRight() *node {
+	minNode := n.right
+	for ; minNode.left != nil; minNode = minNode.left {
 	}
 	return minNode
 }
 
-func (n *node) switchWith(other *node) {
-	otherParent := other.parent
+func (n *node) switchWithRight(other *node) {
+	if n.right == other {
+		n.parent.replaceChild(n, other)
+		other.parent = n.parent
+		other.left, n.left = n.left, other.left
+		other.right, n.right = n, other.right
+		n.parent = other
+		return
+	}
+
 	n.parent.replaceChild(n, other)
-	otherParent.replaceChild(other, n)
+	other.parent.replaceChild(other, n)
+
+	n.parent, other.parent = other.parent, n.parent
+	n.replaceParentForChildren(other)
+	other.replaceParentForChildren(n)
+	n.left, other.left = other.left, n.left
+	n.right, other.right = other.right, n.right
 }
 
 func (n *node) balanceAfterRemoval() *node {
@@ -389,6 +433,15 @@ func (n *node) replaceChild(oldChild, newChild *node) {
 		n.left = newChild
 	} else {
 		n.right = newChild
+	}
+}
+
+func (n *node) replaceParentForChildren(parent *node) {
+	if n.left != nil {
+		n.left.parent = parent
+	}
+	if n.right != nil {
+		n.right.parent = parent
 	}
 }
 
