@@ -13,7 +13,7 @@ import (
 	"other-trees/tree"
 )
 
-const N = 100_000
+const N = 51 // 20 - invalid case
 
 func main() {
 	fmt.Println("Hello from eleventh homework!")
@@ -25,7 +25,7 @@ func main() {
 
 	numbersRandom := make([]int, N)
 	copy(numbersRandom, numbersSequential)
-	rand.Seed(time.Hour.Nanoseconds())
+	// rand.Seed(time.Hour.Nanoseconds())
 	rand.Shuffle(N, func(i, j int) { numbersRandom[i], numbersRandom[j] = numbersRandom[j], numbersRandom[i] })
 
 	fmt.Println("Prepared a shuffled array of length ", N)
@@ -37,11 +37,11 @@ func main() {
 	// measureRandom("#sequential", numbersSequential)
 	// measureRandom("#random", numbersRandom)
 
-	// measureRbt("#sequential", numbersSequential)
-	// measureRbt("#random", numbersRandom)
+	measureRbt("#sequential", numbersSequential)
+	measureRbt("#random", numbersRandom)
 
-	measureSplay("#sequential", numbersSequential)
-	measureSplay("#random", numbersRandom)
+	// measureSplay("#sequential", numbersSequential)
+	// measureSplay("#random", numbersRandom)
 
 	// measureTreap("#sequential", numbersSequential)
 	// measureTreap("#random", numbersRandom)
@@ -77,7 +77,10 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	start := time.Now()
 	startTotal := start
 	for _, n := range numbers {
+		// fmt.Printf("============= BEFORE INSERT (%d)  =============\n", n)
+		// tree.DumpValuesInDetails()
 		tree.Insert(n)
+		// fmt.Printf("============= AFTER INSERT (%d)  =============\n", n)
 	}
 	elapsed := time.Since(start)
 	fmt.Println("Insertion Time for "+name, elapsed)
@@ -89,15 +92,25 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	elapsed = time.Since(start)
 	fmt.Println("Search Time for "+name, elapsed)
 
+	deleteNumbers := make([]int, N)
+	copy(deleteNumbers, numbers)
+	rand.Shuffle(N, func(i, j int) { deleteNumbers[i], deleteNumbers[j] = deleteNumbers[j], deleteNumbers[i] })
+
+	tree.DumpValuesInDetails()
 	start = time.Now()
-	for i := 0; i < N/10; i++ {
-		num := rand.Intn(N)
+	for i := 0; i < N; i++ {
+		// num := rand.Intn(N)
+		num := deleteNumbers[i]
+		fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
+		fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
+		tree.DumpValuesInDetails()
 	}
 	elapsed = time.Since(start)
 	fmt.Println("Remove Time for "+name, elapsed)
 
 	elapsed = time.Since(startTotal)
 	fmt.Println("Total processing Time for "+name, elapsed)
+	tree.DumpValuesInDetails()
 	fmt.Println("=========================================")
 }

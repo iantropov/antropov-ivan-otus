@@ -29,6 +29,12 @@ func TestRbtSimpleInsert(t *testing.T) {
 	assertNodesAreRed(t, tree, []int{4, 6})
 }
 
+func TestRbtMediumInsert(t *testing.T) {
+	tree := buildTree([]int{1, 3, 0, 7, 5})
+	assertNodesAreRed(t, tree, []int{3, 7})
+	assertNodesAreBlack(t, tree, []int{1, 0, 5})
+}
+
 func TestRbtComplexInsert(t *testing.T) {
 	tree := buildTree([]int{20, 10, 25, 4, 16, 23, 30, 2, 5, 14, 17, 3, 12, 15, 19, 11})
 
@@ -131,7 +137,83 @@ func TestRbtSimpleRemoval6(t *testing.T) {
 	assertNodesAreRed(t, tree, []int{4})
 }
 
-func TestRbtComplexRemoval(t *testing.T) {
+func TestRbtSimpleRemoval7(t *testing.T) {
+	tree := buildTreeDirectly([]directNode{
+		{3, false},
+		{0, false},
+		{7, true},
+		{5, false},
+		{8, false},
+		{6, true},
+	})
+	assertNodesAreRed(t, tree, []int{7, 6})
+	assertNodesAreBlack(t, tree, []int{3, 0, 5, 8})
+
+	tree.Remove(8)
+	assertAbsence(t, tree, 8)
+	assertNodesAreRed(t, tree, []int{5, 7})
+	assertNodesAreBlack(t, tree, []int{3, 0, 6})
+}
+
+func TestRbtMediumRemoval1(t *testing.T) {
+	tree := buildTree([]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+
+	tree.Remove(4)
+	assertAbsence(t, tree, 4)
+	assertNodesAreRed(t, tree, []int{6, 9})
+	assertNodesAreBlack(t, tree, []int{3, 1, 7, 0, 2, 5, 8})
+
+	tree.DumpValuesInDetails()
+
+	tree.Remove(1)
+	assertAbsence(t, tree, 1)
+	assertNodesAreRed(t, tree, []int{0, 7, 6, 9})
+	assertNodesAreBlack(t, tree, []int{3, 2, 5, 8})
+}
+
+func TestRbtMediumRemoval2(t *testing.T) {
+	tree := buildTreeDirectly([]directNode{
+		{15, false},
+		{7, false},
+		{23, false},
+		{3, false},
+		{11, false},
+		{19, false},
+		{31, true},
+		{27, false},
+		{39, false},
+	})
+	assertNodesAreRed(t, tree, []int{31})
+	assertNodesAreBlack(t, tree, []int{15, 7, 23, 27, 39})
+
+	tree.Remove(3)
+	assertAbsence(t, tree, 3)
+	assertNodesAreRed(t, tree, []int{11})
+	assertNodesAreBlack(t, tree, []int{23, 15, 31, 7, 19, 27, 39})
+}
+
+func TestRbtMediumRemoval3(t *testing.T) {
+	tree := buildTreeDirectly([]directNode{
+		{8, false},
+		{5, false},
+		{11, false},
+		{2, false},
+		{6, false},
+		{9, false},
+		{15, false},
+		{0, true},
+		{13, true},
+	})
+	assertNodesAreRed(t, tree, []int{0, 13})
+	assertNodesAreBlack(t, tree, []int{8, 5, 2, 6, 9, 15})
+
+	tree.Remove(5)
+	assertAbsence(t, tree, 5)
+	assertNodesAreRed(t, tree, []int{13})
+	assertNodesAreBlack(t, tree, []int{8, 2, 0, 6, 11, 9, 15})
+}
+
+func TestRbtComplexRemoval1(t *testing.T) {
 	tree := buildTreeDirectly([]directNode{
 		{20, false},
 		{10, true},
