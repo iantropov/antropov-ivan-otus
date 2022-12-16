@@ -83,6 +83,52 @@ func (tree *rbtTree) insertDirectly(val int, red bool) {
 	newNode.red = red
 }
 
+func (tree *rbtTree) checkForInvariants() bool {
+	if tree.root == nil {
+		return true
+	}
+
+	if tree.root.red {
+		fmt.Printf("Root should be black: %v\n", tree.root)
+		return false
+	}
+
+	return tree.root.checkForInvariants()
+}
+
+func (n *node) checkForInvariants() bool {
+	if n == nil {
+		return true
+	}
+
+	if n.red && (n.left.isRed() || n.right.isRed()) {
+		fmt.Printf("Red node can't have red children: %v\n", n)
+		return false
+	}
+
+	leftBlackHeight := n.left.findBlackHeight()
+	rightBlackHight := n.right.findBlackHeight()
+	if leftBlackHeight != rightBlackHight {
+		fmt.Printf("Left and right black heights should be equal: %v\n", n)
+		return false
+	}
+
+	return true
+}
+
+func (n *node) findBlackHeight() int {
+	if n == nil {
+		return 0
+	}
+
+	leftBlackHeight := n.left.findBlackHeight()
+	if n.red {
+		return leftBlackHeight
+	} else {
+		return leftBlackHeight + 1
+	}
+}
+
 func (n *node) searchNode(val int) *node {
 	if n == nil {
 		return nil

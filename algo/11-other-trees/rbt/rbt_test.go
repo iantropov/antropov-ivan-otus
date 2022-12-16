@@ -27,12 +27,15 @@ func TestRbtSimpleInsert(t *testing.T) {
 
 	tree.Insert(6)
 	assertNodesAreRed(t, tree, []int{4, 6})
+
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtMediumInsert(t *testing.T) {
 	tree := buildTree([]int{1, 3, 0, 7, 5})
 	assertNodesAreRed(t, tree, []int{3, 7})
 	assertNodesAreBlack(t, tree, []int{1, 0, 5})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtComplexInsert(t *testing.T) {
@@ -40,6 +43,7 @@ func TestRbtComplexInsert(t *testing.T) {
 
 	assertNodesAreRed(t, tree, []int{14, 20, 3, 11, 19, 23, 30})
 	assertNodesAreBlack(t, tree, []int{10, 4, 16, 2, 5, 12, 15})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtRootRemoval1(t *testing.T) {
@@ -47,6 +51,7 @@ func TestRbtRootRemoval1(t *testing.T) {
 
 	tree.Remove(1)
 	assertAbsence(t, tree, 1)
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtRootRemoval2(t *testing.T) {
@@ -54,6 +59,7 @@ func TestRbtRootRemoval2(t *testing.T) {
 
 	tree.Remove(1)
 	assertAbsence(t, tree, 1)
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtRootRemoval3(t *testing.T) {
@@ -61,6 +67,7 @@ func TestRbtRootRemoval3(t *testing.T) {
 
 	tree.Remove(2)
 	assertAbsence(t, tree, 2)
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtRootRemoval4(t *testing.T) {
@@ -68,6 +75,7 @@ func TestRbtRootRemoval4(t *testing.T) {
 
 	tree.Remove(2)
 	assertAbsence(t, tree, 2)
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtRootRemoval5(t *testing.T) {
@@ -75,6 +83,7 @@ func TestRbtRootRemoval5(t *testing.T) {
 
 	tree.Remove(2)
 	assertAbsence(t, tree, 2)
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtRootRemoval6(t *testing.T) {
@@ -82,6 +91,7 @@ func TestRbtRootRemoval6(t *testing.T) {
 
 	tree.Remove(2)
 	assertAbsence(t, tree, 2)
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval1(t *testing.T) {
@@ -91,6 +101,7 @@ func TestRbtSimpleRemoval1(t *testing.T) {
 	assertAbsence(t, tree, 1)
 	assertNodesAreRed(t, tree, []int{3, 6})
 	assertNodesAreBlack(t, tree, []int{4, 2, 5})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval2(t *testing.T) {
@@ -100,6 +111,7 @@ func TestRbtSimpleRemoval2(t *testing.T) {
 	assertAbsence(t, tree, 2)
 	assertNodesAreRed(t, tree, []int{5})
 	assertNodesAreBlack(t, tree, []int{1, 3, 4, 6})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval3(t *testing.T) {
@@ -109,6 +121,7 @@ func TestRbtSimpleRemoval3(t *testing.T) {
 	assertAbsence(t, tree, 3)
 	assertNodesAreRed(t, tree, []int{5})
 	assertNodesAreBlack(t, tree, []int{1, 2, 4, 6})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval4(t *testing.T) {
@@ -118,6 +131,7 @@ func TestRbtSimpleRemoval4(t *testing.T) {
 	assertAbsence(t, tree, 4)
 	assertNodesAreRed(t, tree, []int{5})
 	assertNodesAreBlack(t, tree, []int{1, 2, 3, 6})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval5(t *testing.T) {
@@ -127,6 +141,7 @@ func TestRbtSimpleRemoval5(t *testing.T) {
 	assertAbsence(t, tree, 5)
 	assertNodesAreRed(t, tree, []int{4})
 	assertNodesAreBlack(t, tree, []int{1, 2, 3, 6})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval6(t *testing.T) {
@@ -135,6 +150,7 @@ func TestRbtSimpleRemoval6(t *testing.T) {
 	tree.Remove(6)
 	assertAbsence(t, tree, 6)
 	assertNodesAreRed(t, tree, []int{4})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtSimpleRemoval7(t *testing.T) {
@@ -153,6 +169,7 @@ func TestRbtSimpleRemoval7(t *testing.T) {
 	assertAbsence(t, tree, 8)
 	assertNodesAreRed(t, tree, []int{5, 7})
 	assertNodesAreBlack(t, tree, []int{3, 0, 6})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtMediumRemoval1(t *testing.T) {
@@ -162,6 +179,7 @@ func TestRbtMediumRemoval1(t *testing.T) {
 	assertAbsence(t, tree, 4)
 	assertNodesAreRed(t, tree, []int{6, 9})
 	assertNodesAreBlack(t, tree, []int{3, 1, 7, 0, 2, 5, 8})
+	assertTreeInvariants(t, tree)
 
 	tree.DumpValuesInDetails()
 
@@ -169,6 +187,7 @@ func TestRbtMediumRemoval1(t *testing.T) {
 	assertAbsence(t, tree, 1)
 	assertNodesAreRed(t, tree, []int{0, 7, 6, 9})
 	assertNodesAreBlack(t, tree, []int{3, 2, 5, 8})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtMediumRemoval2(t *testing.T) {
@@ -190,6 +209,7 @@ func TestRbtMediumRemoval2(t *testing.T) {
 	assertAbsence(t, tree, 3)
 	assertNodesAreRed(t, tree, []int{11})
 	assertNodesAreBlack(t, tree, []int{23, 15, 31, 7, 19, 27, 39})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtMediumRemoval3(t *testing.T) {
@@ -211,6 +231,7 @@ func TestRbtMediumRemoval3(t *testing.T) {
 	assertAbsence(t, tree, 5)
 	assertNodesAreRed(t, tree, []int{13})
 	assertNodesAreBlack(t, tree, []int{8, 2, 0, 6, 11, 9, 15})
+	assertTreeInvariants(t, tree)
 }
 
 func TestRbtComplexRemoval1(t *testing.T) {
@@ -234,11 +255,13 @@ func TestRbtComplexRemoval1(t *testing.T) {
 	})
 	assertNodesAreRed(t, tree, []int{10, 14, 3, 19, 11})
 	assertNodesAreBlack(t, tree, []int{20, 25, 4, 16, 23, 30, 2, 5, 17, 12, 15})
+	assertTreeInvariants(t, tree)
 
 	tree.Remove(30)
 	assertAbsence(t, tree, 30)
 	assertNodesAreRed(t, tree, []int{10, 19, 23, 3, 11})
 	assertNodesAreBlack(t, tree, []int{16, 20, 4, 14, 17, 25, 2, 5, 12, 15})
+	assertTreeInvariants(t, tree)
 }
 
 func buildTree(values []int) *rbtTree {
@@ -276,5 +299,11 @@ func assertNodesAreBlack(t *testing.T, tree *rbtTree, values []int) {
 func assertAbsence(t *testing.T, tree *rbtTree, value int) {
 	if tree.searchNode(value) != nil {
 		t.Errorf("The node with %d should be absent", value)
+	}
+}
+
+func assertTreeInvariants(t *testing.T, tree *rbtTree) {
+	if !tree.checkForInvariants() {
+		t.Error("The tree violates RBT invariants!")
 	}
 }
