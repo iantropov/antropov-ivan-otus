@@ -264,6 +264,41 @@ func TestRbtComplexRemoval1(t *testing.T) {
 	assertTreeInvariants(t, tree)
 }
 
+func TestRbtComplexRemoval2(t *testing.T) {
+	tree := buildTreeDirectly([]directNode{
+		{35, false},
+		{26, false},
+		{45, false},
+		{17, false},
+		{33, false},
+		{40, false},
+		{48, false},
+		{7, true},
+		{21, false},
+		{31, false},
+		{34, false},
+		{37, false},
+		{43, true},
+		{47, false},
+		{49, false},
+		{3, false},
+		{11, false},
+		{42, false},
+		{44, false},
+		{50, true},
+		{14, true},
+	})
+	assertNodesAreRed(t, tree, []int{7, 43, 14, 50})
+	assertNodesAreBlack(t, tree, []int{35, 26, 45, 17, 33, 40, 48, 21, 31, 34, 37, 47, 49, 3, 11, 42, 44})
+	assertTreeInvariants(t, tree)
+
+	tree.Remove(21)
+	assertAbsence(t, tree, 21)
+	// assertNodesAreRed(t, tree, []int{10, 19, 23, 3, 11})
+	// assertNodesAreBlack(t, tree, []int{16, 20, 4, 14, 17, 25, 2, 5, 12, 15})
+	assertTreeInvariants(t, tree)
+}
+
 func buildTree(values []int) *rbtTree {
 	tree := NewTree()
 	for _, value := range values {
