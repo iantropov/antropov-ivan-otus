@@ -1,6 +1,8 @@
 package rbt
 
-import "fmt"
+import (
+	"fmt"
+)
 
 // https://habr.com/ru/company/otus/blog/472040/
 // https://habr.com/ru/company/otus/blog/521034/
@@ -113,19 +115,26 @@ func (n *node) checkForInvariants() bool {
 		return false
 	}
 
-	return true
+	return n.left.checkForInvariants() && n.right.checkForInvariants()
 }
 
 func (n *node) findBlackHeight() int {
 	if n == nil {
-		return 0
+		return 1
 	}
 
 	leftBlackHeight := n.left.findBlackHeight()
+	rightBlackHeight := n.right.findBlackHeight()
+
+	maxBlackHeight := leftBlackHeight
+	if rightBlackHeight > maxBlackHeight {
+		maxBlackHeight = rightBlackHeight
+	}
+
 	if n.red {
-		return leftBlackHeight
+		return maxBlackHeight
 	} else {
-		return leftBlackHeight + 1
+		return maxBlackHeight + 1
 	}
 }
 
