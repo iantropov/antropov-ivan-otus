@@ -13,7 +13,7 @@ import (
 	"other-trees/tree"
 )
 
-const N = 51 // 20 - invalid case
+const N = 100_000
 
 func main() {
 	fmt.Println("Hello from eleventh homework!")
@@ -96,21 +96,24 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	copy(deleteNumbers, numbers)
 	rand.Shuffle(N, func(i, j int) { deleteNumbers[i], deleteNumbers[j] = deleteNumbers[j], deleteNumbers[i] })
 
-	tree.DumpValuesInDetails()
+	// tree.DumpValuesInDetails()
 	start = time.Now()
-	for i := 0; i < N; i++ {
-		// num := rand.Intn(N)
-		num := deleteNumbers[i]
-		fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
+	for i := 0; i < N/10; i++ {
+		num := rand.Intn(N)
+		// num := deleteNumbers[i]
+		// fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
-		fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
-		tree.DumpValuesInDetails()
+		// fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
+		// tree.DumpValuesInDetails()
+		// if !tree.checkForInvariants() {
+		// 	panic("invalid tree")
+		// }
 	}
 	elapsed = time.Since(start)
 	fmt.Println("Remove Time for "+name, elapsed)
 
 	elapsed = time.Since(startTotal)
 	fmt.Println("Total processing Time for "+name, elapsed)
-	tree.DumpValuesInDetails()
-	fmt.Println("=========================================")
+	// tree.DumpValuesInDetails()
+	// fmt.Println("=========================================")
 }
