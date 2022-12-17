@@ -347,6 +347,8 @@ func (n *node) balanceAfterRemoval() *node {
 }
 
 func (n *node) balanceAfterRightRemoval() *node {
+	// 4 CASES WITH RED PARENT
+
 	// case 1 - a red parent with a black left child with black grandchildren
 	if n.red && !n.left.red && !n.left.left.isRed() && !n.left.right.isRed() {
 		n.red = false
@@ -354,7 +356,7 @@ func (n *node) balanceAfterRightRemoval() *node {
 		return nil
 	}
 
-	// case 2 - a red parent with a black left child with a left red grandchild
+	// case 2,3 - a red parent with a black left child with a left red grandchild and a right red/black grandchild
 	if n.red && !n.left.red && n.left.left.isRed() {
 		n.rotateRight()
 		n.red = false
@@ -363,7 +365,7 @@ func (n *node) balanceAfterRightRemoval() *node {
 		return n.parent
 	}
 
-	// case 2.5 - a red parent with a black left child with a right red grandchild
+	// case 4 - a red parent with a black left child with a left red grandchild and a right red grandchild
 	if n.red && !n.left.red && n.left.right.isRed() {
 		n.left.right.red = false
 		n.left.red = true
@@ -372,24 +374,9 @@ func (n *node) balanceAfterRightRemoval() *node {
 		return n.parent
 	}
 
-	// case 3 - a black parent with a red left child with black grandchildren with right black grand-grandchildren
-	if !n.red && n.left.isRed() && !n.left.left.isRed() && !n.left.right.isRed() && !n.left.right.left.isRed() && !n.left.right.right.isRed() {
-		n.rotateRight()
-		n.parent.red = false
-		n.left.red = true
-		return n.parent
-	}
+	// 3 CASES WITH BLACK PARENT AND A BLACK LEFT CHILD
 
-	// case 4 - a black parent with a red left child with black grandchildren with a left red grand-grandchild
-	if !n.red && n.left.isRed() && !n.left.left.isRed() && n.left.right != nil && n.left.right.left.isRed() {
-		newBlackNode := n.left.right.left
-		n.left.rotateLeft()
-		newBlackNode.red = false
-		n.rotateRight()
-		return n.parent
-	}
-
-	// case 5 - a black parent with a black left child with a red right grandchild
+	// case 5,6 - a black parent with a black left child with a red/black left grandchild and a red right grandchild
 	if !n.red && !n.left.red && n.left.right.isRed() {
 		n.left.rotateLeft()
 		n.left.red = false
@@ -397,7 +384,7 @@ func (n *node) balanceAfterRightRemoval() *node {
 		return n.parent
 	}
 
-	// case 5.5 - a black parent with a black left child with a red left grandchild
+	// case 7 - a black parent with a black left child with a red left grandchild and a black right grandchild
 	if !n.red && !n.left.isRed() && n.left.left.isRed() {
 		n.rotateRight()
 		if n.right != nil {
@@ -407,7 +394,74 @@ func (n *node) balanceAfterRightRemoval() *node {
 		return n.parent
 	}
 
-	// case 6
+	// 3 CASES WITH BLACK PARENT AND A RED LEFT CHILD
+
+	// case 8 - a black parent with a red left child with black grandchildren with right black grand-grandchildren
+	if !n.red && n.left.isRed() && !n.left.left.isRed() && !n.left.right.isRed() && !n.left.right.left.isRed() && !n.left.right.right.isRed() {
+		n.rotateRight()
+		n.parent.red = false
+		n.left.red = true
+		return n.parent
+	}
+
+	// case 9,10 - a black parent with a red left child with black grandchildren with a red-black/red grand-grandchildren
+	if !n.red && n.left.isRed() && !n.left.left.isRed() && n.left.right != nil && n.left.right.left.isRed() {
+		newBlackNode := n.left.right.left
+		n.left.rotateLeft()
+		newBlackNode.red = false
+		n.rotateRight()
+		return n.parent
+	}
+
+	// 4 CASES WITH BLACK PARENT AND A RED LEFT CHILD AND BLACK GRANDCHILDREN AND (BLACK-RED) RIGHT GRAND-GRANDCHILDREN
+	// 11,12,13,14
+
+	if !n.red && n.left.isRed() && !n.left.left.isRed() && n.left.right != nil && !n.left.right.left.isRed() && n.left.right.right.isRed() {
+		leftGrand := n.left.left.left
+		rightGrand := n.left.left.right
+
+		// case 11
+		if !leftGrand.isRed() && !rightGrand.isRed() {
+			n.left.rotateLeft()
+			n.rotateRight()
+			n.parent.left.red = false
+			n.parent.left.left.red = true
+			return n.parent
+		}
+
+		// case 12
+		if leftGrand.isRed() && !rightGrand.isRed() {
+			n.left.rotateLeft()
+			n.rotateRight()
+			n.parent.left.rotateRight()
+			return n.parent
+		}
+
+		// case 13
+		if !leftGrand.isRed() && rightGrand.isRed() {
+			n.left.rotateLeft()
+			n.rotateRight()
+			n.parent.left.left.rotateLeft()
+			n.parent.left.rotateRight()
+			n.parent.left.left.red = true
+			n.parent.left.red = false
+			return n.parent
+		}
+
+		// case 14
+		if leftGrand.isRed() && rightGrand.isRed() {
+			n.left.rotateLeft()
+			n.rotateRight()
+			n.parent.left.rotateRight()
+			n.parent.left.left.red = false
+			n.parent.left.right.red = false
+			n.parent.left.red = true
+			return n.parent
+		}
+	}
+
+	// THE LAST CASE WITH FURTHER REBALANCING - THE CASE WITH BLACK PARENT AND A BLACK LEFT CHILD AND BLACK GRANCHILDREN
+	// case 15
 	if !n.red && !n.left.red && !n.left.left.isRed() && !n.left.right.isRed() {
 		n.left.red = true
 
@@ -429,14 +483,16 @@ func (n *node) balanceAfterRightRemoval() *node {
 }
 
 func (n *node) balanceAfterLeftRemoval() *node {
-	// case 1 - a red parent with black children with black grandchildren
+	// 4 CASES WITH RED PARENT
+
+	// case 1 - a red parent with a black right child with black grandchildren
 	if n.red && !n.right.red && !n.right.left.isRed() && !n.right.right.isRed() {
 		n.red = false
 		n.right.red = true
 		return nil
 	}
 
-	// case 2 - a red parent with a black right child with a right red grandchild
+	// case 2,3 - a red parent with a black right child with a right red grandchild and a left red/black grandchild
 	if n.red && !n.right.red && n.right.right.isRed() {
 		n.rotateLeft()
 		n.red = false
@@ -445,7 +501,7 @@ func (n *node) balanceAfterLeftRemoval() *node {
 		return n.parent
 	}
 
-	// case 2.5 - a red parent with a black right child with a left red grandchild
+	// case 4 - a red parent with a black right child with a right red grandchild and a left red grandchild
 	if n.red && !n.right.red && n.right.left.isRed() {
 		n.right.left.red = false
 		n.right.red = true
@@ -454,32 +510,17 @@ func (n *node) balanceAfterLeftRemoval() *node {
 		return n.parent
 	}
 
-	// case 3 - a black parent with a red right child with black grandchildren with left black grand-grandchildren
-	if !n.red && n.right.isRed() && !n.right.right.isRed() && !n.right.left.left.isRed() && !n.right.left.right.isRed() {
-		n.rotateLeft()
-		n.parent.red = false
-		n.right.red = true
-		return n.parent
-	}
+	// 3 CASES WITH BLACK PARENT AND A BLACK RIGHT CHILD
 
-	// case 4 - a black parent with a red right child with black grandchildren with a right red grand-grandchild
-	if !n.red && n.right.isRed() && n.right.left != nil && !n.right.left.red && n.right.left.right.isRed() {
-		newBlackNode := n.right.left.right
-		n.right.rotateRight()
-		newBlackNode.red = false
-		n.rotateLeft()
-		return n.parent
-	}
-
-	// case 5 - a black parent with a black right child with a red left grandchild
-	if !n.red && !n.right.isRed() && n.right.left.isRed() {
+	// case 5,6 - a black parent with a black right child with a red/black right grandchild and a red left grandchild
+	if !n.red && !n.right.red && n.right.left.isRed() {
 		n.right.rotateRight()
 		n.right.red = false
 		n.rotateLeft()
 		return n.parent
 	}
 
-	// case 5.5 - a black parent with a black right child with a red right grandchild
+	// case 7 - a black parent with a black right child with a red right grandchild and a black left grandchild
 	if !n.red && !n.right.isRed() && n.right.right.isRed() {
 		n.rotateLeft()
 		if n.left != nil {
@@ -489,8 +530,75 @@ func (n *node) balanceAfterLeftRemoval() *node {
 		return n.parent
 	}
 
-	// case 6
-	if !n.red && !n.right.isRed() && !n.right.left.isRed() && !n.right.right.isRed() {
+	// 3 CASES WITH BLACK PARENT AND A RED LEFT CHILD
+
+	// case 8 - a black parent with a red right child with black grandchildren with left black grand-grandchildren
+	if !n.red && n.right.isRed() && !n.right.right.isRed() && !n.right.left.isRed() && !n.right.left.right.isRed() && !n.right.left.left.isRed() {
+		n.rotateLeft()
+		n.parent.red = false
+		n.right.red = true
+		return n.parent
+	}
+
+	// case 9,10 - a black parent with a red right child with black grandchildren with a black-red/black grand-grandchildren
+	if !n.red && n.right.isRed() && !n.right.right.isRed() && n.right.left != nil && n.right.left.right.isRed() {
+		newBlackNode := n.right.left.right
+		n.right.rotateRight()
+		newBlackNode.red = false
+		n.rotateLeft()
+		return n.parent
+	}
+
+	// 4 CASES WITH BLACK PARENT AND A RED RIGHT CHILD AND BLACK GRANDCHILDREN AND (RED-BLACK) LEFT GRAND-GRANDCHILDREN
+	// 11,12,13,14
+
+	if !n.red && n.right.isRed() && !n.right.right.isRed() && n.right.left != nil && !n.right.left.right.isRed() && n.right.left.left.isRed() {
+		rightGrand := n.right.right.right
+		leftGrand := n.right.right.left
+
+		// case 11
+		if !rightGrand.isRed() && !leftGrand.isRed() {
+			n.right.rotateRight()
+			n.rotateLeft()
+			n.parent.right.red = false
+			n.parent.right.right.red = true
+			return n.parent
+		}
+
+		// case 12
+		if rightGrand.isRed() && !leftGrand.isRed() {
+			n.right.rotateRight()
+			n.rotateLeft()
+			n.parent.right.rotateLeft()
+			return n.parent
+		}
+
+		// case 13
+		if !rightGrand.isRed() && leftGrand.isRed() {
+			n.right.rotateRight()
+			n.rotateLeft()
+			n.parent.right.right.rotateRight()
+			n.parent.right.rotateLeft()
+			n.parent.right.right.red = true
+			n.parent.right.red = false
+			return n.parent
+		}
+
+		// case 14
+		if rightGrand.isRed() && leftGrand.isRed() {
+			n.right.rotateRight()
+			n.rotateLeft()
+			n.parent.right.rotateLeft()
+			n.parent.right.right.red = false
+			n.parent.right.left.red = false
+			n.parent.right.red = true
+			return n.parent
+		}
+	}
+
+	// THE LAST CASE WITH FURTHER REBALANCING - THE CASE WITH BLACK PARENT AND A BLACK LEFT CHILD AND BLACK GRANCHILDREN
+	// case 15
+	if !n.red && !n.right.red && !n.right.right.isRed() && !n.right.left.isRed() {
 		n.right.red = true
 
 		if n.parent == nil {
@@ -504,6 +612,9 @@ func (n *node) balanceAfterLeftRemoval() *node {
 		}
 	}
 
+	// root := n.findRoot()
+	// root.dumpValuesInDetails()
+	// panic(n.val)
 	panic("invalid case")
 }
 

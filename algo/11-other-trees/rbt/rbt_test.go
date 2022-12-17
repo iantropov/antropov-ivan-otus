@@ -265,7 +265,6 @@ func TestRbtComplexRemoval1(t *testing.T) {
 }
 
 func TestRbtComplexRemoval2(t *testing.T) {
-	t.Skip()
 	tree := buildTreeDirectly([]directNode{
 		{35, false},
 		{26, false},
@@ -295,8 +294,6 @@ func TestRbtComplexRemoval2(t *testing.T) {
 
 	tree.Remove(21)
 	assertAbsence(t, tree, 21)
-	// assertNodesAreRed(t, tree, []int{10, 19, 23, 3, 11})
-	// assertNodesAreBlack(t, tree, []int{16, 20, 4, 14, 17, 25, 2, 5, 12, 15})
 	assertTreeInvariants(t, tree)
 }
 
