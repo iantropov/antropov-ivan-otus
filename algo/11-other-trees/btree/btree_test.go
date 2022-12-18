@@ -68,6 +68,17 @@ func TestRemoval6(t *testing.T) {
 	tree.dump()
 }
 
+func TestRemoval7(t *testing.T) {
+	tree := buildTree([]int{1, 2, 3, 4})
+	tree.Remove(4)
+	checkAbsence(t, tree, 4)
+	tree.dump()
+
+	tree.Remove(3)
+	checkAbsence(t, tree, 3)
+	tree.dump()
+}
+
 func buildTree(values []int) *btree {
 	tree := NewTree(2)
 	for _, val := range values {

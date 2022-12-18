@@ -54,6 +54,15 @@ func (tree *btree) Remove(val int) {
 		return
 	}
 
+	if tree.root.size == 1 {
+		leftChild := tree.root.pointers[0]
+		rightChild := tree.root.pointers[1]
+		if leftChild.size == tree.t-1 && rightChild.size == tree.t-1 {
+			leftChild.merge(tree.root.values[0], rightChild)
+			tree.root = leftChild
+		}
+	}
+
 	tree.root.remove(val)
 }
 
