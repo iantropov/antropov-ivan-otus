@@ -1,33 +1,36 @@
 package btree
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 type node struct {
 	values   []int
 	pointers []*node
 	size     int
 	leaf     bool
-	tree     *btree
+	tree     *Btree
 }
 
-type btree struct {
+type Btree struct {
 	root *node
 	t    int // minimal degree, t >= 2
 }
 
-func NewTree(t int) *btree {
+func NewTree(t int) *Btree {
 	if t < 2 {
 		panic("Minimal degree of B tree should be >= 2")
 	}
-	return &btree{nil, t}
+	return &Btree{nil, t}
 }
 
-func (tree *btree) Search(val int) bool {
+func (tree *Btree) Search(val int) bool {
 	node := tree.root.searchNode(val)
 	return node != nil
 }
 
-func (tree *btree) Insert(val int) {
+func (tree *Btree) Insert(val int) {
 	if tree.root == nil {
 		tree.root = tree.buildNode()
 		tree.root.insertToRight(val, nil)
@@ -48,7 +51,7 @@ func (tree *btree) Insert(val int) {
 	tree.root.insert(val)
 }
 
-func (tree *btree) Remove(val int) {
+func (tree *Btree) Remove(val int) {
 	node := tree.root.searchNode(val)
 	if node == nil {
 		return
@@ -66,9 +69,89 @@ func (tree *btree) Remove(val int) {
 	tree.root.remove(val)
 }
 
-func (tree *btree) dump() {
+func (tree *Btree) DumpValuesInDetails() {
 	fmt.Printf("ROOT: ")
 	tree.root.dump()
+}
+
+func (tree *Btree) CheckForInvariants() bool {
+	return tree.root.checkForInvariants(true, math.MinInt, math.MaxInt)
+}
+
+func (n *node) checkForInvariants(isRoot bool, min, max int) bool {
+	if n == nil {
+		return true
+	}
+
+	result := true
+	nonZeroValues := 0
+	nonNilPointers := 0
+	for i := 0; i < 2*n.tree.t-1; i++ {
+		if n.values[i] != 0 {
+			nonZeroValues++
+		}
+
+		if n.pointers[i] != nil {
+			nonNilPointers++
+		}
+	}
+	if n.pointers[2*n.tree.t-1] != nil {
+		nonNilPointers++
+	}
+
+	if nonZeroValues != n.size {
+		fmt.Println("Invalid number of values")
+		result = false
+	}
+
+	if n.leaf {
+		if nonNilPointers != 0 {
+			fmt.Println("Pointers should be empty for leaves")
+			result = false
+		}
+	} else {
+		if nonNilPointers != n.size+1 {
+			fmt.Println("Invalid number of pointers for non-leaf")
+			result = false
+		}
+	}
+
+	if !isRoot && n.size < n.tree.t-1 {
+		fmt.Println("Node is too small")
+		result = false
+	}
+
+	result = result && n.checkValues(min, max)
+
+	result = result && n.pointers[0].checkForInvariants(false, min, n.values[0])
+	for i := 1; i < n.size; i++ {
+		result = result && n.pointers[i].checkForInvariants(false, n.values[i-1], n.values[i])
+	}
+	result = result && n.pointers[n.size].checkForInvariants(false, n.values[n.size-1], max)
+
+	return result
+}
+
+func (n *node) checkValues(min, max int) bool {
+	if n == nil {
+		return true
+	}
+
+	if n.values[0] <= min || n.values[0] >= max {
+		fmt.Printf("Value %d from node %p - invalid!\n", n.values[0], n)
+		return false
+	}
+	for i := 1; i < n.size; i++ {
+		if n.values[i] <= min || n.values[i] >= max {
+			fmt.Printf("Value %d from node %p - is outside the interval!\n", n.values[i], n)
+			return false
+		}
+		if n.values[i] <= n.values[i-1] {
+			fmt.Printf("Value %d from node %p - is unsorted!\n", n.values[i], n)
+			return false
+		}
+	}
+	return true
 }
 
 func (n *node) searchNode(val int) *node {
@@ -276,7 +359,7 @@ func (n *node) findMin() int {
 }
 
 func (n *node) removeFromRight(val int) {
-	if n.size < n.tree.t {
+	if n.size < n.tree.t-1 {
 		panic("the leaf is too sparse")
 	}
 
@@ -292,7 +375,7 @@ func (n *node) removeFromRight(val int) {
 }
 
 func (n *node) removeFromLeft(val int) {
-	if n.size < n.tree.t {
+	if n.size < n.tree.t-1 {
 		panic("the leaf is too sparse")
 	}
 
@@ -322,7 +405,7 @@ func (n *node) dump() {
 	}
 }
 
-func (tree *btree) buildNode() *node {
+func (tree *Btree) buildNode() *node {
 	newNode := &node{}
 	newNode.values = make([]int, 2*tree.t-1)
 	newNode.pointers = make([]*node, 2*tree.t)
