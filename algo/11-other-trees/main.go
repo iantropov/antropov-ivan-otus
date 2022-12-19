@@ -8,7 +8,7 @@ import (
 	"other-trees/btree"
 )
 
-const N = 18
+const N = 100_000
 
 func main() {
 	fmt.Println("Hello from eleventh homework!")
@@ -96,14 +96,19 @@ func measureTree(tree *btree.Btree, name string, numbers []int) {
 	copy(deleteNumbers, numbers)
 	rand.Shuffle(N, func(i, j int) { deleteNumbers[i], deleteNumbers[j] = deleteNumbers[j], deleteNumbers[i] })
 
-	tree.DumpValuesInDetails()
+	if !tree.CheckForInvariants() {
+		tree.DumpValuesInDetails()
+		panic("invalid tree")
+	}
+
+	// tree.DumpValuesInDetails()
 	start = time.Now()
 	for i := 0; i < N/10; i++ {
 		num := rand.Intn(N)
 		// num := deleteNumbers[i]
-		fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
+		// fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
-		fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
+		// fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
 		if !tree.CheckForInvariants() {
 			tree.DumpValuesInDetails()
 			panic("invalid tree")

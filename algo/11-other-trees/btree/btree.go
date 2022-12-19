@@ -18,6 +18,14 @@ type Btree struct {
 	t    int // minimal degree, t >= 2
 }
 
+type directNode struct {
+	values []int
+	leaf   bool
+	root   bool
+	parent int
+	child  int
+}
+
 func NewTree(t int) *Btree {
 	if t < 2 {
 		panic("Minimal degree of B tree should be >= 2")
@@ -74,6 +82,21 @@ func (tree *Btree) DumpValuesInDetails() {
 	tree.root.dump()
 }
 
+func (tree *Btree) BuildDirectly(directNodes []directNode) {
+	nodes := make([]*node, len(directNodes))
+	for i, dn := range directNodes {
+		newNode := tree.buildNode()
+		copy(newNode.values, dn.values)
+		newNode.size = len(dn.values)
+		newNode.leaf = dn.leaf
+		nodes[i] = newNode
+		if !dn.root {
+			nodes[dn.parent].pointers[dn.child] = newNode
+		}
+	}
+	tree.root = nodes[0]
+}
+
 func (tree *Btree) CheckForInvariants() bool {
 	return tree.root.checkForInvariants(true, math.MinInt, math.MaxInt)
 }
@@ -118,6 +141,11 @@ func (n *node) checkForInvariants(isRoot bool, min, max int) bool {
 
 	if !isRoot && n.size < n.tree.t-1 {
 		fmt.Println("Node is too small")
+		result = false
+	}
+
+	if isRoot && n.size == 0 {
+		fmt.Println("Empty root")
 		result = false
 	}
 
@@ -220,6 +248,7 @@ func (n *node) insertToLeft(val int, pointer *node) {
 	n.pointers[1] = n.pointers[0]
 	n.values[0] = val
 	n.pointers[0] = pointer
+	n.size++
 }
 
 func (n *node) findPos(val int) int {
@@ -384,6 +413,7 @@ func (n *node) removeFromLeft(val int) {
 		n.values[i] = n.values[i+1]
 		n.pointers[i] = n.pointers[i+1]
 	}
+	n.pointers[n.size-1] = n.pointers[n.size]
 
 	n.values[n.size-1] = 0
 	n.pointers[n.size] = nil
