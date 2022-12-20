@@ -5,10 +5,11 @@ import (
 	"math/rand"
 	"time"
 
-	"other-trees/btree"
+	"other-trees/treap"
+	"other-trees/tree"
 )
 
-const N = 100_000
+const N = 30
 
 func main() {
 	fmt.Println("Hello from eleventh homework!")
@@ -26,8 +27,8 @@ func main() {
 	fmt.Println("Prepared a shuffled array of length ", N)
 	fmt.Println("=========================================")
 
-	measureBtree("#sequential", numbersSequential)
-	measureBtree("#random", numbersRandom)
+	// measureBtree("#sequential", numbersSequential)
+	// measureBtree("#random", numbersRandom)
 
 	// measureRandom("#sequential", numbersSequential)
 	// measureRandom("#random", numbersRandom)
@@ -38,15 +39,15 @@ func main() {
 	// measureSplay("#sequential", numbersSequential)
 	// measureSplay("#random", numbersRandom)
 
-	// measureTreap("#sequential", numbersSequential)
-	// measureTreap("#random", numbersRandom)
+	measureTreap("#sequential", numbersSequential)
+	measureTreap("#random", numbersRandom)
 
 }
 
-func measureBtree(name string, numbers []int) {
-	btree := btree.NewTree(2)
-	measureTree(btree, name+"-btree: ", numbers)
-}
+// func measureBtree(name string, numbers []int) {
+// 	btree := btree.NewTree(2)
+// 	measureTree(btree, name+"-btree: ", numbers)
+// }
 
 // func measureRandom(name string, numbers []int) {
 // 	random := random.NewTree()
@@ -63,12 +64,12 @@ func measureBtree(name string, numbers []int) {
 // 	measureTree(splay, name+"-splay: ", numbers)
 // }
 
-// func measureTreap(name string, numbers []int) {
-// 	treap := treap.NewTree()
-// 	measureTree(treap, name+"-treap: ", numbers)
-// }
+func measureTreap(name string, numbers []int) {
+	treap := treap.NewTree()
+	measureTree(treap, name+"-treap: ", numbers)
+}
 
-func measureTree(tree *btree.Btree, name string, numbers []int) {
+func measureTree(tree tree.Tree, name string, numbers []int) {
 	start := time.Now()
 	startTotal := start
 	for _, n := range numbers {
@@ -96,21 +97,21 @@ func measureTree(tree *btree.Btree, name string, numbers []int) {
 	copy(deleteNumbers, numbers)
 	rand.Shuffle(N, func(i, j int) { deleteNumbers[i], deleteNumbers[j] = deleteNumbers[j], deleteNumbers[i] })
 
-	if !tree.CheckForInvariants() {
-		tree.DumpValuesInDetails()
-		panic("invalid tree")
-	}
+	// if !tree.CheckForInvariants() {
+	// 	tree.DumpValuesInDetails()
+	// 	panic("invalid tree")
+	// }
 
-	// tree.DumpValuesInDetails()
+	tree.DumpValuesInDetails()
 	start = time.Now()
 	for i := 0; i < N/10; i++ {
 		num := rand.Intn(N)
 		// num := deleteNumbers[i]
-		// fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
+		fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
-		// fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
+		fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
 		// if !tree.CheckForInvariants() {
-		// 	tree.DumpValuesInDetails()
+		tree.DumpValuesInDetails()
 		// 	panic("invalid tree")
 		// }
 	}
