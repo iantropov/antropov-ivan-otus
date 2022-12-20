@@ -97,12 +97,12 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	copy(deleteNumbers, numbers)
 	rand.Shuffle(N, func(i, j int) { deleteNumbers[i], deleteNumbers[j] = deleteNumbers[j], deleteNumbers[i] })
 
-	// if !tree.CheckForInvariants() {
-	// 	tree.DumpValuesInDetails()
-	// 	panic("invalid tree")
-	// }
+	if !tree.CheckForInvariants() {
+		tree.DumpValuesInDetails()
+		panic("invalid tree")
+	}
 
-	tree.DumpValuesInDetails()
+	// tree.DumpValuesInDetails()
 	start = time.Now()
 	for i := 0; i < N/10; i++ {
 		num := rand.Intn(N)
@@ -110,10 +110,10 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 		fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
 		fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
-		// if !tree.CheckForInvariants() {
-		tree.DumpValuesInDetails()
-		// 	panic("invalid tree")
-		// }
+		if !tree.CheckForInvariants() {
+			tree.DumpValuesInDetails()
+			panic("invalid tree")
+		}
 	}
 	elapsed = time.Since(start)
 	fmt.Println("Remove Time for "+name, elapsed)

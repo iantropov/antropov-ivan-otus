@@ -6,8 +6,8 @@ func TestTreapInsertion(t *testing.T) {
 	tree := NewTree()
 	for i := 1; i <= 10; i++ {
 		tree.Insert(i)
-		tree.DumpValuesInDetails()
 		checkPresence(t, tree, i)
+		checkInvariants(t, tree)
 	}
 }
 
@@ -19,12 +19,15 @@ func TestTreapRemove(t *testing.T) {
 
 	tree.Remove(3)
 	checkAbsence(t, tree, 3)
+	checkInvariants(t, tree)
 
 	tree.Remove(7)
 	checkAbsence(t, tree, 7)
+	checkInvariants(t, tree)
 
 	tree.Remove(9)
 	checkAbsence(t, tree, 9)
+	checkInvariants(t, tree)
 }
 
 func TestTreapRemove2(t *testing.T) {
@@ -42,10 +45,11 @@ func TestTreapRemove2(t *testing.T) {
 	tree.insertDirect(5, 0.3)
 	tree.insertDirect(14, 0.3)
 
-	tree.DumpValuesInDetails()
+	checkInvariants(t, tree)
 
 	tree.Remove(21)
 	checkAbsence(t, tree, 21)
+	checkInvariants(t, tree)
 }
 
 func checkPresence(t *testing.T, tree *treap, val int) {
@@ -57,5 +61,12 @@ func checkPresence(t *testing.T, tree *treap, val int) {
 func checkAbsence(t *testing.T, tree *treap, val int) {
 	if tree.Search(val) {
 		t.Errorf("Value %d should be presented in the tree", val)
+	}
+}
+
+func checkInvariants(t *testing.T, tree *treap) {
+	if !tree.CheckForInvariants() {
+		tree.DumpValuesInDetails()
+		t.Error("Tree is invalid!")
 	}
 }

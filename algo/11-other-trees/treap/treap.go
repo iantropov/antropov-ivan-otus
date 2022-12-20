@@ -52,6 +52,10 @@ func (tree *treap) DumpValuesInDetails() {
 	tree.root.dumpValuesInDetails()
 }
 
+func (tree *treap) CheckForInvariants() bool {
+	return tree.root.checkForInvariants()
+}
+
 func (n *node) insertDirect(nn *node) *node {
 	if n == nil {
 		return nn
@@ -147,4 +151,36 @@ func (n *node) dumpValuesInDetails() {
 	fmt.Printf("node - value: %d, priority: %v, left - %v, right - %v\n", n.val, n.pr, n.left, n.right)
 	n.left.dumpValuesInDetails()
 	n.right.dumpValuesInDetails()
+}
+
+func (n *node) checkForInvariants() bool {
+	if n == nil {
+		return true
+	}
+
+	result := true
+	if n.left != nil && n.left.val > n.val {
+		fmt.Printf("Node %v has an invalid value from the left - %d\n", n, n.left.val)
+		result = false
+	}
+
+	if n.right != nil && n.right.val < n.val {
+		fmt.Printf("Node %v has an invalid value from the right - %d\n", n, n.right.val)
+		result = false
+	}
+
+	if n.left != nil && n.left.pr > n.pr {
+		fmt.Printf("Node %v has an invalid priority from the left - %v\n", n, n.left.pr)
+		result = false
+	}
+
+	if n.right != nil && n.right.pr > n.pr {
+		fmt.Printf("Node %v has an invalid priority from the right - %v\n", n, n.left.pr)
+		result = false
+	}
+
+	result = result && n.left.checkForInvariants()
+	result = result && n.right.checkForInvariants()
+
+	return result
 }
