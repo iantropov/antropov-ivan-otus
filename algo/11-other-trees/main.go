@@ -74,10 +74,10 @@ func measureTree(tree *btree.Btree, name string, numbers []int) {
 	for _, n := range numbers {
 		// fmt.Printf("============= WILL INSERT (%d)  =============\n", n)
 		tree.Insert(n)
-		if !tree.CheckForInvariants() {
-			tree.DumpValuesInDetails()
-			panic("invalid tree")
-		}
+		// if !tree.CheckForInvariants() {
+		// 	tree.DumpValuesInDetails()
+		// 	panic("invalid tree")
+		// }
 
 		// fmt.Printf("============= AFTER INSERT (%d)  =============\n", n)
 		// tree.DumpValuesInDetails()
@@ -109,10 +109,10 @@ func measureTree(tree *btree.Btree, name string, numbers []int) {
 		// fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
 		// fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
-		if !tree.CheckForInvariants() {
-			tree.DumpValuesInDetails()
-			panic("invalid tree")
-		}
+		// if !tree.CheckForInvariants() {
+		// 	tree.DumpValuesInDetails()
+		// 	panic("invalid tree")
+		// }
 	}
 	elapsed = time.Since(start)
 	fmt.Println("Remove Time for "+name, elapsed)
