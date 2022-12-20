@@ -11,6 +11,19 @@ func TestTreapInsertion(t *testing.T) {
 	}
 }
 
+func TestTreapInsertion2(t *testing.T) {
+	tree := NewTree()
+	tree.insertDirect(1, 0.9)
+	tree.insertDirect(29, 0.8)
+	tree.insertDirect(15, 0.7)
+	tree.insertDirect(10, 0.6)
+	tree.insertDirect(26, 0.6)
+	checkInvariants(t, tree)
+
+	tree.InsertWithPriority(24, 0.85)
+	checkInvariants(t, tree)
+}
+
 func TestTreapRemove(t *testing.T) {
 	tree := NewTree()
 	for i := 1; i <= 10; i++ {
@@ -39,6 +52,26 @@ func TestTreapRemove2(t *testing.T) {
 	tree.insertDirect(25, 0.7)
 	tree.insertDirect(20, 0.6)
 	tree.insertDirect(23, 0.6)
+	tree.insertDirect(1, 0.5)
+	tree.insertDirect(21, 0.5)
+	tree.insertDirect(10, 0.4)
+	tree.insertDirect(5, 0.3)
+	tree.insertDirect(14, 0.3)
+
+	checkInvariants(t, tree)
+
+	tree.Remove(21)
+	checkAbsence(t, tree, 21)
+	checkInvariants(t, tree)
+}
+
+func TestTreapRemove3(t *testing.T) {
+	tree := NewTree()
+	tree.insertDirect(26, 0.9)
+	tree.insertDirect(24, 0.8)
+	tree.insertDirect(29, 0.8)
+	tree.insertDirect(22, 0.7)
+	tree.insertDirect(20, 0.6)
 	tree.insertDirect(1, 0.5)
 	tree.insertDirect(21, 0.5)
 	tree.insertDirect(10, 0.4)

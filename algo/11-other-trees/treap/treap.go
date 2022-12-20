@@ -31,6 +31,18 @@ func (tree *treap) Insert(val int) {
 		right: nil,
 	}
 	tree.root = tree.root.merge(newNode)
+	// tree.root = mergeTwo(tree.root, newNode)
+}
+
+func (tree *treap) InsertWithPriority(val int, pr float64) {
+	newNode := &node{
+		val:   val,
+		pr:    pr,
+		left:  nil,
+		right: nil,
+	}
+	tree.root = tree.root.merge(newNode)
+	// tree.root = mergeTwo(tree.root, newNode)
 }
 
 func (tree *treap) insertDirect(val int, pr float64) {
@@ -92,31 +104,83 @@ func (n *node) split(val int) (*node, *node) {
 
 func (n *node) merge(other *node) *node {
 	if n == nil {
-		return other
+		return other.dup()
 	} else if other == nil {
-		return n
+		return n.dup()
 	}
 
 	if n.pr > other.pr {
 		if n.val > other.val {
+			n.right = n.right.merge(other.right)
+			otherRight := other.right
+			other.right = nil
 			n.left = n.left.merge(other)
-		} else if n.val < other.val {
-			n.right = n.right.merge(other)
+			other.right = otherRight
 		} else {
-			panic("duplicated element for merge-1")
+			n.left = n.left.merge(other.left)
+			otherLeft := other.left
+			other.left = nil
+			n.right = n.right.merge(other)
+			other.left = otherLeft
 		}
 		return n
 	} else {
 		if other.val > n.val {
+			other.right = other.right.merge(n.right)
+			nRight := n.right
+			n.right = nil
 			other.left = other.left.merge(n)
-		} else if other.val < n.val {
-			other.right = other.right.merge(n)
+			n.right = nRight
 		} else {
-			panic("duplicated element for merge-2")
+			other.left = other.left.merge(n.left)
+			nLeft := n.left
+			n.left = nil
+			other.right = other.right.merge(n)
+			n.left = nLeft
 		}
 		return other
 	}
 }
+
+// func mergeTwo(n, other *node) *node {
+// 	if n == nil {
+// 		return other.dup()
+// 	} else if other == nil {
+// 		return n.dup()
+// 	}
+
+// 	if n.pr > other.pr {
+// 		if n.val > other.val {
+// 			n.right = n.right.merge(other.right)
+// 			otherRight := other.right
+// 			other.right = nil
+// 			n.left = n.left.merge(other)
+// 			other.right = otherRight
+// 		} else {
+// 			n.left = n.left.merge(other.left)
+// 			otherLeft := other.left
+// 			other.left = nil
+// 			n.right = n.right.merge(other)
+// 			other.left = otherLeft
+// 		}
+// 		return n
+// 	} else {
+// 		if other.val > n.val {
+// 			other.right = other.right.merge(n.right)
+// 			nRight := n.right
+// 			n.right = nil
+// 			other.left = other.left.merge(n)
+// 			n.right = nRight
+// 		} else {
+// 			other.left = other.left.merge(n.left)
+// 			nLeft := n.left
+// 			n.left = nil
+// 			other.right = other.right.merge(n)
+// 			n.left = nLeft
+// 		}
+// 		return other
+// 	}
+// }
 
 func (n *node) searchNode(val int) *node {
 	if n == nil {
@@ -159,23 +223,23 @@ func (n *node) checkForInvariants() bool {
 	}
 
 	result := true
-	if n.left != nil && n.left.val > n.val {
-		fmt.Printf("Node %v has an invalid value from the left - %d\n", n, n.left.val)
+	if !n.left.checkForMaxValue(n.val) {
+		fmt.Printf("Node %v has an invalid value in the left subtree\n", n)
 		result = false
 	}
 
-	if n.right != nil && n.right.val < n.val {
-		fmt.Printf("Node %v has an invalid value from the right - %d\n", n, n.right.val)
+	if !n.right.checkForMinValue(n.val) {
+		fmt.Printf("Node %v has an invalid value in the right subtree\n", n)
 		result = false
 	}
 
-	if n.left != nil && n.left.pr > n.pr {
-		fmt.Printf("Node %v has an invalid priority from the left - %v\n", n, n.left.pr)
+	if !n.left.checkForMaxPriority(n.pr) {
+		fmt.Printf("Node %v has an invalid priority in the left subtree\n", n)
 		result = false
 	}
 
-	if n.right != nil && n.right.pr > n.pr {
-		fmt.Printf("Node %v has an invalid priority from the right - %v\n", n, n.left.pr)
+	if !n.right.checkForMaxPriority(n.pr) {
+		fmt.Printf("Node %v has an invalid priority in the right subtree\n", n)
 		result = false
 	}
 
@@ -183,4 +247,28 @@ func (n *node) checkForInvariants() bool {
 	result = result && n.right.checkForInvariants()
 
 	return result
+}
+
+func (n *node) checkForMaxValue(max int) bool {
+	if n == nil {
+		return true
+	} else {
+		return n.val < max && n.left.checkForMaxValue(max) && n.right.checkForMaxValue(max)
+	}
+}
+
+func (n *node) checkForMinValue(min int) bool {
+	if n == nil {
+		return true
+	} else {
+		return n.val > min && n.left.checkForMinValue(min) && n.right.checkForMinValue(min)
+	}
+}
+
+func (n *node) checkForMaxPriority(max float64) bool {
+	if n == nil {
+		return true
+	} else {
+		return n.pr < max && n.left.checkForMaxPriority(max) && n.right.checkForMaxPriority(max)
+	}
 }

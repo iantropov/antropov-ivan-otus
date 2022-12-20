@@ -73,15 +73,15 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	start := time.Now()
 	startTotal := start
 	for _, n := range numbers {
-		// fmt.Printf("============= WILL INSERT (%d)  =============\n", n)
+		fmt.Printf("============= WILL INSERT (%d)  =============\n", n)
 		tree.Insert(n)
-		// if !tree.CheckForInvariants() {
-		// 	tree.DumpValuesInDetails()
-		// 	panic("invalid tree")
-		// }
+		if !tree.CheckForInvariants() {
+			tree.DumpValuesInDetails()
+			panic("invalid tree")
+		}
 
-		// fmt.Printf("============= AFTER INSERT (%d)  =============\n", n)
-		// tree.DumpValuesInDetails()
+		fmt.Printf("============= AFTER INSERT (%d)  =============\n", n)
+		tree.DumpValuesInDetails()
 	}
 	elapsed := time.Since(start)
 	fmt.Println("Insertion Time for "+name, elapsed)
