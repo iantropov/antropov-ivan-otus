@@ -9,7 +9,7 @@ import (
 	"other-trees/tree"
 )
 
-const N = 30
+const N = 100_000
 
 func main() {
 	fmt.Println("Hello from eleventh homework!")
@@ -73,15 +73,15 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	start := time.Now()
 	startTotal := start
 	for _, n := range numbers {
-		fmt.Printf("============= WILL INSERT (%d)  =============\n", n)
+		// fmt.Printf("============= WILL INSERT (%d)  =============\n", n)
 		tree.Insert(n)
-		if !tree.CheckForInvariants() {
-			tree.DumpValuesInDetails()
-			panic("invalid tree")
-		}
+		// if !tree.CheckForInvariants() {
+		// 	tree.DumpValuesInDetails()
+		// 	panic("invalid tree")
+		// }
 
-		fmt.Printf("============= AFTER INSERT (%d)  =============\n", n)
-		tree.DumpValuesInDetails()
+		// fmt.Printf("============= AFTER INSERT (%d)  =============\n", n)
+		// tree.DumpValuesInDetails()
 	}
 	elapsed := time.Since(start)
 	fmt.Println("Insertion Time for "+name, elapsed)
@@ -97,23 +97,23 @@ func measureTree(tree tree.Tree, name string, numbers []int) {
 	copy(deleteNumbers, numbers)
 	rand.Shuffle(N, func(i, j int) { deleteNumbers[i], deleteNumbers[j] = deleteNumbers[j], deleteNumbers[i] })
 
-	if !tree.CheckForInvariants() {
-		tree.DumpValuesInDetails()
-		panic("invalid tree")
-	}
+	// if !tree.CheckForInvariants() {
+	// 	tree.DumpValuesInDetails()
+	// 	panic("invalid tree")
+	// }
 
 	// tree.DumpValuesInDetails()
 	start = time.Now()
 	for i := 0; i < N/10; i++ {
 		num := rand.Intn(N)
 		// num := deleteNumbers[i]
-		fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
+		// fmt.Printf("============= WILL REMOVE (%d)  =============\n", num)
 		tree.Remove(num)
-		fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
-		if !tree.CheckForInvariants() {
-			tree.DumpValuesInDetails()
-			panic("invalid tree")
-		}
+		// fmt.Printf("============= AFTER REMOVAL (%d)  =============\n", num)
+		// if !tree.CheckForInvariants() {
+		// 	tree.DumpValuesInDetails()
+		// 	panic("invalid tree")
+		// }
 	}
 	elapsed = time.Since(start)
 	fmt.Println("Remove Time for "+name, elapsed)

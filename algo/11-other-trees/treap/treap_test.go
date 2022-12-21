@@ -17,11 +17,12 @@ func TestTreapInsertion2(t *testing.T) {
 	tree.insertDirect(29, 0.8)
 	tree.insertDirect(15, 0.7)
 	tree.insertDirect(10, 0.6)
-	tree.insertDirect(26, 0.6)
+	tree.insertDirect(26, 0.5)
 	checkInvariants(t, tree)
 
 	tree.InsertWithPriority(24, 0.85)
 	checkInvariants(t, tree)
+	tree.DumpValuesInDetails()
 }
 
 func TestTreapRemove(t *testing.T) {

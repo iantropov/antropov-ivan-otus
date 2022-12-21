@@ -30,7 +30,18 @@ func (tree *treap) Insert(val int) {
 		left:  nil,
 		right: nil,
 	}
-	tree.root = tree.root.merge(newNode)
+	l, r := tree.root.split(val)
+
+	// fmt.Println("LEFT")
+	// l.dumpValuesInDetails()
+	// fmt.Println("RIGHT")
+	// r.dumpValuesInDetails()
+
+	l = l.merge(newNode)
+	// fmt.Println("AFTER MERGE")
+	// l.dumpValuesInDetails()
+
+	tree.root = l.merge(r)
 	// tree.root = mergeTwo(tree.root, newNode)
 }
 
@@ -41,7 +52,18 @@ func (tree *treap) InsertWithPriority(val int, pr float64) {
 		left:  nil,
 		right: nil,
 	}
-	tree.root = tree.root.merge(newNode)
+	l, r := tree.root.split(val)
+
+	fmt.Println("LEFT")
+	l.dumpValuesInDetails()
+	fmt.Println("RIGHT")
+	r.dumpValuesInDetails()
+
+	l = l.merge(newNode)
+	fmt.Println("AFTER MERGE")
+	l.dumpValuesInDetails()
+
+	tree.root = l.merge(r)
 	// tree.root = mergeTwo(tree.root, newNode)
 }
 
@@ -85,7 +107,11 @@ func (n *node) insertDirect(nn *node) *node {
 func (n *node) split(val int) (*node, *node) {
 	var leftTree, rightTree *node
 
-	fmt.Printf("Will split %v with left - %v, right - %v\n", n, n.left, n.right)
+	if n == nil {
+		return nil, nil
+	}
+
+	// fmt.Printf("Will split %v with left - %v, right - %v\n", n, n.left, n.right)
 
 	if n.val < val {
 		leftTree = &node{n.val, n.pr, nil, nil}
@@ -102,44 +128,26 @@ func (n *node) split(val int) (*node, *node) {
 	return leftTree, rightTree
 }
 
-func (n *node) merge(other *node) *node {
-	if n == nil {
-		return other.dup()
-	} else if other == nil {
-		return n.dup()
+func (l *node) merge(r *node) *node {
+	if l == nil {
+		return r
+	} else if r == nil {
+		return l
 	}
 
-	if n.pr > other.pr {
-		if n.val > other.val {
-			n.right = n.right.merge(other.right)
-			otherRight := other.right
-			other.right = nil
-			n.left = n.left.merge(other)
-			other.right = otherRight
-		} else {
-			n.left = n.left.merge(other.left)
-			otherLeft := other.left
-			other.left = nil
-			n.right = n.right.merge(other)
-			other.left = otherLeft
-		}
-		return n
+	newNode := &node{}
+	if l.pr > r.pr {
+		newNode.val = l.val
+		newNode.pr = l.pr
+		newNode.left = l.left
+		newNode.right = l.right.merge(r)
 	} else {
-		if other.val > n.val {
-			other.right = other.right.merge(n.right)
-			nRight := n.right
-			n.right = nil
-			other.left = other.left.merge(n)
-			n.right = nRight
-		} else {
-			other.left = other.left.merge(n.left)
-			nLeft := n.left
-			n.left = nil
-			other.right = other.right.merge(n)
-			n.left = nLeft
-		}
-		return other
+		newNode.val = r.val
+		newNode.pr = r.pr
+		newNode.right = r.right
+		newNode.left = l.merge(r.left)
 	}
+	return newNode
 }
 
 // func mergeTwo(n, other *node) *node {
