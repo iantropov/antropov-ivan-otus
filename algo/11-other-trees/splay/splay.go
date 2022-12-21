@@ -40,7 +40,7 @@ func (tree *splayTree) Remove(val int) {
 	}
 
 	tree.root = tree.root.splay(val)
-	tree.root = merge(tree.root.left, tree.root.right)
+	tree.root = tree.root.left.merge(tree.root.right)
 }
 
 func (t *splayTree) DumpValuesInDetails() {
@@ -186,48 +186,22 @@ func (node *node) split(val int) (*node, *node) {
 	return splitNode.left, splitNode.right
 }
 
-func (n *node) dup() *node {
+func (n *node) merge(other *node) *node {
 	if n == nil {
-		return nil
+		return other
 	}
-
-	newNode := &node{value: n.value}
-	newNode.left = n.left.dup()
-	newNode.right = n.right.dup()
-
-	return newNode
+	maxNode := n.findMax()
+	newRoot := n.splay(maxNode.value)
+	newRoot.right = other
+	return newRoot
 }
 
-func merge(left, right *node) *node {
-	if left == nil {
-		return right.dup()
-	} else if right == nil {
-		return left.dup()
+func (n *node) findMax() *node {
+	max := n
+	for ; max.right != nil; max = max.right {
+
 	}
-
-	newNode := &node{}
-	if left.value == right.value {
-		newNode.value = left.value
-		newNode.left = merge(left.left, right.left)
-		newNode.right = merge(left.right, right.right)
-		return newNode
-	}
-
-	if left.value > right.value {
-		left, right = right, left
-	}
-
-	newNode.value = left.value
-	newNode.left = merge(left.left, right.left)
-
-	rightLeft := right.left
-	right.left = nil
-
-	newNode.right = merge(left.right, right)
-
-	right.left = rightLeft
-
-	return newNode
+	return max
 }
 
 func (n *node) dumpValuesInDetails() {

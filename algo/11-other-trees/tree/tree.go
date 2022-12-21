@@ -5,5 +5,5 @@ type Tree interface {
 	Search(val int) bool
 	Remove(val int)
 	DumpValuesInDetails()
-	CheckForInvariants() bool
+	// CheckForInvariants() bool
 }
