@@ -1,0 +1,52 @@
+%% circuitBreakerBefore
+
+sequenceDiagram
+    Пользователь-xСервис: Запрос на оценку
+    loop Какой-то интервал
+        Пользователь--xСервис: Запрос на оценку
+    end
+
+%% circuitBreakerAfter
+
+sequenceDiagram
+    Пользователь->>Circuit Breaker: Запрос на оценку
+    Circuit Breaker-xСервис: Запрос на оценку
+    activate Circuit Breaker
+    Пользователь->>Circuit Breaker: Запрос на оценку
+    Circuit Breaker->>Пользователь: Сервис недоступен
+    Пользователь->>Circuit Breaker: Запрос на оценку
+    Circuit Breaker->>Пользователь: Сервис недоступен
+    Пользователь->>Circuit Breaker: Запрос на оценку
+    Circuit Breaker->>Сервис: Запрос на оценку
+    Сервис->>Circuit Breaker: Успешный ответ
+    Circuit Breaker->>Пользователь: Успешный ответ
+    deactivate Circuit Breaker
+
+%% requestIdBefore
+
+sequenceDiagram
+    Пользователь->>Сервис: Создать заявку
+    activate Сервис
+    Note right of Сервис: Создаётся заявка
+    Сервис-xПользователь: Заявка создана
+    deactivate Сервис
+    Note left of Пользователь: Сетевая ошибка
+    Пользователь->>Сервис: Создать заявку
+    activate Сервис
+    Note right of Сервис: Создаётся дубликат заявки
+    Сервис->>Пользователь: Заявка создана
+    deactivate Сервис
+
+%% requiredIdAfter
+
+sequenceDiagram
+    Пользователь->>Сервис: Получить requestId
+    Сервис->>Пользователь: requestId
+    Пользователь->>Сервис: Создать заявку (+requestId)
+    activate Сервис
+    Note right of Сервис: Создаётся заявка
+    Сервис-xПользователь: Заявка создана
+    deactivate Сервис
+    Note left of Пользователь: Сетевая ошибка
+    Пользователь->>Сервис: Создать заявку (+requestId)
+    Сервис-xПользователь: Дублирование requestId
