@@ -5,10 +5,11 @@ import (
 	"strconv"
 )
 
-type Hashtable[K, V any] interface {
+type Hashtable[K comparable, V any] interface {
 	Put(key K, value V)
 	Get(key K) (V, bool)
 	Remove(key K)
+	Size() int
 }
 
 func GetHashCode(value interface{}) int {

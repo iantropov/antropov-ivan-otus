@@ -17,7 +17,7 @@ type Hashtable[K comparable, V any] struct {
 	emptyValue V
 }
 
-const LOAD_COEFF = .75
+const LOAD_COEFF = .5
 const INITIAL_NODES_SIZE = 11
 
 func NewHashtable[K comparable, V any]() *Hashtable[K, V] {
@@ -71,11 +71,11 @@ func (table *Hashtable[K, V]) Remove(key K) {
 	idx := hashCode % len(table.mapNodes)
 	for ; table.mapNodes[idx] != nil; idx = (idx + 1) % len(table.mapNodes) {
 		if !table.mapNodes[idx].deleted && table.mapNodes[idx].key == key {
-			break
+			table.mapNodes[idx].deleted = true
+			table.size--
+			return
 		}
 	}
-	table.mapNodes[idx].deleted = true
-	table.size--
 }
 
 func (table *Hashtable[K, V]) Size() int {
@@ -85,11 +85,13 @@ func (table *Hashtable[K, V]) Size() int {
 func (table *Hashtable[K, V]) rehash() {
 	newMapNodes := make([]*mapNode[K, V], len(table.mapNodes)*2+1)
 	for _, oldNode := range table.mapNodes {
-		hashCode := hashtable.GetHashCode(oldNode.key)
-		newIdx := hashCode % len(newMapNodes)
-		for ; newMapNodes[newIdx] != nil; newIdx = (newIdx + 1) % len(newMapNodes) {
+		if oldNode != nil {
+			hashCode := hashtable.GetHashCode(oldNode.key)
+			newIdx := hashCode % len(newMapNodes)
+			for ; newMapNodes[newIdx] != nil; newIdx = (newIdx + 1) % len(newMapNodes) {
+			}
+			newMapNodes[newIdx] = &mapNode[K, V]{oldNode.key, oldNode.value, false}
 		}
-		newMapNodes[newIdx] = &mapNode[K, V]{oldNode.key, oldNode.value, false}
 	}
 	table.mapNodes = newMapNodes
 }
