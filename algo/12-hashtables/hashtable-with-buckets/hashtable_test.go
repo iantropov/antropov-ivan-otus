@@ -6,22 +6,22 @@ import (
 )
 
 func TestHashtableEmptiness(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 	assertSize(t, table, 0)
 }
 
 func TestHashtablePut(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[int, string]()
 
-	assertAbsence(t, table, "key1")
-	table.Put("key1", "value1")
-	assertPresence(t, table, "key1", "value1")
+	assertAbsence(t, table, 153)
+	table.Put(153, "value1")
+	assertPresence(t, table, 153, "value1")
 
 	assertSize(t, table, 1)
 }
 
 func TestHashtableMultiplePut(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 
 	table.Put("key1", "value1")
 	table.Put("key2", "value2")
@@ -37,7 +37,7 @@ func TestHashtableMultiplePut(t *testing.T) {
 }
 
 func TestHashtableRePut(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 
 	table.Put("key1", "value1")
 	table.Put("key2", "value2")
@@ -48,7 +48,7 @@ func TestHashtableRePut(t *testing.T) {
 }
 
 func TestHashtableRemove(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 
 	table.Put("key1", "value1")
 
@@ -59,7 +59,7 @@ func TestHashtableRemove(t *testing.T) {
 }
 
 func TestHashtableAbsentRemove(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 
 	table.Put("key1", "value1")
 	table.Put("key2", "value2")
@@ -72,7 +72,7 @@ func TestHashtableAbsentRemove(t *testing.T) {
 }
 
 func TestHashtableMultipleRemove(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 
 	table.Put("key1", "value1")
 	table.Put("key2", "value2")
@@ -91,7 +91,7 @@ func TestHashtableMultipleRemove(t *testing.T) {
 }
 
 func TestHashtableRehash(t *testing.T) {
-	table := NewHashtable()
+	table := NewHashtable[string, string]()
 
 	for i := 0; i < 20; i++ {
 		table.Put(fmt.Sprintf("key-%d", i), fmt.Sprintf("value-%d", i))
@@ -103,21 +103,21 @@ func TestHashtableRehash(t *testing.T) {
 	}
 }
 
-func assertPresence(t *testing.T, table *Hashtable, key, value string) {
+func assertPresence[K, V comparable](t *testing.T, table *Hashtable[K, V], key K, value V) {
 	valueFromTable, pr := table.Get(key)
 	if valueFromTable != value || !pr {
-		t.Errorf("Hashtable should have key = %s with value = %s", key, value)
+		t.Errorf("Hashtable should have key = %v with value = %v", key, value)
 	}
 }
 
-func assertAbsence(t *testing.T, table *Hashtable, key string) {
+func assertAbsence[K, V comparable](t *testing.T, table *Hashtable[K, V], key K) {
 	valueFromTable, pr := table.Get(key)
-	if valueFromTable != "" || pr {
-		t.Errorf("Hashtable shouldn't have key = %s", key)
+	if valueFromTable != table.emptyValue || pr {
+		t.Errorf("Hashtable shouldn't have key = %v", key)
 	}
 }
 
-func assertSize(t *testing.T, table *Hashtable, size int) {
+func assertSize[K, V comparable](t *testing.T, table *Hashtable[K, V], size int) {
 	if table.Size() != size {
 		t.Errorf("Hashtable should have size = %d", size)
 	}

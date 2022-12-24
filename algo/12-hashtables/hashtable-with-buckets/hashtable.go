@@ -3,29 +3,32 @@ package hashtableWithBuckets
 import (
 	"hash/fnv"
 	"math"
+	"strconv"
 )
 
-type bucketNode struct {
-	key, value string
-	next       *bucketNode
+type bucketNode[K comparable, V any] struct {
+	key   K
+	value V
+	next  *bucketNode[K, V]
 }
 
-type Hashtable struct {
-	buckets []*bucketNode
-	size    int
+type Hashtable[K comparable, V any] struct {
+	buckets    []*bucketNode[K, V]
+	size       int
+	emptyValue V
 }
 
 const LOAD_COEFF = .75
 const INITIAL_BUCKETS = 11
 const SUPPOSED_BUCKET_LENGTH = 8
 
-func NewHashtable() *Hashtable {
-	table := &Hashtable{}
-	table.buckets = make([]*bucketNode, INITIAL_BUCKETS)
+func NewHashtable[K comparable, V any]() *Hashtable[K, V] {
+	table := &Hashtable[K, V]{}
+	table.buckets = make([]*bucketNode[K, V], INITIAL_BUCKETS)
 	return table
 }
 
-func (table *Hashtable) Put(key, value string) {
+func (table *Hashtable[K, V]) Put(key K, value V) {
 	hashCode := getHashCode(key)
 
 	if table.isReadyToRehash() {
@@ -39,12 +42,12 @@ func (table *Hashtable) Put(key, value string) {
 		return
 	}
 
-	newNode := &bucketNode{key, value, table.buckets[idx]}
+	newNode := &bucketNode[K, V]{key, value, table.buckets[idx]}
 	table.buckets[idx] = newNode
 	table.size++
 }
 
-func (table *Hashtable) Get(key string) (string, bool) {
+func (table *Hashtable[K, V]) Get(key K) (V, bool) {
 	hashCode := getHashCode(key)
 
 	idx := hashCode % len(table.buckets)
@@ -53,10 +56,10 @@ func (table *Hashtable) Get(key string) (string, bool) {
 		return node.value, true
 	}
 
-	return "", false
+	return table.emptyValue, false
 }
 
-func (table *Hashtable) Remove(key string) {
+func (table *Hashtable[K, V]) Remove(key K) {
 	hashCode := getHashCode(key)
 
 	idx := hashCode % len(table.buckets)
@@ -79,7 +82,7 @@ func (table *Hashtable) Remove(key string) {
 	}
 }
 
-func (head *bucketNode) getNode(key string) *bucketNode {
+func (head *bucketNode[K, V]) getNode(key K) *bucketNode[K, V] {
 	if head == nil {
 		return nil
 	}
@@ -93,29 +96,38 @@ func (head *bucketNode) getNode(key string) *bucketNode {
 	return nil
 }
 
-func (table *Hashtable) Size() int {
+func (table *Hashtable[K, V]) Size() int {
 	return table.size
 }
 
-func (table *Hashtable) rehash() {
-	newBuckets := make([]*bucketNode, len(table.buckets)*2+1)
+func (table *Hashtable[K, V]) rehash() {
+	newBuckets := make([]*bucketNode[K, V], len(table.buckets)*2+1)
 	for _, oldBucket := range table.buckets {
 		for oldNode := oldBucket; oldNode != nil; oldNode = oldNode.next {
 			hashCode := getHashCode(oldNode.key)
 			newIdx := hashCode % len(newBuckets)
-			newBuckets[newIdx] = &bucketNode{oldNode.key, oldNode.value, newBuckets[newIdx]}
+			newBuckets[newIdx] = &bucketNode[K, V]{oldNode.key, oldNode.value, newBuckets[newIdx]}
 		}
 	}
 	table.buckets = newBuckets
 }
 
-func (table *Hashtable) isReadyToRehash() bool {
+func (table *Hashtable[K, V]) isReadyToRehash() bool {
 	threshhold := math.Floor(float64(len(table.buckets)*SUPPOSED_BUCKET_LENGTH) * LOAD_COEFF)
 	return table.size > int(threshhold)
 }
 
-func getHashCode(value string) int {
+func getHashCode(value interface{}) int {
 	h := fnv.New32a()
-	h.Write([]byte(value))
+	stringValue := ""
+	switch typedValue := value.(type) {
+	case string:
+		stringValue = typedValue
+	case int:
+		stringValue = strconv.Itoa(typedValue)
+	default:
+		panic("invalid key type")
+	}
+	h.Write([]byte(stringValue))
 	return int(h.Sum32())
 }
