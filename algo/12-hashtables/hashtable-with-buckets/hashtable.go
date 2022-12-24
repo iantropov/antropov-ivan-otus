@@ -1,9 +1,8 @@
 package hashtableWithBuckets
 
 import (
-	"hash/fnv"
+	"hashtables/hashtable"
 	"math"
-	"strconv"
 )
 
 type bucketNode[K comparable, V any] struct {
@@ -29,7 +28,7 @@ func NewHashtable[K comparable, V any]() *Hashtable[K, V] {
 }
 
 func (table *Hashtable[K, V]) Put(key K, value V) {
-	hashCode := getHashCode(key)
+	hashCode := hashtable.GetHashCode(key)
 
 	if table.isReadyToRehash() {
 		table.rehash()
@@ -48,7 +47,7 @@ func (table *Hashtable[K, V]) Put(key K, value V) {
 }
 
 func (table *Hashtable[K, V]) Get(key K) (V, bool) {
-	hashCode := getHashCode(key)
+	hashCode := hashtable.GetHashCode(key)
 
 	idx := hashCode % len(table.buckets)
 	node := table.buckets[idx].getNode(key)
@@ -60,7 +59,7 @@ func (table *Hashtable[K, V]) Get(key K) (V, bool) {
 }
 
 func (table *Hashtable[K, V]) Remove(key K) {
-	hashCode := getHashCode(key)
+	hashCode := hashtable.GetHashCode(key)
 
 	idx := hashCode % len(table.buckets)
 	if table.buckets[idx] == nil {
@@ -104,7 +103,7 @@ func (table *Hashtable[K, V]) rehash() {
 	newBuckets := make([]*bucketNode[K, V], len(table.buckets)*2+1)
 	for _, oldBucket := range table.buckets {
 		for oldNode := oldBucket; oldNode != nil; oldNode = oldNode.next {
-			hashCode := getHashCode(oldNode.key)
+			hashCode := hashtable.GetHashCode(oldNode.key)
 			newIdx := hashCode % len(newBuckets)
 			newBuckets[newIdx] = &bucketNode[K, V]{oldNode.key, oldNode.value, newBuckets[newIdx]}
 		}
@@ -115,19 +114,4 @@ func (table *Hashtable[K, V]) rehash() {
 func (table *Hashtable[K, V]) isReadyToRehash() bool {
 	threshhold := math.Floor(float64(len(table.buckets)*SUPPOSED_BUCKET_LENGTH) * LOAD_COEFF)
 	return table.size > int(threshhold)
-}
-
-func getHashCode(value interface{}) int {
-	h := fnv.New32a()
-	stringValue := ""
-	switch typedValue := value.(type) {
-	case string:
-		stringValue = typedValue
-	case int:
-		stringValue = strconv.Itoa(typedValue)
-	default:
-		panic("invalid key type")
-	}
-	h.Write([]byte(stringValue))
-	return int(h.Sum32())
 }
