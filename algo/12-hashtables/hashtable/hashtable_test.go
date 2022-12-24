@@ -26,6 +26,12 @@ func TestStringHashtables(t *testing.T) {
 				return hashtableWithOpenAddressing.NewHashtable[string, string]()
 			},
 		},
+		{
+			name: "[string, string] with open addressing (quadratic probe)",
+			buildTable: func() hashtable.Hashtable[string, string] {
+				return hashtableWithOpenAddressing.NewHashtableWithQuadraticProbe[string, string]()
+			},
+		},
 	}
 
 	for _, tc := range tests {

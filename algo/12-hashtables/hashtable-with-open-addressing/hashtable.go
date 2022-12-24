@@ -28,6 +28,13 @@ func NewHashtable[K comparable, V any]() *Hashtable[K, V] {
 	return table
 }
 
+func NewHashtableWithQuadraticProbe[K comparable, V any]() *Hashtable[K, V] {
+	table := &Hashtable[K, V]{}
+	table.mapNodes = make([]*mapNode[K, V], INITIAL_NODES_SIZE)
+	table.probe = quadraticProbe
+	return table
+}
+
 func (table *Hashtable[K, V]) Put(key K, value V) {
 	hashCode := hashtable.GetHashCode(key)
 
@@ -122,4 +129,8 @@ func (table *Hashtable[K, V]) isReadyToRehash() bool {
 
 func linearProbe(hashCode, idx, mod int) int {
 	return (hashCode + idx) % mod
+}
+
+func quadraticProbe(hashCode, idx, mod int) int {
+	return (hashCode + idx + idx*idx) % mod
 }
