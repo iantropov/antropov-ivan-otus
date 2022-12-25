@@ -103,6 +103,16 @@ func TestStringHashtables(t *testing.T) {
 				assertSize(t, table, 2)
 			})
 
+			t.Run("TestHashtablePutAfterRemove", func(t *testing.T) {
+				table := tc.buildTable()
+
+				table.Put("key1", "value1")
+				table.Remove("key1")
+				table.Put("key1", "value1")
+				assertPresence(t, table, "key1", "value1")
+				assertSize(t, table, 1)
+			})
+
 			t.Run("TestHashtableMultipleRemove", func(t *testing.T) {
 				table := tc.buildTable()
 

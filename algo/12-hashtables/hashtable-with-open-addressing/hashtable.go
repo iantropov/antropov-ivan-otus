@@ -50,8 +50,13 @@ func (table *Hashtable[K, V]) Put(key K, value V) {
 			break
 		}
 
-		if table.mapNodes[idx].key == key {
+		if table.mapNodes[idx].key == key && !table.mapNodes[idx].deleted {
 			table.mapNodes[idx].value = value
+			return
+		} else if table.mapNodes[idx].key == key {
+			table.mapNodes[idx].value = value
+			table.mapNodes[idx].deleted = false
+			table.size++
 			return
 		} else if table.mapNodes[idx].deleted && deletedIdx != -1 {
 			deletedIdx = idx
