@@ -42,7 +42,7 @@ func (table *Hashtable[K, V]) Put(key K, value V) {
 		table.rehash()
 	}
 
-	idx := table.probe(hashCode, 0, len(table.mapNodes))
+	var idx int
 	deletedIdx := -1
 	for i := 0; ; i++ {
 		idx = table.probe(hashCode, i, len(table.mapNodes))
@@ -68,12 +68,31 @@ func (table *Hashtable[K, V]) Put(key K, value V) {
 
 func (table *Hashtable[K, V]) Get(key K) (V, bool) {
 	hashCode := hashtable.GetHashCode(key)
-	idx := table.findIdxForKey(key, hashCode)
-	if idx != -1 {
-		return table.mapNodes[idx].value, true
+	deletedIdx := -1
+	var idx int
+	for i := 0; ; i++ {
+		idx = table.probe(hashCode, i, len(table.mapNodes))
+		if table.mapNodes[idx] == nil {
+			break
+		}
+
+		if table.mapNodes[idx].key == key && !table.mapNodes[idx].deleted {
+			break
+		} else if table.mapNodes[idx].deleted && deletedIdx != -1 {
+			deletedIdx = idx
+		}
 	}
 
-	return table.emptyValue, false
+	if table.mapNodes[idx] == nil {
+		return table.emptyValue, false
+	}
+
+	if deletedIdx != -1 {
+		table.mapNodes[idx], table.mapNodes[deletedIdx] = table.mapNodes[deletedIdx], table.mapNodes[idx]
+		idx, deletedIdx = deletedIdx, idx
+	}
+
+	return table.mapNodes[idx].value, true
 }
 
 func (table *Hashtable[K, V]) Remove(key K) {
