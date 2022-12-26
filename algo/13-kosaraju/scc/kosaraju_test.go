@@ -21,5 +21,5 @@ func TestKosaraju(t *testing.T) {
 
 	result := kosaraju.Kosaraju(g)
 
-	require.Equal(t, result, []int{0, 0, 0, 3, 3, 5, 5, 7})
+	require.Equal(t, []int{0, 0, 0, 3, 3, 5, 5, 7}, result)
 }
