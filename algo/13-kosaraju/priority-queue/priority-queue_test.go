@@ -33,41 +33,56 @@ func testEnqueue(pq *PriorityQueue[string], t *testing.T) {
 }
 
 func testDequeue(pq *PriorityQueue[string], t *testing.T) {
-	value, error := pq.Dequeue()
-	if value != "This" {
+	value, priority, error := pq.Dequeue()
+	if value != "interesting!" {
 		t.Errorf("Invalid value - %v", value)
+	}
+	if priority != 3 {
+		t.Errorf("Invalid priority - %v", priority)
 	}
 	if error != nil {
 		t.Errorf("Failed to dequeue - %v", error)
 	}
 
-	value, error = pq.Dequeue()
-	if value != "test" {
-		t.Errorf("Invalid value - %v", value)
-	}
-	if error != nil {
-		t.Errorf("Failed to dequeue - %v", error)
-	}
-
-	value, error = pq.Dequeue()
-	if value != "is" {
-		t.Errorf("Invalid value - %v", value)
-	}
-	if error != nil {
-		t.Errorf("Failed to dequeue - %v", error)
-	}
-
-	value, error = pq.Dequeue()
+	value, priority, error = pq.Dequeue()
 	if value != "very" {
 		t.Errorf("Invalid value - %v", value)
 	}
+	if priority != 7 {
+		t.Errorf("Invalid priority - %v", priority)
+	}
 	if error != nil {
 		t.Errorf("Failed to dequeue - %v", error)
 	}
 
-	value, error = pq.Dequeue()
-	if value != "interesting!" {
+	value, priority, error = pq.Dequeue()
+	if value != "test" {
 		t.Errorf("Invalid value - %v", value)
+	}
+	if priority != 8 {
+		t.Errorf("Invalid priority - %v", priority)
+	}
+	if error != nil {
+		t.Errorf("Failed to dequeue - %v", error)
+	}
+
+	value, priority, error = pq.Dequeue()
+	if value != "is" {
+		t.Errorf("Invalid value - %v", value)
+	}
+	if priority != 8 {
+		t.Errorf("Invalid priority - %v", priority)
+	}
+	if error != nil {
+		t.Errorf("Failed to dequeue - %v", error)
+	}
+
+	value, priority, error = pq.Dequeue()
+	if value != "This" {
+		t.Errorf("Invalid value - %v", value)
+	}
+	if priority != 10 {
+		t.Errorf("Invalid priority - %v", priority)
 	}
 	if error != nil {
 		t.Errorf("Failed to dequeue - %v", error)

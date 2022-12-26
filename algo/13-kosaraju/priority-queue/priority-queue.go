@@ -71,25 +71,29 @@ func (pq *PriorityQueue[T]) Enqueue(item T, priority int) error {
 	return nil
 }
 
-func (pq *PriorityQueue[T]) Dequeue() (T, error) {
+func (pq *PriorityQueue[T]) Dequeue() (T, int, error) {
 	if pq.length == 0 {
-		return pq.zeroValue, errors.New("empty priority queue")
+		return pq.zeroValue, 0, errors.New("empty priority queue")
 	}
 
-	for i := pq.nodes.Length() - 1; i >= 0; i-- {
+	for i := 0; i < pq.nodes.Length(); i++ {
 		node, error := pq.nodes.Get(i)
 		if error != nil {
-			return pq.zeroValue, error
+			return pq.zeroValue, 0, error
 		}
 
 		if node.length > 0 {
 			res := node.pull()
 			pq.length--
-			return res, nil
+			return res, node.priority, nil
 		}
 	}
 
-	return pq.zeroValue, errors.New("failed to dequeue")
+	return pq.zeroValue, 0, errors.New("failed to dequeue")
+}
+
+func (pq *PriorityQueue[T]) Length() int {
+	return pq.length
 }
 
 func (pqn *PriorityQueueNode[T]) append(item T) {
