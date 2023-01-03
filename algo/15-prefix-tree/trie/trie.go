@@ -1,11 +1,13 @@
 package trie
 
+const ASCII_BASE = 97
+
 type Trie struct {
 	root *node
 }
 
 type node struct {
-	chars [123]*node
+	chars [26]*node
 	end   bool
 }
 
@@ -17,10 +19,10 @@ func Constructor() Trie {
 func (this *Trie) Insert(word string) {
 	n := this.root
 	for _, c := range word {
-		if n.chars[c] == nil {
-			n.chars[c] = new(node)
+		if n.chars[c-ASCII_BASE] == nil {
+			n.chars[c-ASCII_BASE] = new(node)
 		}
-		n = n.chars[c]
+		n = n.chars[c-ASCII_BASE]
 	}
 	n.end = true
 }
@@ -37,7 +39,7 @@ func (this *Trie) StartsWith(prefix string) bool {
 func (this *Trie) follow(s string) *node {
 	n := this.root
 	for _, c := range s {
-		n = n.chars[c]
+		n = n.chars[c-ASCII_BASE]
 		if n == nil {
 			return nil
 		}
