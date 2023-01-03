@@ -15,4 +15,7 @@ func TestTriemap(t *testing.T) {
 	require.Equal(t, 1, triemap.Get("hello"))
 	require.Equal(t, 2, triemap.Get("asd"))
 	require.Equal(t, 0, triemap.Get("asdasd"))
+
+	triemap.Remove("asd")
+	require.Equal(t, 0, triemap.Get("asd"))
 }
