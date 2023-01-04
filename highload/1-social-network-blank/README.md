@@ -8,13 +8,15 @@
 + Marshal/unmarshal JSON
 + Validate HTTP requests
 + Add dockercompose with MySQL
-+ Connect to MySQL from code
-- Add users table
-- Save users into the table
++ Connect to MySQL from code - https://go.dev/doc/tutorial/database-access
++ Add users table
++ Save users into the table
++ Fix utf8 problem
+- Secure storing of passwords
 - Implement user/register
 - Implement login
 - Implement user/get
-- Check for SQL Injections
+- Check for SQL Injections - https://go.dev/doc/database/sql-injection
 - Clean up
 - Write ReadMe
 - Add Postman collection

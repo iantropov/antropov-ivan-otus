@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"social-network/params"
 	"social-network/storage"
 )
 
@@ -12,15 +13,6 @@ const PORT = ":3000"
 
 type people struct {
 	Number int `json:"number"`
-}
-
-type UserParams struct {
-	FirstName  *string `json:"first_name"`
-	SecondName *string `json:"second_name"`
-	Age        *int    `json:"age"`
-	Biography  string  `json:"biography"`
-	City       string  `json:"city"`
-	Password   *string `json:"password"`
 }
 
 type UserResponse struct {
@@ -70,7 +62,7 @@ func handleUserRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var params UserParams
+	var params params.UserParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -84,7 +76,14 @@ func handleUserRegister(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Received User with params:", params)
 
-	userResponse := UserResponse{"e4d2e6b0-cde2-42c5-aac3-0b8316f21e58"}
+	userId, err := storage.CreateUser(params)
+	if err != nil {
+		fmt.Println("Failed to create User:", err)
+		http.Error(w, "Internal Error", http.StatusInternalServerError)
+		return
+	}
+
+	userResponse := UserResponse{userId}
 
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(userResponse)
