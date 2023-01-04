@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"social-network/storage"
 )
 
 const PORT = ":3000"
@@ -39,6 +40,9 @@ func main() {
 	fmt.Println(people1.Number)
 
 	fmt.Println("Hello from the social network!")
+
+	storage.Init()
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/hello", handleHello)
 	mux.HandleFunc("/bye", handleBye)

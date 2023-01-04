@@ -7,8 +7,8 @@
 + Handle HTTP requests
 + Marshal/unmarshal JSON
 + Validate HTTP requests
-- Add dockercompose with MySQL
-- Connect to MySQL
++ Add dockercompose with MySQL
++ Connect to MySQL from code
 - Add users table
 - Save users into the table
 - Implement user/register
