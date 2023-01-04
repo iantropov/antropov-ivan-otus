@@ -14,12 +14,12 @@ type people struct {
 }
 
 type UserParams struct {
-	FirstName  string `json:"first_name"`
-	SecondName string `json:"second_name"`
-	Age        int    `json:"age"`
-	Biography  string `json:"biography"`
-	City       string `json:"city"`
-	Password   string `json:"password"`
+	FirstName  *string `json:"first_name"`
+	SecondName *string `json:"second_name"`
+	Age        *int    `json:"age"`
+	Biography  string  `json:"biography"`
+	City       string  `json:"city"`
+	Password   *string `json:"password"`
 }
 
 type UserResponse struct {
@@ -60,12 +60,24 @@ func handleBye(w http.ResponseWriter, r *http.Request) {
 }
 
 func handleUserRegister(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.Header().Set("Allow", "POST")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	var params UserParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	if params.FirstName == nil || params.SecondName == nil || params.Age == nil || params.Password == nil {
+		http.Error(w, "required fields are missed", http.StatusBadRequest)
+		return
+	}
+
 	fmt.Println("Received User with params:", params)
 
 	userResponse := UserResponse{"e4d2e6b0-cde2-42c5-aac3-0b8316f21e58"}
