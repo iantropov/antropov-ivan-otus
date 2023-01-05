@@ -1,17 +1,13 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
-	"social-network/auth"
+	"social-network/config"
+	"social-network/routes"
 	"social-network/storage"
-	"social-network/types"
-	"strings"
 )
-
-const PORT = ":3000"
 
 func main() {
 	fmt.Println("Hello from the social network!")
@@ -19,112 +15,11 @@ func main() {
 	storage.Init()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/user/register", handleUserRegister)
-	mux.HandleFunc("/login", handleUserLogin)
-	mux.HandleFunc("/user/get/", handleUserGet)
+	mux.HandleFunc("/user/register", routes.UserRegister)
+	mux.HandleFunc("/login", routes.Login)
+	mux.HandleFunc("/user/get/", routes.UserGet)
 
-	fmt.Println("Will serve on port", PORT)
-	err := http.ListenAndServe(PORT, mux)
+	fmt.Println("Will serve on addr", config.Config("ADDR"))
+	err := http.ListenAndServe(config.Config("ADDR"), mux)
 	log.Fatal(err)
-}
-
-func handleUserRegister(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", "POST")
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var params types.UserRegisterParams
-	err := json.NewDecoder(r.Body).Decode(&params)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if params.FirstName == nil || params.SecondName == nil || params.Age == nil || params.Password == nil {
-		http.Error(w, "required fields are missed", http.StatusBadRequest)
-		return
-	}
-
-	fmt.Println("Received User with params:", params)
-
-	userId, err := storage.CreateUser(params)
-	if err != nil {
-		fmt.Println("Failed to handle /user/register:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	userResponse := types.UserRegisterResponse{UserId: userId}
-
-	w.WriteHeader(http.StatusCreated)
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userResponse)
-}
-
-func handleUserLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", "POST")
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	var params types.UserLoginParams
-	err := json.NewDecoder(r.Body).Decode(&params)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	if params.Id == nil || params.Password == nil {
-		http.Error(w, "required fields are missed", http.StatusBadRequest)
-		return
-	}
-
-	userRecord, err := storage.LoginUser(*params.Id, *params.Password)
-	if err != nil {
-		fmt.Println("Failed to handle /login:", err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	token, err := auth.GenerateJWT(userRecord.Id)
-	if err != nil {
-		fmt.Println("Failed to handle generte JWT:", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	response := types.UserLoginResponse{Token: token}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
-}
-
-func handleUserGet(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.Header().Set("Allow", "GET")
-		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
-
-	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
-	err := auth.VerifyJWT(bearerHeader)
-	if err != nil {
-		fmt.Println("Failed to check JWT token", err)
-		w.WriteHeader(http.StatusUnauthorized)
-		return
-	}
-
-	userId := strings.TrimPrefix(r.URL.Path, "/user/get/")
-	userRecord, err := storage.GetUser(userId)
-	if err != nil {
-		fmt.Println("Failed to handle /get/user/", userId, err)
-		w.WriteHeader(http.StatusNotFound)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userRecord)
 }
