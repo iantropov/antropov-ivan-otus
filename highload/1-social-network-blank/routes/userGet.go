@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"social-network/auth"
 	"social-network/storage"
+	"social-network/types"
 	"strings"
 )
 
@@ -28,7 +29,13 @@ func UserGet(w http.ResponseWriter, r *http.Request) {
 	userRecord, err := storage.GetUser(userId)
 	if err != nil {
 		fmt.Println("Failed to handle /get/user/", userId, err)
-		w.WriteHeader(http.StatusNotFound)
+		_, ok := err.(*types.UserNotFoundError)
+		if ok {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
 		return
 	}
 

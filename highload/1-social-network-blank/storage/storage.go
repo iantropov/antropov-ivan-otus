@@ -126,7 +126,9 @@ func GetUser(userId string) (*types.UserRecord, error) {
 				return
 			}
 		} else {
-			getUserError = fmt.Errorf("getUser: %q: not_found", userId)
+			getUserError = &types.UserNotFoundError{
+				UserId: userId,
+			}
 		}
 	})
 

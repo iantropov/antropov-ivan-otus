@@ -18,9 +18,9 @@
 + Implement login
 + Implement user/get
 + Add dotenv
-- Add JWT tokens
-- Check for SQL Injections - https://go.dev/doc/database/sql-injection
-- Clean up
-- Improve error handling
++ Add JWT tokens
++ Check for SQL Injections - https://go.dev/doc/database/sql-injection
++ Improve error handling
++ Clean up
++ Add Postman collection
 - Write ReadMe
-- Add Postman collection
