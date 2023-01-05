@@ -17,8 +17,10 @@
 + Implement user/register
 + Implement login
 + Implement user/get
++ Add dotenv
 - Add JWT tokens
 - Check for SQL Injections - https://go.dev/doc/database/sql-injection
 - Clean up
+- Improve error handling
 - Write ReadMe
 - Add Postman collection

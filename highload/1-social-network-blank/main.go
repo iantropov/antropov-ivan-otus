@@ -5,20 +5,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"social-network/auth"
 	"social-network/storage"
 	"social-network/types"
 	"strings"
 )
 
 const PORT = ":3000"
-
-type people struct {
-	Number int `json:"number"`
-}
-
-type UserResponse struct {
-	UserId string `json:"user_id"`
-}
 
 func main() {
 	fmt.Println("Hello from the social network!")
@@ -63,7 +56,7 @@ func handleUserRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	userResponse := UserResponse{userId}
+	userResponse := types.UserRegisterResponse{UserId: userId}
 
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Set("Content-Type", "application/json")
@@ -96,14 +89,31 @@ func handleUserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	token, err := auth.GenerateJWT(userRecord.Id)
+	if err != nil {
+		fmt.Println("Failed to handle generte JWT:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	response := types.UserLoginResponse{Token: token}
+
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userRecord)
+	json.NewEncoder(w).Encode(response)
 }
 
 func handleUserGet(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
 		w.Header().Set("Allow", "GET")
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
+	err := auth.VerifyJWT(bearerHeader)
+	if err != nil {
+		fmt.Println("Failed to check JWT token", err)
+		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
 

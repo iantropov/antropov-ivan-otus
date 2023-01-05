@@ -9,9 +9,17 @@ type UserRegisterParams struct {
 	Password   *string `json:"password"`
 }
 
+type UserRegisterResponse struct {
+	UserId string `json:"user_id"`
+}
+
 type UserLoginParams struct {
 	Id       *string `json:"id"`
 	Password *string `json:"password"`
+}
+
+type UserLoginResponse struct {
+	Token string `json:"token"`
 }
 
 type UserRecord struct {

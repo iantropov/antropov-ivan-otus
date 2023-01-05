@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"os"
+	"social-network/config"
 	"social-network/types"
 
 	"github.com/go-sql-driver/mysql"
@@ -144,11 +144,11 @@ func checkPassword(password, hash string) bool {
 
 func queryDb(callback func(db *sql.DB)) {
 	cfg := mysql.Config{
-		User:   os.Getenv("DBUSER"),
-		Passwd: os.Getenv("DBPASS"),
+		User:   config.Config("DB_USER"),
+		Passwd: config.Config("DB_PASS"),
 		Net:    "tcp",
-		Addr:   "127.0.0.1:3306",
-		DBName: "social-network",
+		Addr:   config.Config("DB_ADDR"),
+		DBName: config.Config("DB_NAME"),
 		Params: map[string]string{
 			"charset":              "utf8mb4",
 			"allowNativePasswords": "true",
