@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"social-network/params"
 	"social-network/storage"
+	"social-network/types"
+	"strings"
 )
 
 const PORT = ":3000"
@@ -20,39 +21,18 @@ type UserResponse struct {
 }
 
 func main() {
-	text := `{"people": [{"craft": "ISS", "name": "Sergey Rizhikov"}, {"craft": "ISS", "name": "Andrey Borisenko"}, {"craft": "ISS", "name": "Shane Kimbrough"}, {"craft": "ISS", "name": "Oleg Novitskiy"}, {"craft": "ISS", "name": "Thomas Pesquet"}, {"craft": "ISS", "name": "Peggy Whitson"}], "message": "success", "number": 6}`
-	textBytes := []byte(text)
-
-	people1 := people{}
-	err := json.Unmarshal(textBytes, &people1)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	fmt.Println(people1.Number)
-
 	fmt.Println("Hello from the social network!")
 
 	storage.Init()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/hello", handleHello)
-	mux.HandleFunc("/bye", handleBye)
 	mux.HandleFunc("/user/register", handleUserRegister)
+	mux.HandleFunc("/login", handleUserLogin)
+	mux.HandleFunc("/user/get/", handleUserGet)
 
 	fmt.Println("Will serve on port", PORT)
-	err = http.ListenAndServe(PORT, mux)
+	err := http.ListenAndServe(PORT, mux)
 	log.Fatal(err)
-}
-
-func handleHello(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Received request: Hello")
-	w.Write([]byte("Hello"))
-}
-
-func handleBye(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Received request: Bye")
-	w.Write([]byte("Bye"))
 }
 
 func handleUserRegister(w http.ResponseWriter, r *http.Request) {
@@ -62,7 +42,7 @@ func handleUserRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var params params.UserParams
+	var params types.UserRegisterParams
 	err := json.NewDecoder(r.Body).Decode(&params)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -78,13 +58,63 @@ func handleUserRegister(w http.ResponseWriter, r *http.Request) {
 
 	userId, err := storage.CreateUser(params)
 	if err != nil {
-		fmt.Println("Failed to create User:", err)
-		http.Error(w, "Internal Error", http.StatusInternalServerError)
+		fmt.Println("Failed to handle /user/register:", err)
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	userResponse := UserResponse{userId}
 
 	w.WriteHeader(http.StatusCreated)
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userResponse)
+}
+
+func handleUserLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.Header().Set("Allow", "POST")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var params types.UserLoginParams
+	err := json.NewDecoder(r.Body).Decode(&params)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if params.Id == nil || params.Password == nil {
+		http.Error(w, "required fields are missed", http.StatusBadRequest)
+		return
+	}
+
+	userRecord, err := storage.LoginUser(*params.Id, *params.Password)
+	if err != nil {
+		fmt.Println("Failed to handle /login:", err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(userRecord)
+}
+
+func handleUserGet(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", "GET")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	userId := strings.TrimPrefix(r.URL.Path, "/user/get/")
+	userRecord, err := storage.GetUser(userId)
+	if err != nil {
+		fmt.Println("Failed to handle /get/user/", userId, err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(userRecord)
 }

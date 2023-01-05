@@ -12,10 +12,12 @@
 + Add users table
 + Save users into the table
 + Fix utf8 problem
-- Secure storing of passwords
-- Implement user/register
-- Implement login
-- Implement user/get
++ Secure storing of passwords
++ Check user password
++ Implement user/register
++ Implement login
++ Implement user/get
+- Add JWT tokens
 - Check for SQL Injections - https://go.dev/doc/database/sql-injection
 - Clean up
 - Write ReadMe

@@ -2,12 +2,14 @@ package storage
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 	"os"
-	"social-network/params"
+	"social-network/types"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 const DB_NAME = "social-network"
@@ -49,9 +51,15 @@ func Init() {
 	})
 }
 
-func CreateUser(params params.UserParams) (string, error) {
-	var userError error
+func CreateUser(params types.UserRegisterParams) (string, error) {
+	hashedPassword, err := hashPassword(*params.Password)
+	if err != nil {
+		return "", err
+	}
+
+	var createUserError error
 	userId := uuid.New().String()
+
 	queryDb(func(db *sql.DB) {
 		_, err := db.Exec(
 			"INSERT INTO users (id, first_name, second_name, age, password, biography, city) VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -59,20 +67,79 @@ func CreateUser(params params.UserParams) (string, error) {
 			*params.FirstName,
 			*params.SecondName,
 			*params.Age,
-			*params.Password,
+			hashedPassword,
 			params.Biography,
 			params.City,
 		)
 		if err != nil {
-			userError = fmt.Errorf("createUser: %v", err)
+			createUserError = fmt.Errorf("createUser: %v", err)
 		}
 	})
 
-	if userError != nil {
-		return "", userError
+	if createUserError != nil {
+		return "", createUserError
 	}
 
 	return userId, nil
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func LoginUser(userId, userPassword string) (*types.UserRecord, error) {
+	userRecord, err := GetUser(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	if !checkPassword(userPassword, userRecord.HashedPassword) {
+		return nil, errors.New("invalid credentials")
+	}
+
+	return userRecord, nil
+}
+
+func GetUser(userId string) (*types.UserRecord, error) {
+	var getUserError error
+	var userRecord types.UserRecord
+	queryDb(func(db *sql.DB) {
+		rows, err := db.Query("SELECT * FROM users WHERE id = ? LIMIT 1", userId)
+		if err != nil {
+			getUserError = fmt.Errorf("getUser: %q: %v", userId, err)
+			return
+		}
+		defer rows.Close()
+
+		if rows.Next() {
+			if err := rows.Scan(
+				&userRecord.Id,
+				&userRecord.FirstName,
+				&userRecord.SecondName,
+				&userRecord.Age,
+				&userRecord.HashedPassword,
+				&userRecord.Biography,
+				&userRecord.City,
+			); err != nil {
+				getUserError = fmt.Errorf("getUser: %q: %v", userId, err)
+				return
+			}
+		} else {
+			getUserError = fmt.Errorf("getUser: %q: not_found", userId)
+		}
+	})
+
+	if getUserError != nil {
+		return nil, getUserError
+	}
+
+	return &userRecord, nil
+}
+
+func checkPassword(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
 }
 
 func queryDb(callback func(db *sql.DB)) {
