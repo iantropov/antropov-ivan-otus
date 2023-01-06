@@ -1,7 +1,14 @@
 # Homework 1: Social Network Blank
 
+Заготовка социальной сети
 
-### Roadmap
+Чтобы запустить:
+
+1. Завести .env файл, например, `cp sample.env .env`
+2. Поднять сервисы через `docker-compose up`
+3. Проверить работу через Postman (импортировав коллекцию `social_network.postman_collection.json`)
+
+### Roadmap (for myself)
 
 + Go Hello World
 + Handle HTTP requests
@@ -23,4 +30,4 @@
 + Improve error handling
 + Clean up
 + Add Postman collection
-- Write ReadMe
++ Write ReadMe
