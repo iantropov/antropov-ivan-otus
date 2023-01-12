@@ -55,3 +55,7 @@ func (uf *Uf) Find(u int) int {
 func (uf *Uf) ComponentsCount() int {
 	return uf.componentsCount
 }
+
+func (uf *Uf) Connected(u, v int) bool {
+	return uf.Find(u) == uf.Find(v)
+}
