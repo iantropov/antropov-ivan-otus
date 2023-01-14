@@ -5,19 +5,14 @@ import "math"
 type heap struct {
 	elements []*node
 	keys     []int
-	size     int
-	count    int
 }
 
 type node struct {
 	key, priority int
-	extracted     bool
 }
 
 func NewHeap(size int) *heap {
 	h := new(heap)
-	h.size = size
-	h.count = size
 	h.elements = make([]*node, size)
 	h.keys = make([]int, size)
 	for i := 0; i < size; i++ {
@@ -37,20 +32,21 @@ func (h *heap) DecreaseKey(key, newPriority int) {
 func (h *heap) ExtractMin() (key, priority int) {
 	minKey, minPriority := h.elements[0].key, h.elements[0].priority
 
-	h.elements[0].priority = math.MaxInt
-	h.elements[0].extracted = true
+	h.swap(0, len(h.elements)-1)
+	h.elements = h.elements[:len(h.elements)-1]
+	h.keys[minKey] = -1
+
 	h.sink(0)
-	h.count--
 
 	return minKey, minPriority
 }
 
 func (h *heap) Empty() bool {
-	return h.count == 0
+	return len(h.elements) == 0
 }
 
 func (h *heap) Contains(key int) bool {
-	return !h.elements[h.keys[key]].extracted
+	return h.keys[key] != -1
 }
 
 func (h *heap) Priority(key int) int {
@@ -71,10 +67,10 @@ func (h *heap) sink(i int) {
 	right := i*2 + 2
 
 	node := root
-	if left < h.size && h.elements[left].priority < h.elements[node].priority {
+	if left < len(h.elements) && h.elements[left].priority < h.elements[node].priority {
 		node = left
 	}
-	if right < h.size && h.elements[right].priority < h.elements[node].priority {
+	if right < len(h.elements) && h.elements[right].priority < h.elements[node].priority {
 		node = right
 	}
 	if node == root {

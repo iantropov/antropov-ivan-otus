@@ -21,20 +21,18 @@ func Prim(g [][]int) []Edge {
 
 	output := make([]Edge, 0)
 	heap := NewHeap(len(g))
+	minEdges := make([]*Edge, len(g))
 
-	heap.DecreaseKey(0, 0)
 	u, _ := heap.ExtractMin()
 	for !heap.Empty() {
-		minEdge := Edge{U: u}
-		for _, edge := range edges[u] {
+		for i, edge := range edges[u] {
 			if heap.Contains(edge.V) && edge.W < heap.Priority(edge.V) {
-				minEdge.V = edge.V
-				minEdge.W = edge.W
 				heap.DecreaseKey(edge.V, edge.W)
+				minEdges[edge.V] = &edges[u][i]
 			}
 		}
-		output = append(output, minEdge)
 		u, _ = heap.ExtractMin()
+		output = append(output, *minEdges[u])
 	}
 
 	return output
