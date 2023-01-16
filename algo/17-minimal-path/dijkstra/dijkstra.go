@@ -4,10 +4,6 @@ import (
 	"minimal-tree/heap"
 )
 
-type edge struct {
-	U, V, W int
-}
-
 func Dijkstra(g [][]int, u, v int) []int {
 	adj := make([][]int, len(g))
 	for i := 0; i < len(g); i++ {
