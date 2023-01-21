@@ -28,3 +28,23 @@ https://go.dev/doc/tutorial/database-access
 - Поискать пользователей с индексом с explan
 - Протестировать приложение по заданию
 - Сформировать отчёты
+
+## Scripts
+
+mysql -uuser -ppassword social-network
+
+LOAD DATA INFILE './people.csv'
+INTO TABLE users
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(@name,age,city)
+SET id = UUID()
+SET first_name=SUBSTRING_INDEX(@name, ' ', 1)
+SET last_name=SUBSTRING_INDEX(@name, ' ', -1);
+
+UUID()
+SUBSTRING_INDEX(@name, ' ', 1)
+SUBSTRING_INDEX(@name, ' ', -11)
+
+LOAD DATA LOCAL INFILE './people.csv' INTO TABLE users FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS (@name,age,city) SET id = UUID(), first_name = SUBSTRING_INDEX(@name, ' ', 1), second_name = SUBSTRING_INDEX(@name, ' ', -1);

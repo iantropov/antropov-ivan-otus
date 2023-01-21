@@ -19,6 +19,9 @@ services:
       MYSQL_PASSWORD: 'password'
       MYSQL_ROOT_PASSWORD: 'password'
       LANG: C.UTF-8
+    volumes:
+      - .mysql-data:/var/lib/mysql
+      - ./people.csv:/people.csv
     ports:
       - 3306:3306
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
