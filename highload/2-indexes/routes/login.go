@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"social-network/auth"
-	"social-network/storage"
-	"social-network/types"
+	"social-network-2/auth"
+	"social-network-2/storage"
+	"social-network-2/types"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {

@@ -8,26 +8,23 @@
 2. Поднять сервисы через `docker-compose up`
 3. Проверить работу через Postman (импортировав коллекцию `social_network.postman_collection.json`)
 
+### Links
+
+https://go.dev/doc/tutorial/database-access
+
+
+
 ### Roadmap (for myself)
 
-+ Go Hello World
-+ Handle HTTP requests
-+ Marshal/unmarshal JSON
-+ Validate HTTP requests
-+ Add dockercompose with MySQL
-+ Connect to MySQL from code - https://go.dev/doc/tutorial/database-access
-+ Add users table
-+ Save users into the table
-+ Fix utf8 problem
-+ Secure storing of passwords
-+ Check user password
-+ Implement user/register
-+ Implement login
-+ Implement user/get
-+ Add dotenv
-+ Add JWT tokens
-+ Check for SQL Injections - https://go.dev/doc/database/sql-injection
-+ Improve error handling
-+ Clean up
-+ Add Postman collection
-+ Write ReadMe
++ Реализовать поиск по пользователям
++ Попробовать поискать с explain
+- Вынести хранение данных из контейнера
+- Написать скрипт импорта пользователей
+- Импортировать пользователей
+- Поискать пользователей без индекса с explain
+- Установить jmeter
+- Протестировать приложение по заданию
+- Добавить индексы
+- Поискать пользователей с индексом с explan
+- Протестировать приложение по заданию
+- Сформировать отчёты

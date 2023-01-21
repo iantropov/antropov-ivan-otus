@@ -2,7 +2,7 @@ package auth
 
 import (
 	"fmt"
-	"social-network/config"
+	"social-network-2/config"
 	"time"
 
 	"github.com/golang-jwt/jwt"

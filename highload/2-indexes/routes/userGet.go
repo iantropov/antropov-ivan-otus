@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"social-network/auth"
-	"social-network/storage"
-	"social-network/types"
+	"social-network-2/auth"
+	"social-network-2/storage"
+	"social-network-2/types"
 	"strings"
 )
 
@@ -28,7 +28,7 @@ func UserGet(w http.ResponseWriter, r *http.Request) {
 	userId := strings.TrimPrefix(r.URL.Path, "/user/get/")
 	userRecord, err := storage.GetUser(userId)
 	if err != nil {
-		fmt.Println("Failed to handle /get/user/", userId, err)
+		fmt.Println("Failed to handle /user/get/", userId, err)
 		_, ok := err.(*types.UserNotFoundError)
 		if ok {
 			w.WriteHeader(http.StatusNotFound)

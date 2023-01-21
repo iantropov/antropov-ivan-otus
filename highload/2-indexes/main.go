@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"social-network/config"
-	"social-network/routes"
-	"social-network/storage"
+	"social-network-2/config"
+	"social-network-2/routes"
+	"social-network-2/storage"
 )
 
 func main() {
@@ -18,6 +18,7 @@ func main() {
 	mux.HandleFunc("/user/register", routes.UserRegister)
 	mux.HandleFunc("/login", routes.Login)
 	mux.HandleFunc("/user/get/", routes.UserGet)
+	mux.HandleFunc("/user/search/", routes.UserSearch)
 
 	fmt.Println("Will serve on addr", config.Config("ADDR"))
 	err := http.ListenAndServe(config.Config("ADDR"), mux)

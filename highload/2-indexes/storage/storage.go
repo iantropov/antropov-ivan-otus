@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"social-network/config"
-	"social-network/types"
+	"social-network-2/config"
+	"social-network-2/types"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
@@ -137,6 +137,42 @@ func GetUser(userId string) (*types.UserRecord, error) {
 	}
 
 	return &userRecord, nil
+}
+
+func SearchUsers(firstName, lastName string) ([]types.UserRecord, error) {
+	var getUserError error
+	var users []types.UserRecord
+	queryDb(func(db *sql.DB) {
+		rows, err := db.Query("SELECT * FROM users WHERE first_name LIKE CONCAT(?, '%') and second_name LIKE CONCAT(?, '%') LIMIT 10", firstName, lastName)
+		if err != nil {
+			getUserError = fmt.Errorf("searchUsers: firstName=%q, lastName=%q: %v", firstName, lastName, err)
+			return
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var user types.UserRecord
+			if err := rows.Scan(
+				&user.Id,
+				&user.FirstName,
+				&user.SecondName,
+				&user.Age,
+				&user.HashedPassword,
+				&user.Biography,
+				&user.City,
+			); err != nil {
+				getUserError = fmt.Errorf("searchUsers: firstName=%q, lastName=%q: %v", firstName, lastName, err)
+				return
+			}
+			users = append(users, user)
+		}
+	})
+
+	if getUserError != nil {
+		return nil, getUserError
+	}
+
+	return users, nil
 }
 
 func checkPassword(password, hash string) bool {

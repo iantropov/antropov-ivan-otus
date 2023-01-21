@@ -1,4 +1,4 @@
-module social-network
+module social-network-2
 
 go 1.19
 
