@@ -23,11 +23,11 @@ type UserLoginResponse struct {
 }
 
 type UserRecord struct {
-	FirstName      string `json:"first_name"`
-	SecondName     string `json:"second_name"`
-	Age            int    `json:"age"`
-	Biography      string `json:"biography"`
-	City           string `json:"city"`
-	HashedPassword string `json:"-"`
-	Id             string `json:"id"`
+	FirstName      string  `json:"first_name"`
+	SecondName     string  `json:"second_name"`
+	Age            int     `json:"age"`
+	Biography      *string `json:"biography"`
+	City           string  `json:"city"`
+	HashedPassword *string `json:"-"`
+	Id             string  `json:"id"`
 }

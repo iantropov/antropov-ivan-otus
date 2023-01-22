@@ -94,7 +94,7 @@ func LoginUser(userId, userPassword string) (*types.UserRecord, error) {
 		return nil, err
 	}
 
-	if !checkPassword(userPassword, userRecord.HashedPassword) {
+	if !checkPassword(userPassword, *userRecord.HashedPassword) {
 		return nil, errors.New("invalid credentials")
 	}
 
@@ -143,7 +143,7 @@ func SearchUsers(firstName, lastName string) ([]types.UserRecord, error) {
 	var getUserError error
 	var users []types.UserRecord
 	queryDb(func(db *sql.DB) {
-		rows, err := db.Query("SELECT * FROM users WHERE first_name LIKE CONCAT(?, '%') and second_name LIKE CONCAT(?, '%') LIMIT 10", firstName, lastName)
+		rows, err := db.Query("SELECT * FROM users WHERE first_name LIKE CONCAT(?, '%') and second_name LIKE CONCAT(?, '%') ORDER BY id LIMIT 10", firstName, lastName)
 		if err != nil {
 			getUserError = fmt.Errorf("searchUsers: firstName=%q, lastName=%q: %v", firstName, lastName, err)
 			return
