@@ -1,4 +1,5 @@
 *.md
 *.json
 *.yml
+.mysql-data
 Dockerfile
