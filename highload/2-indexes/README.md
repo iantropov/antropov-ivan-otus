@@ -49,6 +49,8 @@ LOAD DATA LOCAL INFILE './people.csv' INTO TABLE users FIELDS TERMINATED BY ',' 
 
 explain select * from users where first_name like 'Абр%' and second_name like 'Ег%' order by id;
 
+select count(*) from users where first_name like 'Абр%' and second_name like 'Ег%' order by id;
+
 create index users_first_name_idx on users(first_name) using BTREE;
 drop index users_first_name_idx on users;
 create index users_second_name_idx on users(second_name) using BTREE;
