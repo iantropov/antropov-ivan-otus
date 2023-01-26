@@ -8,6 +8,9 @@ import (
 )
 
 func TestSearchSubstring(t *testing.T) {
-	res := naive.SearchSubstring("STRONGSTRING", "STRING")
-	require.Equal(t, 6, res)
+	res := naive.SearchSubstring("TRINGSTRONGSTRING", "STRING")
+	require.Equal(t, 11, res)
+
+	res = naive.SearchSubstring("STROTRINGASTRINGSTRONGSTRING", "STRONGSTRING")
+	require.Equal(t, 16, res)
 }

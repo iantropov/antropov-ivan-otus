@@ -8,6 +8,9 @@ import (
 )
 
 func TestSearchSubstring(t *testing.T) {
-	res := prefix.SearchSubstring("STRONGSTRING", "STRING")
-	require.Equal(t, 6, res)
+	res := prefix.SearchSubstring("TRINGSTRONGSTRING", "STRING")
+	require.Equal(t, 11, res)
+
+	res = prefix.SearchSubstring("STROTRINGASTRINGSTRONGSTRING", "STRONGSTRING")
+	require.Equal(t, 16, res)
 }
