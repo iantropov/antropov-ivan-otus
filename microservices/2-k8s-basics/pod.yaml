@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: otus-app
+  labels:
+    app: otus-app
+spec:
+  containers:
+  - name: otus-app
+    image: antropovivan/otus:microservices-docker
+    ports:
+      - containerPort: 8000

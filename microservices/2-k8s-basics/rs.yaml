@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+    name: otus-app
+spec:
+    replicas: 3
+    selector:
+       matchLabels:
+          app: otus-app
+    template:
+       metadata:
+          labels:
+             app: otus-app
+       spec:
+          containers:
+          - name: otus-app
+            image: antropovivan/otus:microservices-docker
+            ports:
+              - containerPort: 8000
