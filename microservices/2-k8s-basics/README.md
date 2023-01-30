@@ -2,6 +2,13 @@
 
 Как проверить:
 
-1. Выкачать образ `docker pull antropovivan/otus:microservices-docker`
-2. Запустить сервис `docker run -d -p 8000:8000 antropovivan/otus:microservices-docker`
-3. Проверить работу `curl localhost:8000/health`
+1. Применить манифесты
+```
+kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml
+```
+2. Проверить работу
+```
+➜  2-k8s-basics git:(2-k8s-basics) ✗ curl http://arch.homework/health
+{"status": "OK"}%
+➜  2-k8s-basics git:(2-k8s-basics) ✗
+```
