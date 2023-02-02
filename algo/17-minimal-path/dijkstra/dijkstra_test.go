@@ -1,7 +1,7 @@
 package dijkstra_test
 
 import (
-	"minimal-tree/dijkstra"
+	"minimal-path/dijkstra"
 	"testing"
 
 	"github.com/stretchr/testify/require"
