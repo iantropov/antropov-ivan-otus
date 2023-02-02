@@ -1,4 +1,4 @@
-module minimal-tree
+module minimal-path
 
 go 1.19
 

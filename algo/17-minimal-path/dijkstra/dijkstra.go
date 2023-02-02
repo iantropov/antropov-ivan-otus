@@ -1,7 +1,7 @@
 package dijkstra
 
 import (
-	"minimal-tree/heap"
+	"minimal-path/heap"
 )
 
 func Dijkstra(g [][]int, u, v int) []int {
