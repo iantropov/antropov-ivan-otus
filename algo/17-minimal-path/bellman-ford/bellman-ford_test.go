@@ -1,7 +1,7 @@
 package bellmanford_test
 
 import (
-	bellmanford "minimal-tree/bellman-ford"
+	bellmanford "minimal-path/bellman-ford"
 	"testing"
 
 	"github.com/stretchr/testify/require"
