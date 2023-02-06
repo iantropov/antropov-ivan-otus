@@ -37,6 +37,7 @@ docker restart mysql1
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 
+sudo ufw allow 3306
 
 CREATE USER 'replica_user'@'10.129.0.29' IDENTIFIED WITH mysql_native_password BY 'password';
 GRANT REPLICATION SLAVE ON *.* TO 'replica_user'@'10.129.0.29';
@@ -52,13 +53,14 @@ mysql -u root --local_infile=1 -p
 set global local_infile=true;
 LOAD DATA LOCAL INFILE './people.csv' INTO TABLE users CHARACTER SET utf8 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS (@name,age,city) SET id = UUID(), first_name = SUBSTRING_INDEX(@name, ' ', 1), second_name = SUBSTRING_INDEX(@name, ' ', -1);
 
+SELECT host, user FROM mysql.user;
 
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST='10.129.0.9',
 SOURCE_USER='replica_user',
 SOURCE_PASSWORD='password',
 SOURCE_LOG_FILE='mysql-bin.000003',
-SOURCE_LOG_POS=93508623;
+SOURCE_LOG_POS=187015073;
 
 START REPLICA;
 

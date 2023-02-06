@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"social-network-2/storage"
+	"social-network-3/storage"
 )
 
 func UserSearch(w http.ResponseWriter, r *http.Request) {

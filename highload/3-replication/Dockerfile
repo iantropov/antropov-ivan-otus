@@ -1,12 +1,13 @@
-FROM golang:1.19-alpine
+FROM golang:1.19-alpine as build
 
 WORKDIR /app
 
 COPY . .
 
 RUN go mod download
-RUN go build .
+RUN go build -a -tags netgo -ldflags '-w -extldflags "-static"' -o server-app *.go
 
-EXPOSE 3000
+FROM scratch
+COPY --from=build /app/server-app /server-app
 
-CMD [ "./social-network" ]
+ENTRYPOINT [ "/server-app" ]

@@ -2,4 +2,6 @@
 *.json
 *.yml
 .mysql-data
+social-network-3
+*.env
 Dockerfile

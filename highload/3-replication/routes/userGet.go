@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"social-network-2/auth"
-	"social-network-2/storage"
-	"social-network-2/types"
+	"social-network-3/auth"
+	"social-network-3/storage"
+	"social-network-3/types"
 	"strings"
 )
 

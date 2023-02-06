@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"social-network-2/config"
-	"social-network-2/routes"
-	"social-network-2/storage"
+	"social-network-3/config"
+	"social-network-3/routes"
+	"social-network-3/storage"
 )
 
 func main() {
-	fmt.Println("Hello from the social network!")
+	fmt.Println("Hello from the social network 3!")
 
 	storage.Init()
 
@@ -20,7 +20,7 @@ func main() {
 	mux.HandleFunc("/user/get/", routes.UserGet)
 	mux.HandleFunc("/user/search/", routes.UserSearch)
 
-	fmt.Println("Will serve on addr", config.Config("ADDR"))
-	err := http.ListenAndServe(config.Config("ADDR"), mux)
+	fmt.Println("Will serve on port", config.Config("PORT"))
+	err := http.ListenAndServe(":"+config.Config("PORT"), mux)
 	log.Fatal(err)
 }

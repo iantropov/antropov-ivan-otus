@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
-	"social-network-2/config"
-	"social-network-2/types"
+	"social-network-3/config"
+	"social-network-3/types"
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"

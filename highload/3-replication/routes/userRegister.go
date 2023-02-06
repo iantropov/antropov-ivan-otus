@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"social-network-2/storage"
-	"social-network-2/types"
+	"social-network-3/storage"
+	"social-network-3/types"
 )
 
 func UserRegister(w http.ResponseWriter, r *http.Request) {
