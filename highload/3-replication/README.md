@@ -10,8 +10,10 @@
 + Create master-slave replication
 + Load data into master database
 + Check replicated data on the slave
-- Configure app to use slave for reading
+
+- Improve application to use variables from ENV (in addition to .env file)
 - Deploy app to the cloud
+- Configure app to use slave for reading
 - Check operability of the service
 - Add monitoring master / slave
 - Start YCloud load testing
