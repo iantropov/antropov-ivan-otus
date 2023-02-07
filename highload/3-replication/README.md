@@ -21,8 +21,9 @@
 ## Configuration
 
 otus-vm-1 - master
-otus-vm-2 - replica (asynchronous)
-serverless container with the service
+otus-vm-2 - replica (async) (semi-sync + GTID)
+otus-vm-3 - replica (semi-sync + GTID)
+otus-social-network-3 - serverless container with the service otus
 
 ## Links
 
@@ -31,12 +32,20 @@ https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-replication-in-mysql
 
+https://www.redhat.com/sysadmin/gtid-replication-mysql-servers
+
+https://dev.mysql.com/doc/refman/8.0/en/replication-formats.html
+
+https://dev.mysql.com/doc/refman/8.0/en/replication-semisync-installation.html
+
 ## Commands
 
 ### Containers
 
 ```
 docker stop mysql1 && docker rm mysql1 && sudo rm -fr mysql/datadir && mkdir mysql/datadir
+
+docker stop mysql1 && docker rm mysql1
 
 docker run --name=mysql1 --mount type=bind,src=/home/admin/mysql/my.cnf,dst=/etc/my.cnf --mount type=bind,src=/home/admin/mysql/datadir,dst=/var/lib/mysql -d --network=host mysql/mysql-server:8.0.25
 
@@ -49,7 +58,7 @@ docker restart mysql1
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 ```
 
-### Replication
+### Replication (async)
 
 ```
 CREATE USER 'replica_user'@'10.129.0.22' IDENTIFIED WITH mysql_native_password BY 'password';
@@ -64,10 +73,12 @@ CHANGE REPLICATION SOURCE TO
 SOURCE_HOST='10.129.0.9',
 SOURCE_USER='replica_user',
 SOURCE_PASSWORD='password',
-SOURCE_LOG_FILE='mysql-bin.000003',
-SOURCE_LOG_POS=1572;
+SOURCE_LOG_FILE='mysql-bin.000001',
+SOURCE_LOG_POS=156;
 
 START REPLICA;
+
+STOP REPLICA;
 
 SHOW REPLICA STATUS\G
 
@@ -87,12 +98,50 @@ SHOW TABLES;
 SELECT * FROM example_table;
 ```
 
+### Replication (semi-sync + GTID)
+
+```
+SET @@GLOBAL.read_only = ON;
+
+gtid_mode=ON
+enforce-gtid-consistency=ON
+
+
+gtid_mode=ON
+enforce-gtid-consistency=ON
+log-replica-updates=ON
+skip-replica-start=ON
+
+SET @@GLOBAL.read_only = OFF;
+
+INSTALL PLUGIN rpl_semi_sync_master SONAME 'semisync_master.so';
+INSTALL PLUGIN rpl_semi_sync_slave SONAME 'semisync_slave.so';
+
+SELECT PLUGIN_NAME, PLUGIN_STATUS
+       FROM INFORMATION_SCHEMA.PLUGINS
+       WHERE PLUGIN_NAME LIKE '%semi%';
+
+SET GLOBAL rpl_semi_sync_master_enabled = 1;
+SET GLOBAL rpl_semi_sync_slave_enabled = 1;
+
+CHANGE REPLICATION SOURCE TO
+SOURCE_HOST='10.129.0.9',
+SOURCE_USER='replica_user',
+SOURCE_PASSWORD='password',
+SOURCE_AUTO_POSITION=1;
+
+STOP SLAVE IO_THREAD;
+START SLAVE IO_THREAD;
+```
+
 ### Diagnostics
 
 ```
 SELECT host, user FROM mysql.user;
 
 show variables like 'character%';
+
+show variables like 'binlog%';
 ```
 
 ### Load data
