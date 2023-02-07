@@ -14,3 +14,7 @@
 
 ![](./service-async.png)
 
+### Отчёт в jmeter(после начала репликации)
+
+![](./jmeter-async.png)
+
