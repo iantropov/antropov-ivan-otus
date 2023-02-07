@@ -23,7 +23,7 @@ collation-server  =  utf8mb4_unicode_ci
 init-connect='SET NAMES utf8mb4'
 character-set-server = utf8mb4
 
-bind-address      = 10.129.0.9
+bind-address      = 10.129.0.9 # otus-vm-1
 server-id         = 1
 log_bin           = /var/lib/mysql-bin.log
 binlog_do_db      = otus
