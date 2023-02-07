@@ -25,7 +25,7 @@ https://docs.docker.com/engine/swarm/swarm-tutorial/create-swarm/
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-replication-in-mysql
 
-## Commands
+## Commands (containers)
 
 docker stop mysql1 && docker rm mysql1 && sudo rm -fr mysql/datadir && mkdir mysql/datadir
 
@@ -37,7 +37,7 @@ docker restart mysql1
 
 ALTER USER 'root'@'localhost' IDENTIFIED BY 'password';
 
-sudo ufw allow 3306
+## Commands (replication)
 
 CREATE USER 'replica_user'@'10.129.0.29' IDENTIFIED WITH mysql_native_password BY 'password';
 GRANT REPLICATION SLAVE ON *.* TO 'replica_user'@'10.129.0.29';
@@ -46,14 +46,6 @@ FLUSH PRIVILEGES;
 FLUSH TABLES WITH READ LOCK;
 SHOW MASTER STATUS;
 UNLOCK TABLES;
-
-CREATE DATABASE otus;
-
-mysql -u root --local_infile=1 -p
-set global local_infile=true;
-LOAD DATA LOCAL INFILE './people.csv' INTO TABLE users CHARACTER SET utf8 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' IGNORE 1 ROWS (@name,age,city) SET id = UUID(), first_name = SUBSTRING_INDEX(@name, ' ', 1), second_name = SUBSTRING_INDEX(@name, ' ', -1);
-
-SELECT host, user FROM mysql.user;
 
 CHANGE REPLICATION SOURCE TO
 SOURCE_HOST='10.129.0.9',
@@ -66,6 +58,8 @@ START REPLICA;
 
 SHOW REPLICA STATUS\G;
 
+CREATE DATABASE otus;
+
 CREATE TABLE example_table (
 example_column varchar(30)
 );
@@ -75,11 +69,26 @@ INSERT INTO example_table VALUES
 ('This is the second row'),
 ('This is the third row');
 
-show variables like 'character%';
-
 USE otus;
 SHOW TABLES;
 SELECT * FROM example_table;
 
+## Commands (diagnostics)
+
+SELECT host, user FROM mysql.user;
+
+show variables like 'character%';
+
+## Commands (load data)
+
+mysql -u root --local_infile=1 -p
+set global local_infile=true;
+LOAD DATA LOCAL INFILE './people.csv' INTO TABLE users CHARACTER SET utf8 FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' ROWS (@name,age,city) SET id = UUID(), first_name = SUBSTRING_INDEX(@name, ' ', 1), second_name = SUBSTRING_INDEX(@name, ' ', -1);
 
 CREATE TABLE users (id VARCHAR(36) NOT NULL, first_name VARCHAR(128) NOT NULL, second_name VARCHAR(128) NOT NULL, age INT NOT NULL, password VARCHAR(128), biography VARCHAR(255), city VARCHAR(64), PRIMARY KEY (`id`));
+
+## Commands (remote connection)
+
+sudo ufw allow 3306
+
+CREATE USER 'service_user'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
