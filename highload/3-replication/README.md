@@ -10,13 +10,14 @@
 + Create master-slave replication
 + Load data into master database
 + Check replicated data on the slave
-
-- Improve application to use variables from ENV (in addition to .env file)
-- Deploy app to the cloud
-- Configure app to use slave for reading
-- Check operability of the service
-- Add monitoring master / slave
-- Start YCloud load testing
++ Improve application to use variables from ENV (in addition to .env file)
++ Deploy app to the cloud
++ Configure app to use slave for reading
++ Check operability of the service
++ Add monitoring master / slave
++ Use JMeter load testing
++ Try Async replication
++ Try Semi-sync replication
 
 ## Configuration
 
@@ -37,6 +38,8 @@ https://www.redhat.com/sysadmin/gtid-replication-mysql-servers
 https://dev.mysql.com/doc/refman/8.0/en/replication-formats.html
 
 https://dev.mysql.com/doc/refman/8.0/en/replication-semisync-installation.html
+
+https://www.percona.com/blog/how-to-createrestore-a-slave-using-gtid-replication-in-mysql-5-6/
 
 ## Commands
 
@@ -70,11 +73,11 @@ SHOW MASTER STATUS;
 UNLOCK TABLES;
 
 CHANGE REPLICATION SOURCE TO
-SOURCE_HOST='10.129.0.9',
+SOURCE_HOST='10.129.0.22',
 SOURCE_USER='replica_user',
 SOURCE_PASSWORD='password',
-SOURCE_LOG_FILE='mysql-bin.000001',
-SOURCE_LOG_POS=156;
+SOURCE_LOG_FILE='mysql-bin.000003',
+SOURCE_LOG_POS=123377;
 
 START REPLICA;
 
@@ -125,8 +128,8 @@ SET GLOBAL rpl_semi_sync_master_enabled = 1;
 SET GLOBAL rpl_semi_sync_slave_enabled = 1;
 
 CHANGE REPLICATION SOURCE TO
-SOURCE_HOST='10.129.0.9',
-SOURCE_USER='replica_user',
+SOURCE_HOST='10.129.0.22',
+SOURCE_USER='replica_user_2',
 SOURCE_PASSWORD='password',
 SOURCE_AUTO_POSITION=1;
 
