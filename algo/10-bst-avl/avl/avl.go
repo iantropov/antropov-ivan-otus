@@ -9,6 +9,10 @@ type Tree struct {
 	root *Node
 }
 
+// Really Slow implementation - because of inaccurate balancing after insertion / removal
+// Now - rebalnce all tree
+// Should - rebalance only on the way from affected node towards root (ancestors of affected node)
+
 func NewTree() *Tree {
 	return new(Tree)
 }
@@ -31,6 +35,36 @@ func (tree *Tree) Remove(val int) {
 func (tree *Tree) DumpValues() []int {
 	values := make([]int, 0)
 	return tree.root.dumpValues(values)
+}
+
+func (tree *Tree) SearchStrictLeft(val int) *Node {
+	node := tree.root.searchStrictLeft(val)
+	return node
+}
+
+func (n *Node) searchStrictLeft(val int) *Node {
+	if n == nil {
+		return nil
+	}
+
+	if val < n.val {
+		if n.left != nil && n.left.val > val {
+			return n.left.searchStrictLeft(val)
+		} else if n.left != nil && n.left.val <= val {
+			leftRes := n.left.searchStrictLeft(val)
+			if leftRes == nil || leftRes.val < val {
+				return n
+			} else {
+				return leftRes
+			}
+		} else if n.left == nil {
+			return n
+		}
+	} else if val >= n.val {
+		return n.right.searchStrictLeft(val)
+	}
+
+	return nil
 }
 
 func (node *Node) search(val int) *Node {

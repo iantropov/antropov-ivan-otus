@@ -70,6 +70,36 @@ func (tree *rbtTree) DumpValuesInDetails() {
 	tree.root.dumpValuesInDetails()
 }
 
+func (tree *rbtTree) SearchStrictLeft(val int) *node {
+	node := tree.root.searchStrictLeft(val)
+	return node
+}
+
+func (n *node) searchStrictLeft(val int) *node {
+	if n == nil {
+		return nil
+	}
+
+	if val < n.val {
+		if n.left != nil && n.left.val > val {
+			return n.left.searchStrictLeft(val)
+		} else if n.left != nil && n.left.val <= val {
+			leftRes := n.left.searchStrictLeft(val)
+			if leftRes == nil || leftRes.val < val {
+				return n
+			} else {
+				return leftRes
+			}
+		} else if n.left == nil {
+			return n
+		}
+	} else if val >= n.val {
+		return n.right.searchStrictLeft(val)
+	}
+
+	return nil
+}
+
 func (tree *rbtTree) searchNode(val int) *node {
 	return tree.root.searchNode(val)
 }
