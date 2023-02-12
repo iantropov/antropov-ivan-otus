@@ -14,7 +14,7 @@ func GenerateJWT(userId string) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(1 * time.Minute).Unix()
+	claims["exp"] = time.Now().Add(365 * 24 * time.Hour).Unix()
 	claims["authorized"] = true
 	claims["userId"] = userId
 
@@ -26,13 +26,20 @@ func GenerateJWT(userId string) (string, error) {
 	return tokenString, nil
 }
 
-func VerifyJWT(token string) error {
-	_, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
+func VerifyJWT(tokenStr string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
 		_, ok := token.Method.(*jwt.SigningMethodHMAC)
 		if !ok {
 			return nil, fmt.Errorf("failed with JWT signing method")
 		}
 		return sampleSecretKey, nil
 	})
-	return err
+	if err != nil {
+		return nil, err
+	}
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	} else {
+		return nil, fmt.Errorf("invalid JWT Token")
+	}
 }

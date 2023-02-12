@@ -2,7 +2,8 @@
 
 ## Roadmap
 
-- Migration for MySQL from Golang
++ Migration for MySQL from Golang
+- Extract current user
 - 'Friends' feature
 - 'Posts' feature
 - 'Feed' feature

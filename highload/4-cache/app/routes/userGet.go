@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"social-network-4/auth"
 	"social-network-4/storage"
 	"social-network-4/types"
 	"strings"
@@ -16,13 +17,15 @@ func UserGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
-	// err := auth.VerifyJWT(bearerHeader)
-	// if err != nil {
-	// 	fmt.Println("Failed to check JWT token", err)
-	// 	w.WriteHeader(http.StatusUnauthorized)
-	// 	return
-	// }
+	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
+	claims, err := auth.VerifyJWT(bearerHeader)
+	if err != nil {
+		fmt.Println("Failed to check JWT token", err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	fmt.Println("CURRENT_USER_ID", claims["userId"])
 
 	userId := strings.TrimPrefix(r.URL.Path, "/user/get/")
 	userRecord, err := storage.GetUser(userId)

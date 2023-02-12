@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"social-network-4/auth"
 	"social-network-4/storage"
 )
 
@@ -14,13 +15,13 @@ func UserSearch(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
-	// err := auth.VerifyJWT(bearerHeader)
-	// if err != nil {
-	// 	fmt.Println("Failed to check JWT token", err)
-	// 	w.WriteHeader(http.StatusUnauthorized)
-	// 	return
-	// }
+	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
+	_, err := auth.VerifyJWT(bearerHeader)
+	if err != nil {
+		fmt.Println("Failed to check JWT token", err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
 
 	firstName := r.URL.Query().Get("first_name")
 	lastName := r.URL.Query().Get("last_name")
