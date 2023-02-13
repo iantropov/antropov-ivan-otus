@@ -14,7 +14,7 @@ func SetFriend(userId, friendId string) error {
 			friendId,
 		)
 		if err != nil {
-			setFriendError = fmt.Errorf("createUser: %v", err)
+			setFriendError = fmt.Errorf("setFriend: %v", err)
 		}
 	})
 
@@ -30,7 +30,7 @@ func DeleteFriend(userId, friendId string) error {
 			friendId,
 		)
 		if err != nil {
-			deleteFriendError = fmt.Errorf("createUser: %v", err)
+			deleteFriendError = fmt.Errorf("deleteFriend: %v", err)
 		}
 	})
 

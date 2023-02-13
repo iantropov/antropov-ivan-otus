@@ -2,10 +2,10 @@ package types
 
 import "fmt"
 
-type UserNotFoundError struct {
-	UserId string
+type NotFoundError struct {
+	Id string
 }
 
-func (r *UserNotFoundError) Error() string {
-	return fmt.Sprintf("UserNotFound %s", r.UserId)
+func (r *NotFoundError) Error() string {
+	return fmt.Sprintf("NotFound %s", r.Id)
 }

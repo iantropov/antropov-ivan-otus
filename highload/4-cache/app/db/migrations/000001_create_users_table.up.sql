@@ -6,5 +6,5 @@ CREATE TABLE users (
 	password     VARCHAR(128),
 	biography     VARCHAR(255),
 	city     VARCHAR(64),
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (id)
 );

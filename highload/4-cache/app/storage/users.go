@@ -85,8 +85,8 @@ func GetUser(userId string) (*types.UserRecord, error) {
 				return
 			}
 		} else {
-			getUserError = &types.UserNotFoundError{
-				UserId: userId,
+			getUserError = &types.NotFoundError{
+				Id: userId,
 			}
 		}
 	})
