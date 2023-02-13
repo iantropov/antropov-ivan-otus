@@ -35,6 +35,7 @@ func FriendDelete(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("Failed to handle /friend/delete/", friendId, err)
 		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusNoContent)

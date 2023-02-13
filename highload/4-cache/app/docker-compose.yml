@@ -5,6 +5,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
+    networks:
+      - social-network-4
     ports:
       - 3000:3000
     environment:
@@ -22,6 +24,8 @@ services:
     volumes:
       - ./db/migrations:/migrations
     command: -database 'mysql://user:password@tcp(db)/social-network-4' -path=/migrations/ up
+    networks:
+      - social-network-4
     depends_on:
       db:
         condition: service_healthy
@@ -36,6 +40,8 @@ services:
       LANG: C.UTF-8
     volumes:
       - .mysql-data:/var/lib/mysql
+    networks:
+      - social-network-4
     ports:
       - 3306:3306
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
@@ -45,3 +51,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 55
+
+networks:
+  social-network-4:
