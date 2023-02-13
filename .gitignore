@@ -6,3 +6,4 @@ dist
 coverage
 
 drinks.json
+.mysql-data
