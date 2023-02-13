@@ -2,8 +2,9 @@
 
 ## Roadmap
 
-- Create app
-- Connect with DB
++ Create users app
++ Connect with DB
++ Debug app with docker-compose
 - Install DB from helm
 - Add Configmap
 - Add Job

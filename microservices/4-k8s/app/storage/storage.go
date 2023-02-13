@@ -24,10 +24,10 @@ func CreateUser(params types.UserParams) (int64, error) {
 	var userId int64
 	queryDb(func(db *sql.DB) {
 		result, err := db.Exec(
-			"INSERT INTO users (username, first_name, second_name, email, phone) VALUES (?, ?, ?, ?, ?)",
+			"INSERT INTO users (username, first_name, last_name, email, phone) VALUES (?, ?, ?, ?, ?)",
 			*params.Username,
 			*params.FirstName,
-			*params.SecondName,
+			*params.LastName,
 			*params.Email,
 			*params.Phone,
 		)
@@ -48,10 +48,10 @@ func UpdateUser(userId int64, params types.UserParams) error {
 	var updateUserError error
 	queryDb(func(db *sql.DB) {
 		result, err := db.Exec(
-			"UPDATE users SET username=?, first_name=?, second_name=?, email=?, phone=? WHERE id=?",
+			"UPDATE users SET username=?, first_name=?, last_name=?, email=?, phone=? WHERE id=?",
 			*params.Username,
 			*params.FirstName,
-			*params.SecondName,
+			*params.LastName,
 			*params.Email,
 			*params.Phone,
 			userId,
@@ -85,7 +85,7 @@ func GetUser(userId int64) (*types.UserRecord, error) {
 				&userRecord.Id,
 				&userRecord.Username,
 				&userRecord.FirstName,
-				&userRecord.SecondName,
+				&userRecord.LastName,
 				&userRecord.Email,
 				&userRecord.Phone,
 			); err != nil {

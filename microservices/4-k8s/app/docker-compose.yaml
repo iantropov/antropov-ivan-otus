@@ -1,0 +1,46 @@
+version: "3"
+
+services:
+  users-app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - 3000:3000
+    environment:
+      DB_USER: user
+      DB_PASS: password
+      DB_ADDR: users-db
+      DB_NAME: users-app
+      PORT: 3000
+    depends_on:
+      - migrations
+      - users-db
+  migrations:
+    image: migrate/migrate
+    volumes:
+      - ./db/migrations:/migrations
+    command: -database 'mysql://user:password@tcp(users-db)/users-app' -path=/migrations/ up
+    depends_on:
+      users-db:
+        condition: service_healthy
+  users-db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'users-app'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+      LANG: C.UTF-8
+    volumes:
+      - .mysql-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55

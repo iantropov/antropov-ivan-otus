@@ -31,7 +31,7 @@ func main() {
 	storage.Init()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/user/get/", HandleUserRoute)
+	mux.HandleFunc("/user/", HandleUserRoute)
 
 	fmt.Println("Will serve on port", config.Config("PORT"))
 	err := http.ListenAndServe(":"+config.Config("PORT"), mux)

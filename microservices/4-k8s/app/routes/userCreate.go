@@ -18,7 +18,7 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if !lib.AreValidUserParams(params) {
-		fmt.Printf("Failed to handle POST /user : %W\n", err)
+		fmt.Printf("Failed to handle POST /user : %#v\n", params)
 		http.Error(w, "required fields are missed", http.StatusBadRequest)
 		return
 	}
