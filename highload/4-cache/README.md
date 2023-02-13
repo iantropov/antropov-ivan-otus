@@ -15,4 +15,5 @@ Go-migrate - https://github.com/golang-migrate/migrate
 - 'Feed' feature
 - Redis for 'Feed' feature
 - Save post ids in Redis
+- Invalidation of cache
 - Async workers for 'Feed' feature
