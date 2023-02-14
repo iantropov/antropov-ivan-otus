@@ -12,8 +12,7 @@ Go-migrate - https://github.com/golang-migrate/migrate
 + Extract current user from JWT claims
 + 'Friends' feature
 + 'Posts' feature
-- 'Feed' feature
-- Redis for 'Feed' feature
-- Save post ids in Redis
-- Invalidation of cache
-- Async workers for 'Feed' feature
++ 'Feed' feature
++ Redis for 'Feed' feature
++ Save feed in Redis
++ Invalidation of cache

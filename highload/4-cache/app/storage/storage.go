@@ -8,7 +8,7 @@ import (
 	"github.com/go-sql-driver/mysql"
 )
 
-func Init() {
+func init() {
 	queryDb(func(db *sql.DB) {
 		pingErr := db.Ping()
 		if pingErr != nil {

@@ -3,10 +3,13 @@ package storage
 import (
 	"database/sql"
 	"fmt"
+	"social-network-4/cache"
 	"social-network-4/types"
 
 	"github.com/google/uuid"
 )
+
+const FeedLimit = 1000
 
 func CreatePost(authorId, text string) (string, error) {
 	var createPostError error
@@ -104,17 +107,36 @@ func GetPost(postId string) (*types.PostRecord, error) {
 }
 
 func GetPostsFeed(userId string, limit, offset int) ([]types.PostRecord, error) {
+	postsFeedFromCache, err := cache.GetPostsFeed(userId)
+	if err != nil {
+		return nil, err
+	}
+	if postsFeedFromCache != nil {
+		return getPostsWithLimitAndOffet(postsFeedFromCache, limit, offset), nil
+	}
+	postsFeedFromDb, err := getPostsFeedFromDb(userId)
+	if err != nil {
+		return nil, err
+	}
+	err = cache.SetPostsFeed(userId, postsFeedFromDb)
+	if err != nil {
+		return nil, err
+	}
+
+	return getPostsWithLimitAndOffet(postsFeedFromDb, limit, offset), nil
+}
+
+func getPostsFeedFromDb(userId string) ([]types.PostRecord, error) {
 	var getPostsFeedError error
 	var posts []types.PostRecord
 	queryDb(func(db *sql.DB) {
 		rows, err := db.Query(
-			"SELECT id, author_id, text FROM posts JOIN friends ON author_id = friends.friend_id WHERE friends.user_id = ? LIMIT ?, ?",
+			"SELECT id, author_id, text FROM posts JOIN friends ON author_id = friends.friend_id WHERE friends.user_id = ? ORDER BY id DESC LIMIT ?",
 			userId,
-			offset,
-			limit,
+			FeedLimit,
 		)
 		if err != nil {
-			getPostsFeedError = fmt.Errorf("GetPostsFeed: userId=%s, limit=%d, offset=%d: %w", userId, limit, offset, err)
+			getPostsFeedError = fmt.Errorf("getPostsFeedFromDb: userId=%s: %w", userId, err)
 			return
 		}
 		defer rows.Close()
@@ -126,7 +148,7 @@ func GetPostsFeed(userId string, limit, offset int) ([]types.PostRecord, error) 
 				&post.AuthorId,
 				&post.Text,
 			); err != nil {
-				getPostsFeedError = fmt.Errorf("GetPostsFeed: userId=%s, limit=%d, offset=%d: %w", userId, limit, offset, err)
+				getPostsFeedError = fmt.Errorf("getPostsFeedFromDb: userId=%s: %w", userId, err)
 				return
 			}
 			posts = append(posts, post)
@@ -138,4 +160,16 @@ func GetPostsFeed(userId string, limit, offset int) ([]types.PostRecord, error) 
 	}
 
 	return posts, nil
+}
+
+func getPostsWithLimitAndOffet(posts []types.PostRecord, limit, offset int) []types.PostRecord {
+	sliceStart := offset
+	if sliceStart > len(posts) {
+		sliceStart = len(posts)
+	}
+	sliceFinish := limit + offset
+	if sliceFinish > len(posts) {
+		sliceFinish = len(posts)
+	}
+	return posts[sliceStart:sliceFinish]
 }
