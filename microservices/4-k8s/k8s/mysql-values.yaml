@@ -1,0 +1,4 @@
+auth:
+  database: otus-db
+  username: user
+  password: password
