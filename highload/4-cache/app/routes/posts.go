@@ -7,6 +7,7 @@ import (
 	"social-network-4/auth"
 	"social-network-4/storage"
 	"social-network-4/types"
+	"strconv"
 	"strings"
 )
 
@@ -166,4 +167,59 @@ func PostUpdate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func PostFeed(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", "GET")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
+	claims, err := auth.VerifyJWT(bearerHeader)
+	if err != nil {
+		fmt.Println("Failed to check JWT token", err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	userId, ok := claims["userId"].(string)
+	if !ok {
+		fmt.Println("Invalid userId in JWT claim", claims["userId"])
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	limitQuery := r.URL.Query().Get("limit")
+	if limitQuery == "" {
+		limitQuery = "10"
+	}
+	limit, err := strconv.Atoi(limitQuery)
+	if err != nil {
+		fmt.Println("Failed to parse limit", limitQuery, err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	offsetQuery := r.URL.Query().Get("offset")
+	if offsetQuery == "" {
+		offsetQuery = "0"
+	}
+	offset, err := strconv.Atoi(offsetQuery)
+	if err != nil {
+		fmt.Println("Failed to parse offset", offsetQuery, err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	posts, err := storage.GetPostsFeed(userId, limit, offset)
+	if err != nil {
+		fmt.Println("Failed to handle /post/feed/", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(posts)
 }

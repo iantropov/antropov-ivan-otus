@@ -4,7 +4,7 @@ services:
   app:
     build:
       dockerfile: Dockerfile
-      context: .
+      context: ./app/
     networks:
       - social-network-4
     ports:
@@ -39,7 +39,7 @@ services:
       MYSQL_ROOT_PASSWORD: 'password'
       LANG: C.UTF-8
     volumes:
-      - .mysql-data:/var/lib/mysql
+      - ./db/data:/var/lib/mysql
     networks:
       - social-network-4
     ports:

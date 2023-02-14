@@ -102,3 +102,40 @@ func GetPost(postId string) (*types.PostRecord, error) {
 
 	return &postRecord, nil
 }
+
+func GetPostsFeed(userId string, limit, offset int) ([]types.PostRecord, error) {
+	var getPostsFeedError error
+	var posts []types.PostRecord
+	queryDb(func(db *sql.DB) {
+		rows, err := db.Query(
+			"SELECT id, author_id, text FROM posts JOIN friends ON author_id = friends.friend_id WHERE friends.user_id = ? LIMIT ?, ?",
+			userId,
+			offset,
+			limit,
+		)
+		if err != nil {
+			getPostsFeedError = fmt.Errorf("GetPostsFeed: userId=%s, limit=%d, offset=%d: %w", userId, limit, offset, err)
+			return
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var post types.PostRecord
+			if err := rows.Scan(
+				&post.Id,
+				&post.AuthorId,
+				&post.Text,
+			); err != nil {
+				getPostsFeedError = fmt.Errorf("GetPostsFeed: userId=%s, limit=%d, offset=%d: %w", userId, limit, offset, err)
+				return
+			}
+			posts = append(posts, post)
+		}
+	})
+
+	if getPostsFeedError != nil {
+		return nil, getPostsFeedError
+	}
+
+	return posts, nil
+}

@@ -28,6 +28,7 @@ func main() {
 	mux.HandleFunc("/post/delete/", routes.PostDelete)
 	mux.HandleFunc("/post/update/", routes.PostUpdate)
 	mux.HandleFunc("/post/get/", routes.PostGet)
+	mux.HandleFunc("/post/feed", routes.PostFeed)
 
 	fmt.Println("Will serve on port", config.Config("PORT"))
 	err := http.ListenAndServe(":"+config.Config("PORT"), mux)
