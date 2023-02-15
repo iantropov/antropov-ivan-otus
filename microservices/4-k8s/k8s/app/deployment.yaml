@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: otus-app
+  template:
+    metadata:
+      labels:
+        app: otus-app
+    spec:
+      containers:
+        - name: otus-app
+          image: antropovivan/otus:microservices-otus-users
+          command: ["/users-app"]
+          ports:
+            - name: otus-app
+              containerPort: 3000
+          volumeMounts:
+            - name: app-env
+              mountPath: /.env
+              subPath: .env
+          env:
+            # - name: PORT
+              # value: "3000"
+            - name: DB_USER
+              # value: "user"
+              valueFrom:
+                secretKeyRef:
+                  name: otus-secrets
+                  key: db_user
+            - name: DB_PASS
+              # value: "password"
+              valueFrom:
+                secretKeyRef:
+                  name: otus-secrets
+                  key: db_password
+            - name: DB_ADDR
+              # value: "mysql-minikube"
+              valueFrom:
+                secretKeyRef:
+                  name: otus-secrets
+                  key: db_addr
+            - name: DB_NAME
+              # value: "otus-db"
+              valueFrom:
+                secretKeyRef:
+                  name: otus-secrets
+                  key: db_name
+      volumes:
+        - name: app-env
+          configMap:
+            name: env-file

@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: env-file
-data:
-  .env: |
-    PORT=3000
