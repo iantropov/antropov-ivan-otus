@@ -9,3 +9,4 @@ drinks.json
 
 .mysql-data
 data
+.DS_store
