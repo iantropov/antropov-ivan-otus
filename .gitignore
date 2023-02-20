@@ -7,6 +7,6 @@ coverage
 
 drinks.json
 
-.DS_store
-
 .mysql-data
+data
+.DS_store
