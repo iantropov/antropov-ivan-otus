@@ -264,10 +264,10 @@ https://stackoverflow.com/questions/17448061/how-many-system-resources-will-be-h
 - Все балансеры - MS
 - Все MB - MS
 - Разворачиваемся в 3х зонах доступности
-  - СТ - 4i * 3dc (64GB, 8 cores, 1GBs)
-  - СЛ - 1i * 3dc (8GB, 4 cores, 1GBs)
-  - СА - 1i * 3dc (8GB, 4 cores, 1GBs)
-  - СП - 1i * 3dc (8GB, 4 cores, 1GBs)
-  - СК - 1i * 3dc (8GB, 4 cores, 1GBs)
-  - АИ - 1i * 3dc (8GB, 4 cores, 1GBs)
-  - КИ - 1i * 3dc (8GB, 4 cores, 1GBs)
+  - СТ - 4i * 3dc (64GB, 8 cores, 1 GBs)
+  - СЛ - 1i * 3dc (8GB, 2 cores, 100 MBs)
+  - СА - 1i * 3dc (8GB, 2 cores, 100 MBs)
+  - СП - 1i * 3dc (8GB, 2 cores, 100 MBs)
+  - СК - 1i * 3dc (8GB, 2 cores, 100 MBs)
+  - АИ - 1i * 3dc (8GB, 2 cores, 100 MBs)
+  - КИ - 1i * 3dc (8GB, 2 cores, 100 MBs)
