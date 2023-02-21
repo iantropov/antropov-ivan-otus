@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS dialogs_users;
+DROP TABLE IF EXISTS users_dialogs;

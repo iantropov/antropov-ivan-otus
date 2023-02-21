@@ -9,4 +9,4 @@ RUN go build .
 
 EXPOSE 3000
 
-CMD [ "./social-network-4" ]
+CMD [ "./social-network-5" ]
