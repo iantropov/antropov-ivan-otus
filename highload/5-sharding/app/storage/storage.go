@@ -28,6 +28,7 @@ func queryDb(callback func(db *sql.DB)) {
 		Params: map[string]string{
 			"charset":              "utf8mb4",
 			"allowNativePasswords": "true",
+			"interpolateParams":    "true",
 		},
 	}
 	fmt.Println(cfg.FormatDSN())

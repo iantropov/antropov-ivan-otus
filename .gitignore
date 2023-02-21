@@ -10,3 +10,6 @@ drinks.json
 .mysql-data
 data
 .DS_store
+mysql_data_1
+mysql_data_2
+proxysql_data
