@@ -8,4 +8,3 @@ CREATE TABLE messages (
     FOREIGN KEY (to_user_id) REFERENCES users (id) ON DELETE CASCADE,
     FOREIGN KEY (dialog_id) REFERENCES dialogs (id) ON DELETE CASCADE
 );
-CREATE INDEX messages_dialog_id_idx on messages(dialog_id) using BTREE;
