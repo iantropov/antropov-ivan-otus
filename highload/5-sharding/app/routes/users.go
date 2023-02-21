@@ -57,14 +57,12 @@ func UserGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
-	claims, err := auth.VerifyJWT(bearerHeader)
+	_, err := auth.VerifyJWT(bearerHeader)
 	if err != nil {
 		fmt.Println("Failed to check JWT token", err)
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
-	fmt.Println("CURRENT_USER_ID", claims["userId"])
 
 	userId := strings.TrimPrefix(r.URL.Path, "/user/get/")
 	userRecord, err := storage.GetUser(userId)
@@ -152,4 +150,43 @@ func UserSearch(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(userRecords)
+}
+
+func Whoami(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.Header().Set("Allow", "GET")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	bearerHeader := auth.ExtractBearerAuthHeader(r.Header.Get("Authorization"))
+	claims, err := auth.VerifyJWT(bearerHeader)
+	if err != nil {
+		fmt.Println("Failed to check JWT token", err)
+		w.WriteHeader(http.StatusUnauthorized)
+		return
+	}
+
+	userId, ok := claims["userId"].(string)
+	if !ok {
+		fmt.Println("Invalid userId in JWT claim", claims["userId"])
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	userRecord, err := storage.GetUser(userId)
+	if err != nil {
+		fmt.Println("Failed to handle /whoami", userId, err)
+		_, ok := err.(*types.NotFoundError)
+		if ok {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(userRecord)
 }

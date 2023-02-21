@@ -47,8 +47,8 @@ func CreateMessage(fromUserId, toUserId, dialogId, text string) error {
 	queryDb(func(db *sql.DB) {
 		_, err := db.Exec(
 			"INSERT INTO messages (from_user_id, to_user_id, dialog_id, text) VALUES (?, ?, ?, ?)",
-			toUserId,
 			fromUserId,
+			toUserId,
 			dialogId,
 			text,
 		)

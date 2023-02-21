@@ -12,7 +12,7 @@ func GetDialogId(userId1, userId2 string) (string, error) {
 	var dialogId string
 	queryDb(func(db *sql.DB) {
 		rows, err := db.Query(
-			"SELECT dialogId FROM users_dialogs WHERE user_id_1 = ? AND user_id_2 = ? OR user_id_1 = ? AND user_id_2 = ?",
+			"SELECT dialog_id FROM users_dialogs WHERE user_id_1 = ? AND user_id_2 = ? OR user_id_1 = ? AND user_id_2 = ?",
 			userId1,
 			userId2,
 			userId2,

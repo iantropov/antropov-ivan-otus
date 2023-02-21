@@ -62,6 +62,11 @@ func dialogSendMessage(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Failed to create dialog", err)
 			return
 		}
+		err = storage.LinkUsersWithDialog(userId, recipientId, dialogId)
+		if err != nil {
+			fmt.Println("Failed to link users to dialog", err)
+			return
+		}
 	}
 
 	err = storage.CreateMessage(userId, recipientId, dialogId, params.Text)

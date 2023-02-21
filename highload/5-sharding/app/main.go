@@ -18,6 +18,8 @@ func main() {
 	mux.HandleFunc("/user/get/", routes.UserGet)
 	mux.HandleFunc("/user/search/", routes.UserSearch)
 
+	mux.HandleFunc("/whoami", routes.Whoami)
+
 	mux.HandleFunc("/friend/set/", routes.FriendSet)
 	mux.HandleFunc("/friend/delete/", routes.FriendDelete)
 
