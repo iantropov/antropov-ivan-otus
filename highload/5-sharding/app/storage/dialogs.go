@@ -33,7 +33,7 @@ func GetDialogId(userId1, userId2 string) (string, error) {
 	return dialogId, queryError
 }
 
-func CreateDialog(name string) error {
+func CreateDialog(name string) (string, error) {
 	dialogId := uuid.New().String()
 	var createDialogError error
 	queryDb(func(db *sql.DB) {
@@ -47,7 +47,7 @@ func CreateDialog(name string) error {
 		}
 	})
 
-	return createDialogError
+	return dialogId, createDialogError
 }
 
 func LinkUsersWithDialog(userId1, userId2, dialogId string) error {

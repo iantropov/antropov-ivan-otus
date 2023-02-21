@@ -6,3 +6,7 @@ type MessageRecord struct {
 	ToUserId   string `json:"to"`
 	Id         string `json:"-"`
 }
+
+type MessageParams struct {
+	Text string `json:"text"`
+}

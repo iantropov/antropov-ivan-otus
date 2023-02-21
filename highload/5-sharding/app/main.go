@@ -27,6 +27,8 @@ func main() {
 	mux.HandleFunc("/post/get/", routes.PostGet)
 	mux.HandleFunc("/post/feed", routes.PostFeed)
 
+	mux.HandleFunc("/dialog/", routes.Dialog)
+
 	fmt.Println("Will serve on port", config.Config("PORT"))
 	err := http.ListenAndServe(":"+config.Config("PORT"), mux)
 	log.Fatal(err)
