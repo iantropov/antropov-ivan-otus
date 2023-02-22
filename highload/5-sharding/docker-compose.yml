@@ -20,6 +20,7 @@ services:
       PORT: 3000
     depends_on:
       - proxy_sql
+
   migration_1: &migration
     image: migrate/migrate
     volumes:
@@ -30,12 +31,14 @@ services:
     depends_on:
       db_1:
         condition: service_healthy
+
   migration_2:
     <<: *migration
     command: -database 'mysql://user:password@tcp(db_2)/social-network-5' -path=/migrations/ up
     depends_on:
       db_2:
         condition: service_healthy
+
   db_1: &db
     image: mysql:5.7
     restart: always
@@ -56,10 +59,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 55
+
   db_2:
     <<: *db
     volumes:
       - ./db/mysql_data_2:/var/lib/mysql
+
   proxy_sql:
     image: proxysql/proxysql:2.4.7
     restart: always
@@ -77,14 +82,14 @@ services:
       - migration_1
       - migration_2
 
-  # cache:
-  #   image: redis:6.2
-  #   restart: always
-  #   ports:
-  #     - '6379:6379'
-  #   command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
-  #   networks:
-  #     - social-network-5
+  cache:
+    image: redis:6.2
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    networks:
+      - social-network-5
 
 networks:
   social-network-5:
