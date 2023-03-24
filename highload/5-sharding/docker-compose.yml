@@ -1,0 +1,95 @@
+version: "3"
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: ./app/
+    networks:
+      - social-network-5
+    ports:
+      - 3000:3000
+    environment:
+      DB_USER: user
+      DB_PASS: password
+      DB_ADDR: proxy_sql:6033
+      DB_NAME: social-network-5
+      JWT_SECRET_KEY: SecretYouShouldHide
+      CACHE_ADDR: 'cache:6379'
+      CACHE_PASS: eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+      PORT: 3000
+    depends_on:
+      - proxy_sql
+
+  migration_1: &migration
+    image: migrate/migrate
+    volumes:
+      - ./db/migrations:/migrations
+    command: -database 'mysql://user:password@tcp(db_1)/social-network-5' -path=/migrations/ up
+    networks:
+      - social-network-5
+    depends_on:
+      db_1:
+        condition: service_healthy
+
+  migration_2:
+    <<: *migration
+    command: -database 'mysql://user:password@tcp(db_2)/social-network-5' -path=/migrations/ up
+    depends_on:
+      db_2:
+        condition: service_healthy
+
+  db_1: &db
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'social-network-5'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+      LANG: C.UTF-8
+    volumes:
+      - ./db/mysql_data_1:/var/lib/mysql
+    networks:
+      - social-network-5
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u $$MYSQL_USER --password=$$MYSQL_PASSWORD
+      start_period: 5s
+      interval: 5s
+      timeout: 5s
+      retries: 55
+
+  db_2:
+    <<: *db
+    volumes:
+      - ./db/mysql_data_2:/var/lib/mysql
+
+  proxy_sql:
+    image: proxysql/proxysql:2.4.7
+    restart: always
+    volumes:
+      - ./db/proxysql_data:/var/lib/proxysql
+      - ./db/proxysql.cnf:/etc/proxysql.cnf
+    networks:
+      - social-network-5
+    ports:
+      # Mysql Client Port
+      - 6033:6033
+      # Mysql Admin Port
+      - 6032:6032
+    depends_on:
+      - migration_1
+      - migration_2
+
+  cache:
+    image: redis:6.2
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    networks:
+      - social-network-5
+
+networks:
+  social-network-5:
